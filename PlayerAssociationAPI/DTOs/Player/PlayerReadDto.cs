@@ -9,6 +9,8 @@ namespace PlayerAssociationAPI.DTOs.Player
         public string Position { get; set; } = string.Empty;
         public string Nationality { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public string ImagePath { get; set; } = string.Empty;
+        public string? ImagePath { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 }

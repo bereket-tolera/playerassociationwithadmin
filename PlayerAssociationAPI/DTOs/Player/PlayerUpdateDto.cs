@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+
 namespace PlayerAssociationAPI.DTOs.Player
 {
     public class PlayerUpdateDto
@@ -8,6 +10,8 @@ namespace PlayerAssociationAPI.DTOs.Player
         public string? Position { get; set; }
         public string? Nationality { get; set; }
         public string? Description { get; set; }
-        public string? ImagePath { get; set; }
+
+        // Optional new image
+        public IFormFile? ImageFile { get; set; }
     }
 }

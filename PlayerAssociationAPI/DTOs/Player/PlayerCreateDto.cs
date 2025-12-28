@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+
 namespace PlayerAssociationAPI.DTOs.Player
 {
     public class PlayerCreateDto
@@ -9,8 +11,7 @@ namespace PlayerAssociationAPI.DTOs.Player
         public string Nationality { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
 
-        // Image will be uploaded separately, so store path
-        public string? ImagePath { get; set; }
+        // This will hold the uploaded image file
+        public IFormFile? ImageFile { get; set; }
     }
 }
-

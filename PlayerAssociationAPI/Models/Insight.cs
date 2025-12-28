@@ -16,7 +16,7 @@ namespace PlayerAssociationAPI.Models
 
         public string Author { get; set; } = string.Empty;
 
-        public InsightCategory Category { get; set; }
+        public InsightCategory Category { get; set; } // Store as enum in DB
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

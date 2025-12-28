@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { EventService } from "../../api/eventService";
-import Loader from "../../components/common/Loader";
 import EventForm from "./EventForm";
 
 interface Event {
@@ -31,7 +30,6 @@ export default function EventList() {
 
   const handleDelete = async (id: number) => {
     if (!window.confirm("Are you sure you want to delete this event?")) return;
-
     try {
       await EventService.delete(id);
       fetchEvents();
@@ -44,7 +42,23 @@ export default function EventList() {
     fetchEvents();
   }, []);
 
-  if (loading) return <Loader />;
+  const getImageUrl = (imagePath?: string) => {
+    if (!imagePath) {
+      return "/default-event.jpg";
+    }
+    
+    if (imagePath.startsWith("http")) {
+      return imagePath;
+    }
+    
+    if (imagePath.startsWith("/")) {
+      return `http://localhost:5121${imagePath}`;
+    }
+    
+    return imagePath;
+  };
+
+  if (loading) return <div className="p-6">Loading events...</div>;
 
   return (
     <div className="p-6">
@@ -58,39 +72,92 @@ export default function EventList() {
         }}
       />
 
-      <table className="w-full border mt-6">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="p-2">Title</th>
-            <th>Date</th>
-            <th>Location</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {events.map((event) => (
-            <tr key={event.id} className="border-b">
-              <td className="p-2">{event.title}</td>
-              <td>{new Date(event.eventDate).toLocaleDateString()}</td>
-              <td>{event.location}</td>
-              <td className="space-x-2 p-2">
-                <button
-                  className="bg-blue-500 text-white px-2 py-1 rounded"
-                  onClick={() => setEditingEvent(event)}
-                >
-                  Edit
-                </button>
-                <button
-                  className="bg-red-500 text-white px-2 py-1 rounded"
-                  onClick={() => handleDelete(event.id)}
-                >
-                  Delete
-                </button>
-              </td>
+      <div className="overflow-x-auto bg-white rounded-lg shadow">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Image
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Title
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Date
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Location
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Description
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Actions
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {events.length === 0 ? (
+              <tr>
+                <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
+                  No events found. Add your first event!
+                </td>
+              </tr>
+            ) : (
+              events.map((event) => (
+                <tr key={event.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="h-10 w-10 flex-shrink-0">
+                      <img
+                        className="h-10 w-10 rounded object-cover border"
+                        src={getImageUrl(event.imagePath)}
+                        alt={event.title}
+                        onError={(e) => {
+                          e.currentTarget.src = "https://via.placeholder.com/40?text=Event";
+                        }}
+                      />
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="text-sm font-medium text-gray-900">
+                      {event.title}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">
+                      {new Date(event.eventDate).toLocaleDateString()}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="text-sm text-gray-900">{event.location}</div>
+                  </td>
+                  <td className="px-6 py-4 max-w-xs">
+                    <div className="text-sm text-gray-700">
+                      {event.description.length > 50 
+                        ? `${event.description.substring(0, 50)}...` 
+                        : event.description}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                    <button
+                      className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs transition"
+                      onClick={() => setEditingEvent(event)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs transition"
+                      onClick={() => handleDelete(event.id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

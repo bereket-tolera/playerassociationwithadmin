@@ -1,4 +1,4 @@
-using PlayerAssociationAPI.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace PlayerAssociationAPI.DTOs.Insight
 {
@@ -8,7 +8,7 @@ namespace PlayerAssociationAPI.DTOs.Insight
         public string? Description { get; set; }
         public string? Content { get; set; }
         public string? Author { get; set; }
-        public InsightCategory? Category { get; set; }
-        public string? ImagePath { get; set; }
+        public string? Category { get; set; } // Accept string from frontend
+        public IFormFile? ImageFile { get; set; }
     }
 }

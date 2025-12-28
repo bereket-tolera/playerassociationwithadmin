@@ -217,3 +217,4 @@ C:\Users\user\Documents\daftech\playerassociationwithadmin\PlayerAssociationAPI\
 C:\Users\user\Documents\daftech\playerassociationwithadmin\PlayerAssociationAPI\bin\Debug\net10.0\runtimes\win\lib\net9.0\System.Windows.Extensions.dll
 C:\Users\user\Documents\daftech\playerassociationwithadmin\PlayerAssociationAPI\bin\Debug\net10.0\Castle.Core.dll
 C:\Users\user\Documents\daftech\playerassociationwithadmin\PlayerAssociationAPI\bin\Debug\net10.0\Microsoft.EntityFrameworkCore.Proxies.dll
+C:\Users\user\Documents\daftech\playerassociationwithadmin\PlayerAssociationAPI\bin\Debug\net10.0\AutoMapper.dll

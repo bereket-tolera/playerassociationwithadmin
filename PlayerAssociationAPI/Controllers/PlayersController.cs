@@ -31,18 +31,18 @@ namespace PlayerAssociationAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] PlayerCreateDto dto)
+        public async Task<IActionResult> Create([FromForm] PlayerCreateDto dto)
         {
             var player = await _playerService.CreateAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = player.Id }, player);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] PlayerUpdateDto dto)
+        public async Task<IActionResult> Update(int id, [FromForm] PlayerUpdateDto dto)
         {
-            var player = await _playerService.UpdateAsync(id, dto);
-            if (player == null) return NotFound();
-            return Ok(player);
+            var updated = await _playerService.UpdateAsync(id, dto);
+            if (updated == null) return NotFound();
+            return Ok(updated);
         }
 
         [HttpDelete("{id}")]
@@ -54,4 +54,3 @@ namespace PlayerAssociationAPI.Controllers
         }
     }
 }
-

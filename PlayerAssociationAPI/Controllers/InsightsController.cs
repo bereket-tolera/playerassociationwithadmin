@@ -39,14 +39,14 @@ namespace PlayerAssociationAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] InsightCreateDto dto)
+        public async Task<IActionResult> Create([FromForm] InsightCreateDto dto) // Changed from [FromBody] to [FromForm]
         {
             var insight = await _insightService.CreateAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = insight.Id }, insight);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] InsightUpdateDto dto)
+        public async Task<IActionResult> Update(int id, [FromForm] InsightUpdateDto dto) // Changed from [FromBody] to [FromForm]
         {
             var insight = await _insightService.UpdateAsync(id, dto);
             if (insight == null) return NotFound();

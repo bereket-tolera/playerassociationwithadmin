@@ -1,93 +1,92 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using PlayerAssociationAPI.Data;
 using PlayerAssociationAPI.DTOs.Insight;
 using PlayerAssociationAPI.Models;
 using PlayerAssociationAPI.Services.Interfaces;
+using System;
 
 namespace PlayerAssociationAPI.Services.Implementations
 {
     public class InsightService : IInsightService
     {
         private readonly AppDbContext _context;
+        private readonly IWebHostEnvironment _env;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public InsightService(AppDbContext context)
+        public InsightService(
+            AppDbContext context, 
+            IWebHostEnvironment env, 
+            IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _env = env;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IEnumerable<InsightReadDto>> GetAllAsync()
         {
-            return await _context.Insights
-                .Select(i => new InsightReadDto
-                {
-                    Id = i.Id,
-                    Title = i.Title,
-                    Description = i.Description,
-                    Content = i.Content,
-                    Author = i.Author,
-                    Category = i.Category,
-                    ImagePath = i.ImagePath
-                }).ToListAsync();
+            var insights = await _context.Insights.ToListAsync();
+            return insights.Select(i => ConvertToDto(i));
         }
 
         public async Task<InsightReadDto?> GetByIdAsync(int id)
         {
             var insight = await _context.Insights.FindAsync(id);
             if (insight == null) return null;
-
-            return new InsightReadDto
-            {
-                Id = insight.Id,
-                Title = insight.Title,
-                Description = insight.Description,
-                Content = insight.Content,
-                Author = insight.Author,
-                Category = insight.Category,
-                ImagePath = insight.ImagePath
-            };
+            return ConvertToDto(insight);
         }
 
         public async Task<IEnumerable<InsightReadDto>> GetByCategoryAsync(InsightCategory category)
         {
-            return await _context.Insights
+            var insights = await _context.Insights
                 .Where(i => i.Category == category)
-                .Select(i => new InsightReadDto
-                {
-                    Id = i.Id,
-                    Title = i.Title,
-                    Description = i.Description,
-                    Content = i.Content,
-                    Author = i.Author,
-                    Category = i.Category,
-                    ImagePath = i.ImagePath
-                }).ToListAsync();
+                .ToListAsync();
+            return insights.Select(i => ConvertToDto(i));
         }
 
         public async Task<InsightReadDto> CreateAsync(InsightCreateDto dto)
         {
-            var insight = new Insight
+            try
             {
-                Title = dto.Title,
-                Description = dto.Description,
-                Content = dto.Content,
-                Author = dto.Author,
-                Category = dto.Category,
-                ImagePath = dto.ImagePath
-            };
+                Console.WriteLine($"Creating insight: {dto.Title}");
+                Console.WriteLine($"Category from request: {dto.Category}");
 
-            _context.Insights.Add(insight);
-            await _context.SaveChangesAsync();
+                // Parse string to enum
+                if (!Enum.TryParse<InsightCategory>(dto.Category, true, out var categoryEnum))
+                {
+                    throw new ArgumentException($"Invalid category: {dto.Category}");
+                }
 
-            return new InsightReadDto
+                var insight = new Insight
+                {
+                    Title = dto.Title?.Trim() ?? throw new ArgumentException("Title is required"),
+                    Description = dto.Description?.Trim() ?? "",
+                    Content = dto.Content?.Trim() ?? "",
+                    Author = dto.Author?.Trim() ?? "",
+                    Category = categoryEnum, // Use parsed enum
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                if (dto.ImageFile != null && dto.ImageFile.Length > 0)
+                {
+                    Console.WriteLine($"Processing image file: {dto.ImageFile.FileName}, Size: {dto.ImageFile.Length}");
+                    insight.ImagePath = await SaveImageAsync(dto.ImageFile);
+                    Console.WriteLine($"Image saved at: {insight.ImagePath}");
+                }
+
+                _context.Insights.Add(insight);
+                await _context.SaveChangesAsync();
+
+                return ConvertToDto(insight);
+            }
+            catch (Exception ex)
             {
-                Id = insight.Id,
-                Title = insight.Title,
-                Description = insight.Description,
-                Content = insight.Content,
-                Author = insight.Author,
-                Category = insight.Category,
-                ImagePath = insight.ImagePath
-            };
+                Console.WriteLine($"Error in InsightService.CreateAsync: {ex.Message}");
+                Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+                throw;
+            }
         }
 
         public async Task<InsightReadDto?> UpdateAsync(int id, InsightUpdateDto dto)
@@ -95,15 +94,118 @@ namespace PlayerAssociationAPI.Services.Implementations
             var insight = await _context.Insights.FindAsync(id);
             if (insight == null) return null;
 
-            insight.Title = dto.Title ?? insight.Title;
-            insight.Description = dto.Description ?? insight.Description;
-            insight.Content = dto.Content ?? insight.Content;
-            insight.Author = dto.Author ?? insight.Author;
-            insight.Category = dto.Category ?? insight.Category;
-            insight.ImagePath = dto.ImagePath ?? insight.ImagePath;
+            if (!string.IsNullOrWhiteSpace(dto.Title))
+                insight.Title = dto.Title.Trim();
+            
+            if (!string.IsNullOrWhiteSpace(dto.Description))
+                insight.Description = dto.Description.Trim();
+            
+            if (!string.IsNullOrWhiteSpace(dto.Content))
+                insight.Content = dto.Content.Trim();
+            
+            if (!string.IsNullOrWhiteSpace(dto.Author))
+                insight.Author = dto.Author.Trim();
+            
+            // Handle category update - convert string to enum if provided
+            if (!string.IsNullOrWhiteSpace(dto.Category))
+            {
+                if (Enum.TryParse<InsightCategory>(dto.Category, true, out var categoryEnum))
+                {
+                    insight.Category = categoryEnum;
+                }
+            }
+
+            if (dto.ImageFile != null && dto.ImageFile.Length > 0)
+            {
+                // Delete old image if exists
+                if (!string.IsNullOrEmpty(insight.ImagePath))
+                    DeleteImage(insight.ImagePath);
+
+                insight.ImagePath = await SaveImageAsync(dto.ImageFile);
+            }
+
             insight.UpdatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
+
+            return ConvertToDto(insight);
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var insight = await _context.Insights.FindAsync(id);
+            if (insight == null) return false;
+
+            // Delete image file if exists
+            if (!string.IsNullOrEmpty(insight.ImagePath))
+                DeleteImage(insight.ImagePath);
+
+            _context.Insights.Remove(insight);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        private async Task<string> SaveImageAsync(IFormFile file)
+        {
+            try
+            {
+                // Ensure wwwroot/uploads directory exists
+                var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                // Generate unique filename
+                var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                // Save file
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
+
+                // Return relative path
+                return $"/uploads/{uniqueFileName}";
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving image: {ex.Message}");
+                throw;
+            }
+        }
+
+        private void DeleteImage(string imagePath)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(imagePath)) return;
+
+                // Extract filename from URL
+                var fileName = Path.GetFileName(imagePath);
+                if (string.IsNullOrEmpty(fileName)) return;
+
+                var filePath = Path.Combine(_env.WebRootPath, "uploads", fileName);
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting image: {ex.Message}");
+                // Don't throw - image deletion failure shouldn't prevent other operations
+            }
+        }
+
+        private InsightReadDto ConvertToDto(Insight insight)
+        {
+            var request = _httpContextAccessor.HttpContext?.Request;
+            var baseUrl = $"{request?.Scheme}://{request?.Host}";
+
+            // Convert enum to string for frontend
+            var categoryString = insight.Category.ToString();
 
             return new InsightReadDto
             {
@@ -112,19 +214,11 @@ namespace PlayerAssociationAPI.Services.Implementations
                 Description = insight.Description,
                 Content = insight.Content,
                 Author = insight.Author,
-                Category = insight.Category,
-                ImagePath = insight.ImagePath
+                Category = categoryString, // Send as string
+                ImagePath = !string.IsNullOrEmpty(insight.ImagePath) 
+                    ? $"{baseUrl}{insight.ImagePath}" 
+                    : insight.ImagePath
             };
-        }
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            var insight = await _context.Insights.FindAsync(id);
-            if (insight == null) return false;
-
-            _context.Insights.Remove(insight);
-            await _context.SaveChangesAsync();
-            return true;
         }
     }
 }

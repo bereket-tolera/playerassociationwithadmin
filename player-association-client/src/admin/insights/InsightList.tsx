@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { InsightService } from "../../api/insightService";
-import Loader from "../../components/common/Loader";
 import InsightForm from "./InsightForm";
 
 interface Insight {
@@ -9,7 +8,7 @@ interface Insight {
   description: string;
   content: string;
   author: string;
-  category: string;
+  category: any; // Use any to be safe
   imagePath: string;
 }
 
@@ -24,7 +23,7 @@ export default function InsightList() {
       const res = await InsightService.getAll();
       setInsights(res.data);
     } catch (error) {
-      console.error(error);
+      console.error("Failed to fetch insights:", error);
     } finally {
       setLoading(false);
     }
@@ -36,7 +35,7 @@ export default function InsightList() {
       await InsightService.delete(id);
       fetchInsights();
     } catch (error) {
-      console.error(error);
+      console.error("Failed to delete insight:", error);
     }
   };
 
@@ -44,7 +43,38 @@ export default function InsightList() {
     fetchInsights();
   }, []);
 
-  if (loading) return <Loader />;
+  const getImageUrl = (imagePath?: string) => {
+    if (!imagePath) return "/default-insight.jpg";
+    if (imagePath.startsWith("http")) return imagePath;
+    if (imagePath.startsWith("/")) return `http://localhost:5121${imagePath}`;
+    return imagePath;
+  };
+
+  // Safe category display function
+  const displayCategory = (category: any): string => {
+    if (!category) return "Unknown";
+    
+    // If it's a string, return it
+    if (typeof category === "string") return category;
+    
+    // If it's a number, map it
+    if (typeof category === "number") {
+      const categories = [
+        "Development",
+        "HealthFitness", 
+        "CareerEducation",
+        "TransferMarket",
+        "Interview",
+        "Biography"
+      ];
+      return categories[category] || `Category ${category}`;
+    }
+    
+    // Fallback
+    return String(category);
+  };
+
+  if (loading) return <div className="p-6">Loading insights...</div>;
 
   return (
     <div className="p-6">
@@ -58,39 +88,95 @@ export default function InsightList() {
         }}
       />
 
-      <table className="w-full border mt-6">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="p-2">Title</th>
-            <th>Category</th>
-            <th>Author</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {insights.map((insight) => (
-            <tr key={insight.id} className="border-b">
-              <td className="p-2">{insight.title}</td>
-              <td>{insight.category}</td>
-              <td>{insight.author}</td>
-              <td className="space-x-2 p-2">
-                <button
-                  className="bg-blue-500 text-white px-2 py-1 rounded"
-                  onClick={() => setEditingInsight(insight)}
-                >
-                  Edit
-                </button>
-                <button
-                  className="bg-red-500 text-white px-2 py-1 rounded"
-                  onClick={() => handleDelete(insight.id)}
-                >
-                  Delete
-                </button>
-              </td>
+      <div className="overflow-x-auto bg-white rounded-lg shadow">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Image
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Title
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Category
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Author
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Description
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Actions
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {insights.length === 0 ? (
+              <tr>
+                <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
+                  No insights found. Add your first insight!
+                </td>
+              </tr>
+            ) : (
+              insights.map((insight) => (
+                <tr key={insight.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="h-10 w-10 flex-shrink-0">
+                      <img
+                        className="h-10 w-10 rounded object-cover border"
+                        src={getImageUrl(insight.imagePath)}
+                        alt={insight.title}
+                        onError={(e) => {
+                          e.currentTarget.src = "https://via.placeholder.com/40?text=Insight";
+                        }}
+                      />
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="text-sm font-medium text-gray-900">
+                      {insight.title}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">
+                      {displayCategory(insight.category)}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">{insight.author}</div>
+                  </td>
+                  <td className="px-6 py-4 max-w-xs">
+                    <div 
+                      className="text-sm text-gray-700"
+                      title={insight.description}
+                    >
+                      {insight.description.length > 50 
+                        ? `${insight.description.substring(0, 50)}...` 
+                        : insight.description}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                    <button
+                      className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs transition"
+                      onClick={() => setEditingInsight(insight)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs transition"
+                      onClick={() => handleDelete(insight.id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

@@ -1,5 +1,3 @@
-using PlayerAssociationAPI.Models;
-
 namespace PlayerAssociationAPI.DTOs.Insight
 {
     public class InsightReadDto
@@ -9,7 +7,7 @@ namespace PlayerAssociationAPI.DTOs.Insight
         public string Description { get; set; } = string.Empty;
         public string Content { get; set; } = string.Empty;
         public string Author { get; set; } = string.Empty;
-        public InsightCategory Category { get; set; }
+        public string Category { get; set; } = string.Empty; // Return string to frontend
         public string ImagePath { get; set; } = string.Empty;
     }
 }

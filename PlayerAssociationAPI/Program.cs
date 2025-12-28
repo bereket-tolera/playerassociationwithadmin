@@ -1,81 +1,93 @@
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.FileProviders;
 using PlayerAssociationAPI.Data;
 using PlayerAssociationAPI.Services.Interfaces;
 using PlayerAssociationAPI.Services.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ----------------------
-// Add Services
-// ----------------------
-
-// Add Controllers
+// Add services to the container
 builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
-// Add EF Core DbContext with SQL Server & Lazy Loading
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
-           .UseLazyLoadingProxies()
-);
+// Configure file upload limits
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.ValueLengthLimit = int.MaxValue;
+    options.MultipartBodyLengthLimit = int.MaxValue; // 100MB
+    options.MemoryBufferThreshold = int.MaxValue;
+});
 
-// Enable CORS for Frontend Integration
+// Add CORS (adjust origins as needed)
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend", policy =>
-    {
-        policy.AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowAnyOrigin();
-    });
+    options.AddPolicy("AllowReactApp",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000") // React app URL
+                   .AllowAnyMethod()
+                   .AllowAnyHeader()
+                   .AllowCredentials();
+        });
 });
 
-// Register Services (Dependency Injection)
+// Configure DbContext
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Register ALL services
 builder.Services.AddScoped<IPlayerService, PlayerService>();
-builder.Services.AddScoped<IEventService, EventService>();
-builder.Services.AddScoped<IInsightService, InsightService>();
-
-// Swagger / OpenAPI for API Documentation
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo 
-    { 
-        Title = "Player Association API", 
-        Version = "v1",
-        Description = "API for managing Players, Events, and Insights"
-    });
-});
+builder.Services.AddScoped<IEventService, EventService>(); // ADDED THIS LINE
+builder.Services.AddScoped<IInsightService, InsightService>(); // ADD THIS LINE
+// Add required services for file uploads
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddHttpContextAccessor(); // Also add this for better DI
 
 var app = builder.Build();
 
-// ----------------------
-// Middleware Pipeline
-// ----------------------
-
-// Serve Static Files (for uploaded images)
-app.UseStaticFiles();
-
-// Enable CORS
-app.UseCors("AllowFrontend");
-
-// Enable Swagger in Development
+// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Player Association API v1");
-        c.RoutePrefix = string.Empty; // Swagger at root
-    });
+    app.UseSwaggerUI();
 }
 
-// HTTPS redirection
+// Create wwwroot/uploads directory if it doesn't exist
+var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+if (!Directory.Exists(uploadsPath))
+{
+    Directory.CreateDirectory(uploadsPath);
+    Console.WriteLine($"Created uploads directory: {uploadsPath}");
+}
+
+// Enable static files (for serving uploaded images)
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
+    RequestPath = ""
+});
+
+// Also explicitly serve the uploads folder
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads")),
+    RequestPath = "/uploads"
+});
+
+// Enable CORS - must come before UseAuthorization and MapControllers
+app.UseCors("AllowReactApp");
+
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
-// Map Controller Endpoints
 app.MapControllers();
+
+// Log startup information
+Console.WriteLine($"Application started. Uploads path: {uploadsPath}");
+Console.WriteLine($"Environment: {app.Environment.EnvironmentName}");
+Console.WriteLine($"Database connection: {builder.Configuration.GetConnectionString("DefaultConnection")}");
 
 app.Run();

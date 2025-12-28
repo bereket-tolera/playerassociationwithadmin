@@ -31,14 +31,14 @@ namespace PlayerAssociationAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] EventCreateDto dto)
+        public async Task<IActionResult> Create([FromForm] EventCreateDto dto) // Changed from [FromBody] to [FromForm]
         {
             var ev = await _eventService.CreateAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = ev.Id }, ev);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] EventUpdateDto dto)
+        public async Task<IActionResult> Update(int id, [FromForm] EventUpdateDto dto) // Changed from [FromBody] to [FromForm]
         {
             var ev = await _eventService.UpdateAsync(id, dto);
             if (ev == null) return NotFound();
