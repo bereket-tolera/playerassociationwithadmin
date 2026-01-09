@@ -202,6 +202,13 @@ export default function Home() {
           <div className="absolute top-0 right-0 w-32 h-full bg-gradient-to-l from-[#f8f9fa] dark:from-gray-900 to-transparent pointer-events-none hidden md:block"></div>
           <div className="absolute top-0 left-0 w-32 h-full bg-gradient-to-r from-[#f8f9fa] dark:from-gray-900 to-transparent pointer-events-none hidden md:block"></div>
         </div>
+
+        {/* View All Players Button */}
+        <div className="mt-12 text-center">
+          <Link to="/players" className="inline-block px-10 py-3 bg-[#009A44] text-white hover:bg-[#007A30] font-bold uppercase tracking-widest text-sm rounded shadow-lg hover:shadow-green-900/20 transition-all">
+            View All Players
+          </Link>
+        </div>
       </section>
 
       {/* ================= EVENTS (Dark Theme) ================= */}

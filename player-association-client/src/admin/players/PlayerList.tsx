@@ -6,7 +6,7 @@ import { PlayerService } from "../../api/playerService";
 interface Player {
   id?: number;
   fullName: string;
-  age: number;
+  age: number | string;
   club: string;
   position: string;
   nationality: string;
@@ -47,7 +47,7 @@ interface PlayerFormProps {
 function PlayerForm({ player, onSuccess, onCancel }: PlayerFormProps) {
   const initialFormState: Player = {
     fullName: "",
-    age: 18,
+    age: "",
     club: "",
     position: "",
     nationality: "Ethiopian",
@@ -86,6 +86,18 @@ function PlayerForm({ player, onSuccess, onCancel }: PlayerFormProps) {
 
     if (!form.fullName.trim()) {
       setError("Full name is required (ሙሉ ስም ያስፈልጋል)");
+      setLoading(false);
+      return;
+    }
+
+    if (form.age === "" || form.age === null || form.age === undefined) {
+      setError("Age is required");
+      setLoading(false);
+      return;
+    }
+
+    if (Number(form.age) < 0) {
+      setError("Age cannot be negative");
       setLoading(false);
       return;
     }
@@ -177,7 +189,14 @@ function PlayerForm({ player, onSuccess, onCancel }: PlayerFormProps) {
             <div>
               <label className="text-sm font-bold text-gray-700">Age *</label>
               <input type="number" className="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-[#FF0000] outline-none"
-                value={form.age} onChange={e => setForm({ ...form, age: Number(e.target.value) })} min="16" required />
+                value={form.age}
+                onChange={e => {
+                  const val = e.target.value;
+                  if (val === '' || Number(val) >= 0) {
+                    setForm({ ...form, age: val });
+                  }
+                }}
+                min="0" required />
             </div>
             <div>
               <label className="text-sm font-bold text-gray-700">Position</label>
@@ -265,7 +284,7 @@ export default function PlayerManager() {
   // Stats Logic
   const stats = {
     total: players.length,
-    avgAge: players.length ? Math.round(players.reduce((acc, p) => acc + p.age, 0) / players.length) : 0,
+    avgAge: players.length ? Math.round(players.reduce((acc, p) => acc + Number(p.age), 0) / players.length) : 0,
     positions: players.reduce((acc: any, p) => {
       acc[p.position] = (acc[p.position] || 0) + 1;
       return acc;
