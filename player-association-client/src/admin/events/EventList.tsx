@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { EventService } from "../../api/eventService";
 import EventForm from "./EventForm";
 
-// Renamed to avoid conflict with global DOM 'Event' type
+// Types
 interface FederationEvent {
   id: number;
   title: string;
@@ -13,17 +13,17 @@ interface FederationEvent {
 }
 
 // --- Icons ---
-const MapPinIcon = () => (
-  <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+const LocationIcon = () => (
+  <svg className="w-3.5 h-3.5 text-gray-400 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
 );
 const CalendarIcon = () => (
-  <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+  <svg className="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
 );
 const EditIcon = () => (
-  <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
 );
 const TrashIcon = () => (
-  <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
 );
 
 export default function EventList() {
@@ -35,7 +35,6 @@ export default function EventList() {
     try {
       setLoading(true);
       const res = await EventService.getAll();
-      // Sort: Upcoming events first, then by date
       const sortedEvents = res.data.sort((a: FederationEvent, b: FederationEvent) => 
         new Date(a.eventDate).getTime() - new Date(b.eventDate).getTime()
       );
@@ -48,7 +47,7 @@ export default function EventList() {
   };
 
   const handleDelete = async (id: number) => {
-    if (!window.confirm("Are you sure you want to delete this event? This action cannot be undone.")) return;
+    if (!window.confirm("CONFIRM: Delete this scheduled event?")) return;
     try {
       await EventService.delete(id);
       fetchEvents();
@@ -62,47 +61,47 @@ export default function EventList() {
   }, []);
 
   const getImageUrl = (imagePath?: string) => {
-    if (!imagePath) return "https://via.placeholder.com/400x250?text=EFF+Event";
+    if (!imagePath) return "https://images.unsplash.com/photo-1574629810360-7efbbe195018?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80";
     if (imagePath.startsWith("http")) return imagePath;
-    // Ensure this matches your backend port
     return `http://localhost:5121${imagePath.startsWith('/') ? '' : '/'}${imagePath}`;
   };
 
-  const isPastEvent = (dateString: string) => {
-    return new Date(dateString) < new Date();
-  };
+  const isPastEvent = (dateString: string) => new Date(dateString) < new Date();
 
   if (loading) return (
-    <div className="flex flex-col items-center justify-center h-64">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#009A44]"></div>
-      <p className="mt-4 text-gray-500 font-medium">Loading Federation Events...</p>
+    <div className="flex flex-col items-center justify-center h-96">
+      <div className="h-10 w-10 border-4 border-gray-200 border-t-[#009A44] rounded-full animate-spin"></div>
+      <p className="mt-4 text-xs font-bold text-gray-500 uppercase tracking-widest">Loading Calendar...</p>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-12 font-sans">
+    <div className="min-h-screen bg-[#F8F9FA] pb-12 font-sans text-gray-800">
       
-      {/* 1. Header Section */}
-      <div className="bg-white shadow-sm mb-8">
-        <div className="h-1 flex">
-          <div className="flex-1 bg-[#009A44]"></div>
-          <div className="flex-1 bg-[#FEDD00]"></div>
-          <div className="flex-1 bg-[#FF0000]"></div>
-        </div>
-        <div className="px-6 py-6 max-w-7xl mx-auto">
-          <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight">
-            Events Management
-          </h2>
-          <p className="text-[#009A44] font-bold text-sm tracking-widest uppercase mt-1">
-            Ethiopian Football Federation (ዝግጅቶች አስተዳደር)
-          </p>
+      {/* 1. Header */}
+      <div className="bg-white border-b border-gray-200 sticky top-0 z-20">
+        <div className="px-8 py-6 flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-black text-gray-900 tracking-tighter uppercase">
+              Fixtures & Events
+            </h1>
+            <p className="text-[#009A44] font-bold text-[10px] tracking-[0.2em] uppercase mt-1">
+              Association Calendar • መርሃ ግብር
+            </p>
+          </div>
+          <button 
+             onClick={() => { setEditingEvent(null); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+             className="hidden md:block text-xs font-bold text-gray-500 hover:text-[#009A44] transition-colors uppercase tracking-widest border-b-2 border-transparent hover:border-[#009A44]"
+          >
+            Create New Event
+          </button>
         </div>
       </div>
 
-      <div className="px-6 max-w-7xl mx-auto">
+      <div className="max-w-5xl mx-auto px-6 mt-8">
         
-        {/* 2. The Form (integrated nicely) */}
-        <div className="mb-10">
+        {/* 2. Form Injection */}
+        <div className="mb-12">
           <EventForm
             event={editingEvent}
             onSuccess={() => {
@@ -112,24 +111,15 @@ export default function EventList() {
           />
         </div>
 
-        {/* 3. Divider */}
-        <div className="flex items-center mb-8">
-          <div className="h-px flex-1 bg-gray-300"></div>
-          <span className="px-4 text-gray-500 font-medium text-sm uppercase tracking-wider">Scheduled Fixtures & Events</span>
-          <div className="h-px flex-1 bg-gray-300"></div>
-        </div>
-
-        {/* 4. Event Grid (Replaces Table) */}
+        {/* 3. The "Agenda/Ticket" List Layout */}
         {events.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-xl shadow-sm border border-dashed border-gray-300">
-             <div className="mx-auto h-16 w-16 text-gray-300 mb-4">
-               <CalendarIcon />
-             </div>
-             <h3 className="text-lg font-medium text-gray-900">No events found</h3>
-             <p className="mt-1 text-gray-500">Get started by creating a new event above.</p>
+          <div className="text-center py-24 bg-white rounded-lg border border-gray-200 border-dashed">
+             <div className="mx-auto flex justify-center mb-4"><CalendarIcon /></div>
+             <h3 className="text-sm font-bold text-gray-900 uppercase">No Scheduled Events</h3>
+             <p className="text-xs text-gray-500 mt-1">The calendar is currently empty.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="space-y-4">
             {events.map((event) => {
               const isPast = isPastEvent(event.eventDate);
               const dateObj = new Date(event.eventDate);
@@ -137,69 +127,74 @@ export default function EventList() {
               return (
                 <div 
                   key={event.id} 
-                  className={`bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col group ${isPast ? 'opacity-80' : ''}`}
+                  className={`relative flex bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow ${isPast ? 'opacity-60 grayscale' : ''}`}
                 >
-                  {/* Card Image Header */}
-                  <div className="relative h-48 bg-gray-200 overflow-hidden">
-                    <img
-                      className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-                      src={getImageUrl(event.imagePath)}
-                      alt={event.title}
-                      onError={(e) => { e.currentTarget.src = "https://via.placeholder.com/400x250?text=EFF+Event"; }}
-                    />
-                    
-                    {/* Dark Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-
-                    {/* Status Badge */}
-                    <div className={`absolute top-4 right-4 px-2 py-1 rounded text-xs font-bold uppercase tracking-wide ${isPast ? 'bg-gray-800 text-white' : 'bg-[#FEDD00] text-black'}`}>
-                      {isPast ? "Concluded" : "Upcoming"}
-                    </div>
-
-                    {/* Date Block */}
-                    <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur rounded-lg px-3 py-1 shadow-lg text-center min-w-[60px]">
-                      <span className="block text-xs font-bold text-red-600 uppercase">{dateObj.toLocaleString('default', { month: 'short' })}</span>
-                      <span className="block text-xl font-black text-gray-900 leading-none">{dateObj.getDate()}</span>
-                    </div>
+                  {/* Left: Date Block (Ticket Stub Style) */}
+                  <div className={`w-24 sm:w-32 flex-shrink-0 flex flex-col items-center justify-center p-2 border-r border-dashed border-gray-300 ${isPast ? 'bg-gray-100' : 'bg-[#009A44]/5'}`}>
+                    <span className="text-xs font-bold text-[#E30613] uppercase tracking-wider">
+                      {dateObj.toLocaleString('default', { month: 'short' })}
+                    </span>
+                    <span className="text-4xl font-black text-gray-800 leading-none my-1">
+                      {dateObj.getDate()}
+                    </span>
+                    <span className="text-[10px] font-semibold text-gray-400 uppercase">
+                      {dateObj.toLocaleString('default', { weekday: 'short' })}
+                    </span>
                   </div>
 
-                  {/* Card Body */}
-                  <div className="p-5 flex-grow">
-                    <h3 className={`text-lg font-bold mb-2 line-clamp-2 ${isPast ? 'text-gray-600' : 'text-gray-900'}`}>
+                  {/* Middle: Content */}
+                  <div className="flex-1 p-5 flex flex-col justify-center min-w-0">
+                    <div className="flex items-center text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">
+                      <LocationIcon />
+                      <span className="truncate">{event.location}</span>
+                      {isPast && <span className="ml-2 px-1.5 py-0.5 bg-gray-200 text-gray-600 rounded">Concluded</span>}
+                    </div>
+                    
+                    <h3 className="text-lg font-bold text-gray-900 truncate pr-4">
                       {event.title}
                     </h3>
                     
-                    <div className="flex items-center text-sm text-gray-500 mb-3">
-                      <MapPinIcon />
-                      <span className="truncate">{event.location}</span>
-                    </div>
-
-                    <p className="text-gray-600 text-sm line-clamp-3 leading-relaxed">
+                    <p className="text-sm text-gray-500 mt-1 line-clamp-2">
                       {event.description}
                     </p>
+
+                    {/* Mobile Actions (Visible only on small screens) */}
+                    <div className="flex sm:hidden mt-3 gap-3 border-t pt-2">
+                       <button onClick={() => setEditingEvent(event)} className="text-xs text-blue-600 font-bold">Edit</button>
+                       <button onClick={() => handleDelete(event.id)} className="text-xs text-red-600 font-bold">Delete</button>
+                    </div>
                   </div>
 
-                  {/* Card Footer Actions */}
-                  <div className="bg-gray-50 px-5 py-3 border-t border-gray-100 flex justify-between items-center">
-                    <span className="text-xs text-gray-400 font-medium">ID: #{event.id}</span>
-                    <div className="flex space-x-2">
+                  {/* Right: Actions & Tiny Image (Desktop) */}
+                  <div className="hidden sm:flex w-48 border-l border-gray-100 bg-gray-50">
+                    {/* Tiny Image Preview */}
+                    <div className="w-16 h-full relative border-r border-gray-200">
+                       <img 
+                        src={getImageUrl(event.imagePath)} 
+                        alt="" 
+                        className="w-full h-full object-cover grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all"
+                       />
+                    </div>
+                    
+                    {/* Buttons */}
+                    <div className="flex-1 flex flex-col items-center justify-center gap-2 p-2">
                       <button
-                        onClick={() => {
-                          setEditingEvent(event);
-                          window.scrollTo({ top: 0, behavior: 'smooth' });
-                        }}
-                        className="flex items-center px-3 py-1.5 bg-blue-50 text-blue-600 rounded-md text-xs font-bold hover:bg-blue-100 transition-colors"
+                        onClick={() => { setEditingEvent(event); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                        className="w-full py-1.5 text-[10px] font-bold text-gray-600 bg-white border border-gray-200 rounded hover:border-[#009A44] hover:text-[#009A44] transition-colors uppercase"
                       >
-                        <EditIcon /> Edit
+                        Edit
                       </button>
                       <button
                         onClick={() => handleDelete(event.id)}
-                        className="flex items-center px-3 py-1.5 bg-red-50 text-red-600 rounded-md text-xs font-bold hover:bg-red-100 transition-colors"
+                        className="w-full py-1.5 text-[10px] font-bold text-gray-600 bg-white border border-gray-200 rounded hover:border-[#E30613] hover:text-[#E30613] transition-colors uppercase"
                       >
-                        <TrashIcon /> Delete
+                        Remove
                       </button>
                     </div>
                   </div>
+
+                  {/* Association Status Line */}
+                  <div className={`absolute left-0 top-0 bottom-0 w-1 ${isPast ? 'bg-gray-300' : 'bg-[#FEDD00]'}`}></div>
                 </div>
               );
             })}

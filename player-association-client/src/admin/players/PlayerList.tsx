@@ -128,7 +128,7 @@ function PlayerForm({ player, onSuccess, onCancel }: PlayerFormProps) {
         <h3 className="font-bold text-xl text-gray-800 flex items-center gap-2">
           {player ? "Edit Legend" : "Register New Talent"}
           <span className="text-xs font-normal text-gray-500 uppercase tracking-wider border px-2 py-0.5 rounded-full">
-             {player ? "Updating Record" : "Drafting"}
+            {player ? "Updating Record" : "Drafting"}
           </span>
         </h3>
         <button onClick={onCancel} className="text-gray-400 hover:text-red-500 transition-colors">
@@ -155,7 +155,7 @@ function PlayerForm({ player, onSuccess, onCancel }: PlayerFormProps) {
                 </div>
               )}
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
-                 <span className="text-white text-xs font-bold">Change</span>
+                <span className="text-white text-xs font-bold">Change</span>
               </div>
               <input type="file" accept="image/*" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer" />
             </div>
@@ -166,33 +166,47 @@ function PlayerForm({ player, onSuccess, onCancel }: PlayerFormProps) {
           <div className="md:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-5">
             <div className="col-span-2">
               <label className="text-sm font-bold text-gray-700">Full Name *</label>
-              <input className="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-[#009A44] outline-none" 
-                     value={form.fullName} onChange={e => setForm({...form, fullName: e.target.value})} placeholder="e.g. Abebe Bikila" required />
+              <input className="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-[#009A44] outline-none"
+                value={form.fullName} onChange={e => setForm({ ...form, fullName: e.target.value })} placeholder="e.g. Abebe Bikila" required />
             </div>
             <div>
               <label className="text-sm font-bold text-gray-700">Club</label>
-              <input className="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-[#FEDD00] outline-none" 
-                     value={form.club} onChange={e => setForm({...form, club: e.target.value})} placeholder="Current Club" />
+              <input className="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-[#FEDD00] outline-none"
+                value={form.club} onChange={e => setForm({ ...form, club: e.target.value })} placeholder="Current Club" />
             </div>
             <div>
               <label className="text-sm font-bold text-gray-700">Age *</label>
-              <input type="number" className="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-[#FF0000] outline-none" 
-                     value={form.age} onChange={e => setForm({...form, age: Number(e.target.value)})} min="16" required />
+              <input type="number" className="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-[#FF0000] outline-none"
+                value={form.age} onChange={e => setForm({ ...form, age: Number(e.target.value) })} min="16" required />
             </div>
             <div>
               <label className="text-sm font-bold text-gray-700">Position</label>
-              <input className="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-[#009A44] outline-none" 
-                     value={form.position} onChange={e => setForm({...form, position: e.target.value})} placeholder="e.g. Forward" />
+              <div className="relative">
+                <select
+                  className="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-[#009A44] outline-none appearance-none bg-white"
+                  value={form.position}
+                  onChange={e => setForm({ ...form, position: e.target.value })}
+                >
+                  <option value="" disabled>Select Position</option>
+                  <option value="Goalkeeper">Goalkeeper</option>
+                  <option value="Defender">Defender</option>
+                  <option value="Midfielder">Midfielder</option>
+                  <option value="Attacker">Attacker</option>
+                </select>
+                <div className="absolute inset-y-0 right-0 flex items-center px-4 mt-1 pointer-events-none text-gray-500">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                </div>
+              </div>
             </div>
             <div>
               <label className="text-sm font-bold text-gray-700">Nationality</label>
-              <input className="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-[#009A44] outline-none" 
-                     value={form.nationality} onChange={e => setForm({...form, nationality: e.target.value})} />
+              <input className="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-[#009A44] outline-none"
+                value={form.nationality} onChange={e => setForm({ ...form, nationality: e.target.value })} />
             </div>
             <div className="col-span-2">
               <label className="text-sm font-bold text-gray-700">Scout Report / Description</label>
               <textarea className="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-[#009A44] outline-none" rows={3}
-                        value={form.description} onChange={e => setForm({...form, description: e.target.value})} placeholder="Skills, history..." />
+                value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} placeholder="Skills, history..." />
             </div>
           </div>
         </div>
@@ -260,16 +274,16 @@ export default function PlayerManager() {
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans">
-      
+
       {/* 1. HERO HEADER */}
       <div className="bg-white shadow-lg relative overflow-hidden">
         {/* Flag Stripe */}
         <div className="flex h-2">
-            <div className="flex-1 bg-[#009A44]"></div>
-            <div className="flex-1 bg-[#FEDD00]"></div>
-            <div className="flex-1 bg-[#FF0000]"></div>
+          <div className="flex-1 bg-[#009A44]"></div>
+          <div className="flex-1 bg-[#FEDD00]"></div>
+          <div className="flex-1 bg-[#FF0000]"></div>
         </div>
-        
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-4">
@@ -285,8 +299,8 @@ export default function PlayerManager() {
                 </p>
               </div>
             </div>
-            
-            <button 
+
+            <button
               onClick={() => { setShowForm(true); setEditingPlayer(null); }}
               className="flex items-center gap-2 bg-gradient-to-r from-[#009A44] to-[#007A30] text-white px-6 py-3 rounded-full font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all"
             >
@@ -297,30 +311,30 @@ export default function PlayerManager() {
 
           {/* Stats Bar */}
           <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
-             <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
-               <span className="text-xs text-gray-500 uppercase font-bold">Squad Size</span>
-               <div className="text-2xl font-black text-gray-800">{stats.total}</div>
-             </div>
-             <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
-               <span className="text-xs text-gray-500 uppercase font-bold">Avg Age</span>
-               <div className="text-2xl font-black text-gray-800">{stats.avgAge}</div>
-             </div>
-             <div className="col-span-2 flex gap-2 overflow-x-auto pb-1">
-                {Object.entries(stats.positions).map(([pos, count]: any) => (
-                   <span key={pos} className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-bold border border-blue-100 whitespace-nowrap flex items-center">
-                     {pos}: {count}
-                   </span>
-                ))}
-             </div>
+            <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+              <span className="text-xs text-gray-500 uppercase font-bold">Squad Size</span>
+              <div className="text-2xl font-black text-gray-800">{stats.total}</div>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+              <span className="text-xs text-gray-500 uppercase font-bold">Avg Age</span>
+              <div className="text-2xl font-black text-gray-800">{stats.avgAge}</div>
+            </div>
+            <div className="col-span-2 flex gap-2 overflow-x-auto pb-1">
+              {Object.entries(stats.positions).map(([pos, count]: any) => (
+                <span key={pos} className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-bold border border-blue-100 whitespace-nowrap flex items-center">
+                  {pos}: {count}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
+
         {/* 2. FORM SECTION (Conditional) */}
         {(showForm || editingPlayer) && (
-          <PlayerForm 
+          <PlayerForm
             player={editingPlayer}
             onSuccess={() => {
               setShowForm(false);
@@ -337,8 +351,8 @@ export default function PlayerManager() {
         {/* 3. PLAYERS GRID */}
         {loading ? (
           <div className="text-center py-20">
-             <div className="animate-spin h-12 w-12 border-4 border-[#009A44] border-t-transparent rounded-full mx-auto mb-4"></div>
-             <p className="text-gray-500 font-medium">Scouting players...</p>
+            <div className="animate-spin h-12 w-12 border-4 border-[#009A44] border-t-transparent rounded-full mx-auto mb-4"></div>
+            <p className="text-gray-500 font-medium">Scouting players...</p>
           </div>
         ) : players.length === 0 ? (
           <div className="text-center py-20 bg-white rounded-xl shadow-sm border border-dashed border-gray-300">
@@ -353,55 +367,55 @@ export default function PlayerManager() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {players.map((player) => (
               <div key={player.id} className="group bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden flex flex-col">
-                
+
                 {/* Card Image Header */}
                 <div className="relative h-48 bg-gray-200">
-                   <img 
-                     src={getImageUrl(player.imagePath)} 
-                     alt={player.fullName} 
-                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                     onError={(e) => { e.currentTarget.src = "https://via.placeholder.com/300x200?text=EFF"; }}
-                   />
-                   {/* Gradient Overlay */}
-                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                   
-                   {/* Position Badge */}
-                   <span className="absolute top-3 right-3 bg-[#FEDD00] text-gray-900 text-xs font-bold px-2 py-1 rounded shadow-sm">
-                     {player.position || "N/A"}
-                   </span>
+                  <img
+                    src={getImageUrl(player.imagePath)}
+                    alt={player.fullName}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    onError={(e) => { e.currentTarget.src = "https://via.placeholder.com/300x200?text=EFF"; }}
+                  />
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
 
-                   {/* Name Overlay */}
-                   <div className="absolute bottom-3 left-4 text-white">
-                      <h3 className="font-bold text-lg leading-tight">{player.fullName}</h3>
-                      <p className="text-xs opacity-90">{player.club}</p>
-                   </div>
+                  {/* Position Badge */}
+                  <span className="absolute top-3 right-3 bg-[#FEDD00] text-gray-900 text-xs font-bold px-2 py-1 rounded shadow-sm">
+                    {player.position || "N/A"}
+                  </span>
+
+                  {/* Name Overlay */}
+                  <div className="absolute bottom-3 left-4 text-white">
+                    <h3 className="font-bold text-lg leading-tight">{player.fullName}</h3>
+                    <p className="text-xs opacity-90">{player.club}</p>
+                  </div>
                 </div>
 
                 {/* Card Body */}
                 <div className="p-4 flex-grow">
-                   <div className="flex justify-between items-center text-xs text-gray-500 mb-3 border-b pb-2">
-                      <span>Age: <strong className="text-gray-800">{player.age}</strong></span>
-                      <span>{player.nationality}</span>
-                   </div>
-                   <p className="text-sm text-gray-600 line-clamp-3 leading-relaxed">
-                     {player.description || "No scouting report available."}
-                   </p>
+                  <div className="flex justify-between items-center text-xs text-gray-500 mb-3 border-b pb-2">
+                    <span>Age: <strong className="text-gray-800">{player.age}</strong></span>
+                    <span>{player.nationality}</span>
+                  </div>
+                  <p className="text-sm text-gray-600 line-clamp-3 leading-relaxed">
+                    {player.description || "No scouting report available."}
+                  </p>
                 </div>
 
                 {/* Card Actions */}
                 <div className="p-4 pt-0 mt-auto grid grid-cols-2 gap-3">
-                   <button 
-                     onClick={() => { setEditingPlayer(player); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                     className="flex items-center justify-center gap-1 py-2 rounded-lg bg-gray-50 text-gray-700 text-sm font-semibold hover:bg-[#009A44] hover:text-white transition-colors"
-                   >
-                     <EditIcon /> Edit
-                   </button>
-                   <button 
-                     onClick={() => player.id && handleDelete(player.id)}
-                     className="flex items-center justify-center gap-1 py-2 rounded-lg bg-gray-50 text-gray-700 text-sm font-semibold hover:bg-red-500 hover:text-white transition-colors"
-                   >
-                     <DeleteIcon /> Release
-                   </button>
+                  <button
+                    onClick={() => { setEditingPlayer(player); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                    className="flex items-center justify-center gap-1 py-2 rounded-lg bg-gray-50 text-gray-700 text-sm font-semibold hover:bg-[#009A44] hover:text-white transition-colors"
+                  >
+                    <EditIcon /> Edit
+                  </button>
+                  <button
+                    onClick={() => player.id && handleDelete(player.id)}
+                    className="flex items-center justify-center gap-1 py-2 rounded-lg bg-gray-50 text-gray-700 text-sm font-semibold hover:bg-red-500 hover:text-white transition-colors"
+                  >
+                    <DeleteIcon /> Release
+                  </button>
                 </div>
               </div>
             ))}

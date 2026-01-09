@@ -1,41 +1,8 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom"; // ADD THIS IMPORT
 import { InsightService } from "../api/insightService";
 import InsightCard from "../components/insights/InsightCard";
 import Loader from "../components/common/Loader";
-
-// --- Icons ---
-const NewsHeroIcon = () => (
-  <svg className="w-16 h-16 text-[#009A44] opacity-20 absolute top-6 right-6 transform -rotate-12" fill="currentColor" viewBox="0 0 24 24"><path d="M22 3H2v18h20V3zM4 5h16v14H4V5zm2 2h12v2H6V7zm0 4h12v2H6v-2zm0 4h8v2H6v-2z"/></svg>
-);
-const EmptyStateIcon = () => (
-  <svg className="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" /></svg>
-);
-
-// Navigation Icons
-const HomeIcon = () => (
-  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-  </svg>
-);
-
-const PlayerIcon = () => (
-  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5 3.75a3.5 3.5 0 01-7 0m7 0a3.5 3.5 0 00-7 0m7 0h-7" />
-  </svg>
-);
-
-const InsightsIcon = () => (
-  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-  </svg>
-);
-
-const EventsIcon = () => (
-  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-  </svg>
-);
+import { Newspaper, Rss, ArrowUpRight } from "lucide-react";
 
 interface Insight {
   id: number;
@@ -51,133 +18,105 @@ export default function Insights() {
   const [insights, setInsights] = useState<Insight[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchInsights = async () => {
-    try {
-      setLoading(true);
-      const res = await InsightService.getAll();
-      setInsights(res.data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchInsights = async () => {
+      try {
+        setLoading(true);
+        const res = await InsightService.getAll();
+        setInsights(res.data.reverse()); // Show newest first
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchInsights();
   }, []);
 
   if (loading) return <Loader />;
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans">
-      
-      {/* Navigation Bar */}
-      <nav className="bg-white shadow-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center space-x-8">
-              <Link 
-                to="/" 
-                className="flex items-center text-gray-700 hover:text-[#009A44] px-3 py-2 rounded-md text-sm font-medium transition-colors"
-              >
-                <HomeIcon />
-                Home
-              </Link>
-              
-              <Link 
-                to="/players" 
-                className="flex items-center text-gray-700 hover:text-[#009A44] px-3 py-2 rounded-md text-sm font-medium transition-colors"
-              >
-                <PlayerIcon />
-                Players
-              </Link>
-              
-              <Link 
-                to="/events" 
-                className="flex items-center text-gray-700 hover:text-[#009A44] px-3 py-2 rounded-md text-sm font-medium transition-colors"
-              >
-                <EventsIcon />
-                Events
-              </Link>
-              
-              <Link 
-                to="/insights" 
-                className="flex items-center text-[#009A44] bg-green-50 px-3 py-2 rounded-md text-sm font-medium border-l-4 border-[#009A44]"
-              >
-                <InsightsIcon />
-                Insights
-              </Link>
-            </div>
-            
-            <div className="flex items-center">
-              <span className="text-xs font-bold text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-                EFF Newsroom
-              </span>
-            </div>
+    <div className="min-h-screen bg-[#f8f9fa] dark:bg-gray-900 font-sans transition-colors duration-500">
+
+      {/* 1. Hero Section */}
+      <div className="relative pt-20 pb-24 bg-white dark:bg-black text-gray-900 dark:text-white overflow-hidden border-b border-gray-100 dark:border-gray-800">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-red-50 dark:bg-red-900/20 text-[#FF0000] border border-red-100 dark:border-red-900/30 rounded-full font-bold text-xs uppercase tracking-[0.2em] mb-6">
+            <Newspaper size={14} /> The Press Room
           </div>
-        </div>
-      </nav>
 
-      {/* 1. Hero / Newsroom Header */}
-      <div className="bg-white shadow-sm relative overflow-hidden mb-12">
-        {/* Flag Stripe */}
-        <div className="h-1.5 flex w-full">
-           <div className="flex-1 bg-[#009A44]"></div>
-           <div className="flex-1 bg-[#FEDD00]"></div>
-           <div className="flex-1 bg-[#FF0000]"></div>
-        </div>
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10 text-center md:text-left">
-           <NewsHeroIcon />
-           
-           <h1 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight mb-4">
-             News <span className="text-[#009A44]">&</span> Insights
-           </h1>
-           
-           <div className="flex flex-col md:flex-row items-center gap-4 text-sm font-bold uppercase tracking-widest text-gray-400 mb-6">
-             <span>Official Press Centre</span>
-             <span className="hidden md:inline">•</span>
-             <span className="font-amharic text-[#009A44]">የፌዴሬሽን ዜና እና ትንታኔ</span>
-           </div>
+          <h1 className="text-5xl md:text-7xl font-black uppercase mb-4 leading-tight">
+            Latest <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF0000] to-red-800">Insights</span>
+          </h1>
 
-           <p className="max-w-2xl text-lg text-gray-600 leading-relaxed">
-             Exclusive interviews, tactical analysis, youth development updates, 
-             and official statements from the Ethiopian Football Federation. 
-             Get the stories behind the scores.
-           </p>
+          <p className="text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto font-light leading-relaxed">
+            Exclusive interviews, tactical analysis, and official statements from the heart of the federation.
+          </p>
         </div>
-        
-        {/* Decorative Background Fade */}
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-green-50 rounded-full filter blur-3xl opacity-60 pointer-events-none"></div>
       </div>
 
-      {/* 2. Content Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-        
-        {insights.length === 0 ? (
-          // Empty State
-          <div className="bg-white rounded-2xl shadow-sm border border-dashed border-gray-300 p-20 text-center">
-             <EmptyStateIcon />
-             <h3 className="text-xl font-bold text-gray-900">No Articles Published</h3>
-             <p className="text-gray-500 mt-2">The newsroom is currently quiet. Check back soon.</p>
-          </div>
-        ) : (
-          // Insights Grid
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {insights.map((insight) => (
-              <InsightCard key={insight.id} {...insight} />
-            ))}
+      {/* 2. Content Section */}
+      <div className="max-w-7xl mx-auto px-6 py-16">
+
+        {/* Top Feature (First item if exists) */}
+        {insights.length > 0 && (
+          <div className="mb-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="group relative rounded-2xl overflow-hidden shadow-2xl h-[400px]">
+              <img src={insights[0].imagePath} alt={insights[0].title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+              <div className="absolute bottom-6 left-6 right-6">
+                <span className="px-3 py-1 bg-[#FF0000] text-white text-xs font-bold uppercase tracking-widest rounded mb-3 inline-block">Featured</span>
+                <h2 className="text-3xl font-black text-white leading-tight mb-2">{insights[0].title}</h2>
+              </div>
+            </div>
+            <div className="space-y-6">
+              <h2 className="text-3xl font-black text-gray-900 dark:text-white uppercase leading-tight">
+                {insights[0].title}
+              </h2>
+              <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed max-w-lg">
+                {insights[0].description}
+              </p>
+              <a href={`/insights/${insights[0].id}`} className="inline-flex items-center gap-2 text-[#FF0000] font-bold uppercase tracking-widest hover:text-red-700 transition-colors">
+                Read Full Article <ArrowUpRight size={20} />
+              </a>
+            </div>
           </div>
         )}
-        
-        {/* Footer Note */}
-        <div className="mt-16 text-center">
-           <p className="text-xs text-gray-400 uppercase tracking-widest font-bold">
-             EFF Editorial Team
-           </p>
+
+        {/* Categories Bar */}
+        <div className="flex items-center gap-8 border-b border-gray-200 dark:border-gray-700 pb-4 mb-12 overflow-x-auto">
+          <button className="text-[#FF0000] font-black uppercase text-sm border-b-2 border-[#FF0000] pb-4 -mb-4.5 whitespace-nowrap">Latest News</button>
+          <button className="text-gray-500 dark:text-gray-400 font-bold uppercase text-sm hover:text-gray-900 dark:hover:text-white transition-colors whitespace-nowrap">Interviews</button>
+          <button className="text-gray-500 dark:text-gray-400 font-bold uppercase text-sm hover:text-gray-900 dark:hover:text-white transition-colors whitespace-nowrap">Tactics</button>
+          <div className="flex-grow"></div>
+          <button className="flex items-center gap-2 text-gray-400 text-xs font-bold uppercase tracking-widest whitespace-nowrap">
+            <Rss size={14} /> RSS Feed
+          </button>
         </div>
+
+        {/* Insights Grid */}
+        {insights.length === 0 ? (
+          <div className="text-center py-24 bg-white dark:bg-gray-800 rounded-2xl border-2 border-dashed border-gray-200 dark:border-gray-700">
+            <Newspaper size={48} className="mx-auto text-gray-300 mb-4" />
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white">No Articles Published</h3>
+            <p className="text-gray-500 dark:text-gray-400 mt-2">The newsroom is coming soon.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {insights.slice(1).map((insight) => ( // Skip the first one if used in Featured
+              <InsightCard key={insight.id} {...insight} />
+            ))}
+            {/* If only 1 item, show it again or handle empty logic differently. Here simply mapping all remaining. */}
+            {insights.length === 1 && (
+              <div className="col-span-full text-center py-10 text-gray-400">
+                More articles coming soon.
+              </div>
+            )}
+          </div>
+        )}
+
       </div>
+
     </div>
   );
 }
