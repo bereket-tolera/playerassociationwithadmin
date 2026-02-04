@@ -94,7 +94,7 @@ export default function Insights() {
           <button className="text-gray-500 dark:text-gray-400 font-bold uppercase text-sm hover:text-gray-900 dark:hover:text-white transition-colors whitespace-nowrap">Tactics</button>
           <div className="flex-grow"></div>
           <button className="flex items-center gap-2 text-gray-400 text-xs font-bold uppercase tracking-widest whitespace-nowrap">
-            <Rss size={14} /> RSS Feed
+            <Rss size={14} />
           </button>
         </div>
 
