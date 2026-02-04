@@ -12,7 +12,7 @@ interface Player {
   position: string;
   nationality: string;
   description: string;
-  imagePath: string;
+  imagePath?: string;
 }
 
 const POSITIONS = ["All", "Goalkeeper", "Defender", "Midfielder", "Attacker"];
@@ -31,10 +31,12 @@ export default function Players() {
       try {
         setLoading(true);
         const res = await PlayerService.getAll();
+        console.log('Players data:', res.data);
+        console.log('First player:', res.data[0]);
         setAllPlayers(res.data);
         setFilteredPlayers(res.data);
       } catch (error) {
-        console.error(error);
+        console.error('Error fetching players:', error);
       } finally {
         setLoading(false);
       }

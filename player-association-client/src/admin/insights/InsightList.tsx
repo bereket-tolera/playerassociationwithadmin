@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { InsightService } from "../../api/insightService";
 import InsightForm from "./InsightForm";
+import ImageSlider from "../../components/ImageSlider";
 
 // --- Interfaces ---
 interface Insight {
@@ -10,7 +11,8 @@ interface Insight {
   content: string;
   author: string;
   category: any;
-  imagePath: string;
+  imagePath?: string;
+  imagePaths?: string[];
   createdAt?: string;
 }
 
@@ -59,9 +61,14 @@ export default function InsightList() {
     fetchInsights();
   }, []);
 
-  const getImageUrl = (imagePath?: string) => {
+  const getImageUrl = (imagePaths?: string | string[]) => {
+    if (!imagePaths) return "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=400&q=80";
+
+    const imagePath = Array.isArray(imagePaths) ? (imagePaths.length > 0 ? imagePaths[0] : null) : imagePaths;
+
     if (!imagePath) return "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=400&q=80";
     if (imagePath.startsWith("http")) return imagePath;
+
     return `http://localhost:5121${imagePath.startsWith('/') ? '' : '/'}${imagePath}`;
   };
 
@@ -74,16 +81,16 @@ export default function InsightList() {
 
   if (loading) return (
     <div className="flex flex-col items-center justify-center h-96">
-       <div className="h-1 w-24 bg-gray-200 overflow-hidden rounded-full">
-          <div className="h-full bg-[#009A44] w-1/3 animate-[slide_1.5s_infinite]"></div>
-       </div>
-       <p className="mt-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Loading Press Feed...</p>
+      <div className="h-1 w-24 bg-gray-200 overflow-hidden rounded-full">
+        <div className="h-full bg-[#009A44] w-1/3 animate-[slide_1.5s_infinite]"></div>
+      </div>
+      <p className="mt-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Loading Press Feed...</p>
     </div>
   );
 
   return (
     <div className="min-h-screen bg-[#F3F4F6] pb-12 font-sans">
-      
+
       {/* 1. Header */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-20">
         <div className="px-8 py-5 flex justify-between items-end">
@@ -96,14 +103,14 @@ export default function InsightList() {
             </p>
           </div>
           <div className="text-right">
-             <span className="text-4xl font-black text-gray-200">{insights.length.toString().padStart(2, '0')}</span>
-             <span className="block text-[10px] text-gray-400 uppercase font-bold">Articles</span>
+            <span className="text-4xl font-black text-gray-200">{insights.length.toString().padStart(2, '0')}</span>
+            <span className="block text-[10px] text-gray-400 uppercase font-bold">Articles</span>
           </div>
         </div>
       </div>
 
       <div className="max-w-6xl mx-auto px-6 mt-8">
-        
+
         {/* 2. Form Injection */}
         <div className="mb-10">
           <InsightForm
@@ -112,36 +119,44 @@ export default function InsightList() {
               setEditingInsight(null);
               fetchInsights();
             }}
-            onCancel={() => setEditingInsight(null)} 
+            onCancel={() => setEditingInsight(null)}
           />
         </div>
 
         {/* 3. The "Press Wire" List (Horizontal Cards) */}
         {insights.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 bg-white rounded-lg border border-gray-200">
-             <ArchiveIcon />
-             <h3 className="mt-4 text-sm font-bold text-gray-900 uppercase">No Articles Published</h3>
+            <ArchiveIcon />
+            <h3 className="mt-4 text-sm font-bold text-gray-900 uppercase">No Articles Published</h3>
           </div>
         ) : (
           <div className="flex flex-col gap-4">
             {insights.map((insight) => {
               const categoryName = displayCategory(insight.category);
-              
+
               return (
-                <div 
-                  key={insight.id} 
+                <div
+                  key={insight.id}
                   className="group relative bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-200 flex flex-col sm:flex-row overflow-hidden h-auto sm:h-48"
                 >
                   {/* Left: Compact Image (Thumbnail) */}
                   <div className="w-full sm:w-48 h-32 sm:h-full relative flex-shrink-0 bg-gray-900">
-                    <img
-                      className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
-                      src={getImageUrl(insight.imagePath)}
-                      alt={insight.title}
-                      onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=400&q=80"; }}
-                    />
+                    {insight.imagePaths && insight.imagePaths.length > 0 ? (
+                      <ImageSlider
+                        images={insight.imagePaths}
+                        alt={insight.title}
+                        className="h-32 sm:h-full"
+                      />
+                    ) : (
+                      <img
+                        className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                        src={getImageUrl(insight.imagePaths || insight.imagePath)}
+                        alt={insight.title}
+                        onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=400&q=80"; }}
+                      />
+                    )}
                     {/* Category Overlay on Image */}
-                    <div className="absolute top-0 left-0 bg-[#E30613] text-white text-[10px] font-bold px-2 py-1 uppercase tracking-wider">
+                    <div className="absolute top-0 left-0 bg-[#E30613] text-white text-[10px] font-bold px-2 py-1 uppercase tracking-wider z-10">
                       {categoryName}
                     </div>
                   </div>
@@ -185,7 +200,7 @@ export default function InsightList() {
                       </button>
                     </div>
                   </div>
-                  
+
                   {/* Decorative Side Border */}
                   <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#009A44] sm:hidden"></div>
                 </div>

@@ -8,6 +8,6 @@ namespace PlayerAssociationAPI.DTOs.Insight
         public string Content { get; set; } = string.Empty;
         public string Author { get; set; } = string.Empty;
         public string Category { get; set; } = string.Empty; // Return string to frontend
-        public string ImagePath { get; set; } = string.Empty;
+        public List<string> ImagePaths { get; set; } = new List<string>();
     }
 }

@@ -8,7 +8,8 @@ interface Event {
   id: number;
   title: string;
   description: string;
-  imagePath: string;
+  imagePath?: string;
+  imagePaths?: string[];
   eventDate: string;
   location: string;
 }

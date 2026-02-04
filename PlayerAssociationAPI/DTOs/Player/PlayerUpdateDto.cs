@@ -11,7 +11,7 @@ namespace PlayerAssociationAPI.DTOs.Player
         public string? Nationality { get; set; }
         public string? Description { get; set; }
 
-        // Optional new image
-        public IFormFile? ImageFile { get; set; }
+        // Optional new images
+        public List<IFormFile>? ImageFiles { get; set; }
     }
 }

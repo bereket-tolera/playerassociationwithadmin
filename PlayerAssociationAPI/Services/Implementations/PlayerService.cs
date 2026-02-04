@@ -24,13 +24,13 @@ namespace PlayerAssociationAPI.Services.Implementations
 
         public async Task<IEnumerable<PlayerReadDto>> GetAllAsync()
         {
-            var players = await _context.Players.ToListAsync();
+            var players = await _context.Players.Include(p => p.Images).ToListAsync();
             return players.Select(p => ConvertToDto(p));
         }
 
         public async Task<PlayerReadDto?> GetByIdAsync(int id)
         {
-            var player = await _context.Players.FindAsync(id);
+            var player = await _context.Players.Include(p => p.Images).FirstOrDefaultAsync(p => p.Id == id);
             if (player == null) return null;
             return ConvertToDto(player);
         }
@@ -40,7 +40,7 @@ namespace PlayerAssociationAPI.Services.Implementations
             try
             {
                 Console.WriteLine($"Creating player: {dto.FullName}");
-                Console.WriteLine($"Image file: {dto.ImageFile?.FileName}");
+                Console.WriteLine($"Image files count: {dto.ImageFiles?.Count ?? 0}");
 
                 var player = new Player
                 {
@@ -53,11 +53,16 @@ namespace PlayerAssociationAPI.Services.Implementations
                     CreatedAt = DateTime.UtcNow
                 };
 
-                if (dto.ImageFile != null && dto.ImageFile.Length > 0)
+                if (dto.ImageFiles != null && dto.ImageFiles.Any())
                 {
-                    Console.WriteLine($"Processing image file: {dto.ImageFile.FileName}, Size: {dto.ImageFile.Length}");
-                    player.ImagePath = await SaveImageAsync(dto.ImageFile);
-                    Console.WriteLine($"Image saved at: {player.ImagePath}");
+                    foreach (var file in dto.ImageFiles)
+                    {
+                        if (file.Length > 0)
+                        {
+                            var imagePath = await SaveImageAsync(file);
+                            player.Images.Add(new PlayerImage { ImagePath = imagePath });
+                        }
+                    }
                 }
 
                 _context.Players.Add(player);
@@ -75,7 +80,7 @@ namespace PlayerAssociationAPI.Services.Implementations
 
         public async Task<PlayerReadDto?> UpdateAsync(int id, PlayerUpdateDto dto)
         {
-            var player = await _context.Players.FindAsync(id);
+            var player = await _context.Players.Include(p => p.Images).FirstOrDefaultAsync(p => p.Id == id);
             if (player == null) return null;
 
             if (!string.IsNullOrWhiteSpace(dto.FullName))
@@ -95,13 +100,23 @@ namespace PlayerAssociationAPI.Services.Implementations
             if (!string.IsNullOrWhiteSpace(dto.Description))
                 player.Description = dto.Description.Trim();
 
-            if (dto.ImageFile != null && dto.ImageFile.Length > 0)
+            if (dto.ImageFiles != null && dto.ImageFiles.Any())
             {
-                // Delete old image if exists
-                if (!string.IsNullOrEmpty(player.ImagePath))
-                    DeleteImage(player.ImagePath);
-
-                player.ImagePath = await SaveImageAsync(dto.ImageFile);
+                // Replace old images with the new one (as requested: single profile image)
+                foreach (var oldImg in player.Images) 
+                {
+                    DeleteImage(oldImg.ImagePath);
+                }
+                player.Images.Clear();
+                
+                foreach (var file in dto.ImageFiles)
+                {
+                    if (file.Length > 0)
+                    {
+                        var imagePath = await SaveImageAsync(file);
+                        player.Images.Add(new PlayerImage { ImagePath = imagePath });
+                    }
+                }
             }
 
             player.UpdatedAt = DateTime.UtcNow;
@@ -112,12 +127,14 @@ namespace PlayerAssociationAPI.Services.Implementations
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var player = await _context.Players.FindAsync(id);
+            var player = await _context.Players.Include(p => p.Images).FirstOrDefaultAsync(p => p.Id == id);
             if (player == null) return false;
 
-            // Delete image file if exists
-            if (!string.IsNullOrEmpty(player.ImagePath))
-                DeleteImage(player.ImagePath);
+            // Delete associated images
+            foreach (var img in player.Images)
+            {
+                DeleteImage(img.ImagePath);
+            }
 
             _context.Players.Remove(player);
             await _context.SaveChangesAsync();
@@ -130,18 +147,18 @@ namespace PlayerAssociationAPI.Services.Implementations
             try
             {
                 // Ensure wwwroot/uploads directory exists
-                var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads");
+                // Use a more robust way to get the uploads path
+                var webRoot = _env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+                var uploadsFolder = Path.Combine(webRoot, "uploads");
+                
                 if (!Directory.Exists(uploadsFolder))
                 {
                     Directory.CreateDirectory(uploadsFolder);
-                    Console.WriteLine($"Created directory: {uploadsFolder}");
                 }
 
                 // Generate unique filename
                 var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
                 var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                Console.WriteLine($"Saving file to: {filePath}");
 
                 // Save file
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
@@ -149,10 +166,9 @@ namespace PlayerAssociationAPI.Services.Implementations
                     await file.CopyToAsync(fileStream);
                 }
 
-                // Return relative URL path
-                var request = _httpContextAccessor.HttpContext?.Request;
-                var baseUrl = $"{request?.Scheme}://{request?.Host}";
-                return $"{baseUrl}/uploads/{uniqueFileName}";
+                // Return relative path for better portability
+                // imageUtils.ts on frontend will prepend the base URL
+                return $"/uploads/{uniqueFileName}";
             }
             catch (Exception ex)
             {
@@ -196,7 +212,7 @@ namespace PlayerAssociationAPI.Services.Implementations
                 Position = player.Position,
                 Nationality = player.Nationality,
                 Description = player.Description,
-                ImagePath = player.ImagePath,
+                ImagePath = player.Images.FirstOrDefault()?.ImagePath,
                 CreatedAt = player.CreatedAt,
                 UpdatedAt = player.UpdatedAt
             };

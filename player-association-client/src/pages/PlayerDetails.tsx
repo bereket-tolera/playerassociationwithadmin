@@ -12,7 +12,7 @@ interface Player {
     position: string;
     nationality: string;
     description: string;
-    imagePath: string;
+    imagePath?: string;
 }
 
 // --- Player Image Component for Better Positioning ---
@@ -30,25 +30,14 @@ const PlayerHeroImage = ({ src, alt }: { src: string, alt: string }) => {
     };
 
     return (
-        <div className="relative h-full w-full overflow-hidden">
+        <div className="relative h-full w-full overflow-hidden bg-gray-900">
             <img
                 src={imgSrc}
                 alt={alt}
-                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'
+                className={`w-full h-full object-contain transition-opacity duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'
                     }`}
-                style={{
-                    // LOWER POSITIONING: Changed from center 30% to center 40%
-                    objectPosition: 'center 13%' // Centers face lower from top (40% from top)
-                }}
                 onError={handleError}
-                onLoad={(e) => {
-                    handleLoad();
-                    // Auto-adjust based on aspect ratio for better face positioning
-                    const img = e.currentTarget;
-                    const isPortrait = img.naturalHeight > img.naturalWidth;
-                    // LOWER POSITIONING: Portrait 35%, Landscape 45% (both lower than before)
-                    img.style.objectPosition = isPortrait ? 'center 20%' : 'center 20%';
-                }}
+                onLoad={handleLoad}
             />
 
             {/* Loading skeleton */}
@@ -81,10 +70,14 @@ export default function PlayerDetails() {
     }, [id]);
 
     // Helper function to get proper image URL
-    const getImageUrl = (imagePath: string) => {
+    const getImageUrl = (imagePaths?: string | string[]) => {
+        if (!imagePaths) return "https://images.unsplash.com/photo-1614632537423-1e6c7d5e1b9f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80";
+
+        const imagePath = Array.isArray(imagePaths) ? (imagePaths.length > 0 ? imagePaths[0] : null) : imagePaths;
+
         if (!imagePath) return "https://images.unsplash.com/photo-1614632537423-1e6c7d5e1b9f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80";
         if (imagePath.startsWith("http")) return imagePath;
-        // Adjust this base URL to match your backend port
+
         return `http://localhost:5121${imagePath.startsWith('/') ? '' : '/uploads/'}${imagePath}`;
     };
 
@@ -94,21 +87,18 @@ export default function PlayerDetails() {
     return (
         <div className="min-h-screen bg-[#f8f9fa] dark:bg-gray-900 font-sans transition-colors duration-500">
 
-            {/* 1. Header / Hero - LOWER IMAGE POSITIONING */}
+            {/* 1. Header / Hero - Image Gallery */}
             <div className="relative h-[55vh] min-h-[450px] w-full overflow-hidden bg-gray-900">
-                {/* Dark overlay - made lighter to show more of the image */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/10 z-10"></div>
-
-                {/* Player Image positioned LOWER */}
-                <div className="absolute inset-0 z-0" style={{ top: '0%' }}> {/* Added top offset */}
+                {/* Player Image */}
+                <div className="absolute inset-0 z-0">
                     <PlayerHeroImage
                         src={getImageUrl(player.imagePath)}
                         alt={player.fullName}
                     />
                 </div>
 
-                {/* Bottom gradient overlay - adjusted to show more of the image */}
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent z-20"></div>
+                {/* Bottom gradient overlay - z-10 */}
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/40 to-transparent z-10 pointer-events-none"></div>
 
                 {/* Content */}
                 <div className="absolute bottom-0 left-0 w-full p-8 z-30 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -130,13 +120,6 @@ export default function PlayerDetails() {
                                 </div>
                             </div>
                         </div>
-
-                        {/* Player number badge - positioned higher */}
-                        {/* <div className="absolute top-6 right-6 md:relative md:top-auto md:right-auto">
-                            <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-black/50 border-2 border-white/20 flex items-center justify-center">
-                                <span className="text-white text-2xl md:text-3xl font-black">#{player.id.toString().padStart(2, '0')}</span>
-                            </div>
-                        </div> */}
                     </div>
                 </div>
             </div>

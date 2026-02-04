@@ -63,20 +63,7 @@ if (!Directory.Exists(uploadsPath))
 }
 
 // Enable static files (for serving uploaded images)
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
-    RequestPath = ""
-});
-
-// Also explicitly serve the uploads folder
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads")),
-    RequestPath = "/uploads"
-});
+app.UseStaticFiles();
 
 // Enable CORS - must come before UseAuthorization and MapControllers
 app.UseCors("AllowReactApp");
@@ -90,4 +77,13 @@ Console.WriteLine($"Application started. Uploads path: {uploadsPath}");
 Console.WriteLine($"Environment: {app.Environment.EnvironmentName}");
 Console.WriteLine($"Database connection: {builder.Configuration.GetConnectionString("DefaultConnection")}");
 
-app.Run();
+try 
+{
+    app.Run();
+}
+catch (Exception ex)
+{
+    Console.WriteLine("CRITICAL ERROR DURING STARTUP:");
+    Console.WriteLine(ex.ToString());
+    throw;
+}

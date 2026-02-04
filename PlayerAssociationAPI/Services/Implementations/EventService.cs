@@ -23,32 +23,16 @@ namespace PlayerAssociationAPI.Services.Implementations
 
         public async Task<IEnumerable<EventReadDto>> GetAllAsync()
         {
-            return await _context.Events
-                .Select(e => new EventReadDto
-                {
-                    Id = e.Id,
-                    Title = e.Title,
-                    Description = e.Description,
-                    ImagePath = e.ImagePath,
-                    EventDate = e.EventDate,
-                    Location = e.Location
-                }).ToListAsync();
+            var events = await _context.Events.Include(e => e.Images).ToListAsync();
+            return events.Select(e => ConvertToDto(e));
         }
 
         public async Task<EventReadDto?> GetByIdAsync(int id)
         {
-            var ev = await _context.Events.FindAsync(id);
+            var ev = await _context.Events.Include(e => e.Images).FirstOrDefaultAsync(e => e.Id == id);
             if (ev == null) return null;
 
-            return new EventReadDto
-            {
-                Id = ev.Id,
-                Title = ev.Title,
-                Description = ev.Description,
-                ImagePath = ev.ImagePath,
-                EventDate = ev.EventDate,
-                Location = ev.Location
-            };
+            return ConvertToDto(ev);
         }
 
         public async Task<EventReadDto> CreateAsync(EventCreateDto dto)
@@ -62,9 +46,16 @@ namespace PlayerAssociationAPI.Services.Implementations
                 CreatedAt = DateTime.UtcNow
             };
 
-            if (dto.ImageFile != null && dto.ImageFile.Length > 0)
+            if (dto.ImageFiles != null && dto.ImageFiles.Any())
             {
-                ev.ImagePath = await SaveImageAsync(dto.ImageFile);
+                foreach (var file in dto.ImageFiles)
+                {
+                    if (file.Length > 0)
+                    {
+                        var imagePath = await SaveImageAsync(file);
+                        ev.Images.Add(new EventImage { ImagePath = imagePath });
+                    }
+                }
             }
 
             _context.Events.Add(ev);
@@ -75,7 +66,7 @@ namespace PlayerAssociationAPI.Services.Implementations
 
         public async Task<EventReadDto?> UpdateAsync(int id, EventUpdateDto dto)
         {
-            var ev = await _context.Events.FindAsync(id);
+            var ev = await _context.Events.Include(e => e.Images).FirstOrDefaultAsync(e => e.Id == id);
             if (ev == null) return null;
 
             ev.Title = dto.Title ?? ev.Title;
@@ -84,13 +75,16 @@ namespace PlayerAssociationAPI.Services.Implementations
             ev.Location = dto.Location ?? ev.Location;
             ev.UpdatedAt = DateTime.UtcNow;
 
-            if (dto.ImageFile != null && dto.ImageFile.Length > 0)
+            if (dto.ImageFiles != null && dto.ImageFiles.Any())
             {
-                // Delete old image if exists
-                if (!string.IsNullOrEmpty(ev.ImagePath))
-                    DeleteImage(ev.ImagePath);
-
-                ev.ImagePath = await SaveImageAsync(dto.ImageFile);
+                foreach (var file in dto.ImageFiles)
+                {
+                    if (file.Length > 0)
+                    {
+                        var imagePath = await SaveImageAsync(file);
+                        ev.Images.Add(new EventImage { ImagePath = imagePath });
+                    }
+                }
             }
 
             await _context.SaveChangesAsync();
@@ -100,12 +94,15 @@ namespace PlayerAssociationAPI.Services.Implementations
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var ev = await _context.Events.FindAsync(id);
+            var ev = await _context.Events.Include(e => e.Images).FirstOrDefaultAsync(e => e.Id == id);
             if (ev == null) return false;
 
             // Delete image file if exists
-            if (!string.IsNullOrEmpty(ev.ImagePath))
-                DeleteImage(ev.ImagePath);
+            // Delete associated images
+            foreach (var img in ev.Images)
+            {
+                DeleteImage(img.ImagePath);
+            }
 
             _context.Events.Remove(ev);
             await _context.SaveChangesAsync();
@@ -176,9 +173,8 @@ namespace PlayerAssociationAPI.Services.Implementations
                 Id = ev.Id,
                 Title = ev.Title,
                 Description = ev.Description,
-                ImagePath = !string.IsNullOrEmpty(ev.ImagePath) 
-                    ? $"{baseUrl}{ev.ImagePath}" 
-                    : ev.ImagePath,
+                ImagePaths = ev.Images.Select(i => 
+                    !string.IsNullOrEmpty(i.ImagePath) ? $"{baseUrl}{i.ImagePath}" : i.ImagePath).ToList(),
                 EventDate = ev.EventDate,
                 Location = ev.Location
             };

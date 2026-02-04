@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { InsightService } from "../api/insightService";
 import Loader from "../components/common/Loader";
+import ImageSlider from "../components/ImageSlider";
+import { getImageUrl, getImageUrls } from "../utils/imageUtils";
 import { ArrowLeft, Calendar, User, Tag } from "lucide-react";
 
 interface Insight {
@@ -11,7 +13,8 @@ interface Insight {
     content: string;
     author: string;
     category: string;
-    imagePath: string;
+    imagePath?: string;
+    imagePaths?: string[];
     createdAt?: string; // Assuming API returns createdAt or similar
 }
 
@@ -42,14 +45,27 @@ export default function InsightDetails() {
     return (
         <div className="min-h-screen bg-white dark:bg-gray-900 font-sans transition-colors duration-500">
 
-            {/* 1. Hero Header */}
-            <div className="relative h-[60vh] min-h-[500px] w-full overflow-hidden">
-                <img
-                    src={insight.imagePath}
-                    alt={insight.title}
-                    className="absolute inset-0 w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent"></div>
+            {/* 1. Hero Header with Image Gallery */}
+            <div className="relative h-[60vh] min-h-[500px] w-full overflow-hidden bg-gray-900">
+                {/* Image Layer - z-0 */}
+                <div className="absolute inset-0 z-0">
+                    {insight.imagePaths && insight.imagePaths.length > 0 ? (
+                        <ImageSlider
+                            images={getImageUrls(insight.imagePaths)}
+                            alt={insight.title}
+                            className="h-full"
+                        />
+                    ) : (
+                        <img
+                            src={getImageUrl(insight.imagePaths || insight.imagePath)}
+                            alt={insight.title}
+                            className="w-full h-full object-contain"
+                        />
+                    )}
+                </div>
+
+                {/* Gradient Overlays - z-10 */}
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent z-10 pointer-events-none"></div>
 
                 <div className="absolute top-6 left-6 z-30">
                     <Link to="/insights" className="inline-flex items-center text-white/80 hover:text-white uppercase text-xs font-bold tracking-widest transition-colors bg-black/20 backdrop-blur px-4 py-2 rounded-full">

@@ -1,6 +1,7 @@
 import { useEffect, useState, ChangeEvent, FormEvent } from "react";
 // Ensure this path matches your project structure
 import { PlayerService } from "../../api/playerService";
+import ImageSlider from "../../components/ImageSlider";
 
 // --- Types ---
 interface Player {
@@ -12,6 +13,7 @@ interface Player {
   nationality: string;
   description: string;
   imagePath?: string;
+  imagePaths?: string[];
 }
 
 // --- Icons (Embedded for single-file portability) ---
@@ -65,7 +67,9 @@ function PlayerForm({ player, onSuccess, onCancel }: PlayerFormProps) {
     if (player) {
       setForm({ ...player });
       setImageFile(null);
-      setPreviewUrl(player.imagePath || null);
+      // Use getImageUrl to handle relative paths from backend
+      const playerImageUrl = player.imagePath ? getImageUrl(player.imagePath) : null;
+      setPreviewUrl(playerImageUrl);
     } else {
       setForm(initialFormState);
       setImageFile(null);
@@ -111,7 +115,7 @@ function PlayerForm({ player, onSuccess, onCancel }: PlayerFormProps) {
       formData.append("Nationality", form.nationality.trim());
       formData.append("Description", form.description.trim());
 
-      if (imageFile) formData.append("ImageFile", imageFile);
+      if (imageFile) formData.append("ImageFiles", imageFile);
 
       if (player && player.id) {
         await PlayerService.update(player.id, formData);
@@ -241,6 +245,16 @@ function PlayerForm({ player, onSuccess, onCancel }: PlayerFormProps) {
   );
 }
 
+const getImageUrl = (imagePaths?: string | string[]) => {
+  if (!imagePaths) return "https://via.placeholder.com/150x150?text=No+Photo";
+  const imagePath = Array.isArray(imagePaths) ? (imagePaths.length > 0 ? imagePaths[0] : null) : imagePaths;
+  if (!imagePath) return "https://via.placeholder.com/150x150?text=No+Photo";
+  if (imagePath.startsWith("http")) return imagePath;
+
+  // Adjust this base URL to match your backend port
+  return `http://localhost:5121${imagePath.startsWith('/') ? '' : '/uploads/'}${imagePath}`;
+};
+
 // --- Main Component: Player Manager ---
 export default function PlayerManager() {
   const [players, setPlayers] = useState<Player[]>([]);
@@ -272,13 +286,6 @@ export default function PlayerManager() {
     } catch (err) {
       alert("Failed to delete player");
     }
-  };
-
-  const getImageUrl = (imagePath?: string) => {
-    if (!imagePath) return "https://via.placeholder.com/150x150?text=No+Photo";
-    if (imagePath.startsWith("http")) return imagePath;
-    // Adjust this base URL to match your backend port
-    return `http://localhost:5121${imagePath.startsWith('/') ? '' : '/uploads/'}${imagePath}`;
   };
 
   // Stats Logic
@@ -388,23 +395,32 @@ export default function PlayerManager() {
               <div key={player.id} className="group bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden flex flex-col">
 
                 {/* Card Image Header */}
-                <div className="relative h-48 bg-gray-200">
-                  <img
-                    src={getImageUrl(player.imagePath)}
-                    alt={player.fullName}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    onError={(e) => { e.currentTarget.src = "https://via.placeholder.com/300x200?text=EFF"; }}
-                  />
+                <div className="relative h-48 bg-gray-900">
+                  {player.imagePaths && player.imagePaths.length > 0 ? (
+                    <ImageSlider
+                      images={player.imagePaths}
+                      alt={player.fullName}
+                      className="h-48"
+                    />
+                  ) : (
+                    <img
+                      src={getImageUrl(player.imagePath)}
+                      alt={player.fullName}
+                      className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+                      onError={(e) => { e.currentTarget.src = "https://via.placeholder.com/300x200?text=EFF"; }}
+                    />
+                  )}
+
                   {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent pointer-events-none"></div>
 
                   {/* Position Badge */}
-                  <span className="absolute top-3 right-3 bg-[#FEDD00] text-gray-900 text-xs font-bold px-2 py-1 rounded shadow-sm">
+                  <span className="absolute top-3 right-3 bg-[#FEDD00] text-gray-900 text-xs font-bold px-2 py-1 rounded shadow-sm z-10">
                     {player.position || "N/A"}
                   </span>
 
                   {/* Name Overlay */}
-                  <div className="absolute bottom-3 left-4 text-white">
+                  <div className="absolute bottom-3 left-4 text-white z-10 pointer-events-none">
                     <h3 className="font-bold text-lg leading-tight">{player.fullName}</h3>
                     <p className="text-xs opacity-90">{player.club}</p>
                   </div>

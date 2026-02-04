@@ -42,8 +42,9 @@ export default function InsightForm({ insight, onSuccess, onCancel }: InsightFor
     category: categories[0],
   };
 
+  /* eslint-disable react-hooks/exhaustive-deps */
   const [form, setForm] = useState(initialForm);
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -57,18 +58,24 @@ export default function InsightForm({ insight, onSuccess, onCancel }: InsightFor
         author: insight.author || "",
         category: insight.category || categories[0],
       });
-      setImageFile(null);
-      setPreviewUrl(insight.imagePath || null);
+      setImageFiles([]);
+      // Mock logic: insight.imagePath might be comma separated string from backend or single
+      const imgPath = typeof insight.imagePath === 'string' ? insight.imagePath : '';
+      setPreviewUrl(imgPath || null);
     } else {
       setForm(initialForm);
+      setImageFiles([]);
       setPreviewUrl(null);
     }
   }, [insight]);
 
   useEffect(() => {
     return () => {
-      if (previewUrl && previewUrl.startsWith('blob:')) {
-        URL.revokeObjectURL(previewUrl);
+      if (previewUrl && !previewUrl.startsWith('http')) {
+        const urls = previewUrl.split(',');
+        urls.forEach(url => {
+          if (url.startsWith('blob:')) URL.revokeObjectURL(url);
+        });
       }
     };
   }, [previewUrl]);
@@ -79,10 +86,13 @@ export default function InsightForm({ insight, onSuccess, onCancel }: InsightFor
   };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      setImageFile(file);
-      setPreviewUrl(URL.createObjectURL(file));
+    if (e.target.files && e.target.files.length > 0) {
+      const files = Array.from(e.target.files);
+      setImageFiles(files);
+
+      const objectUrls = files.map(file => URL.createObjectURL(file));
+      setPreviewUrl(objectUrls.join(','));
+
       setError(null);
     }
   };
@@ -105,7 +115,12 @@ export default function InsightForm({ insight, onSuccess, onCancel }: InsightFor
       formData.append("Content", form.content.trim());
       formData.append("Author", form.author.trim());
       formData.append("Category", form.category);
-      if (imageFile) formData.append("ImageFile", imageFile);
+
+      if (imageFiles.length > 0) {
+        imageFiles.forEach((file) => {
+          formData.append("ImageFiles", file);
+        });
+      }
 
       if (insight && insight.id) {
         await InsightService.update(insight.id, formData);
@@ -114,7 +129,7 @@ export default function InsightForm({ insight, onSuccess, onCancel }: InsightFor
       }
 
       setForm(initialForm);
-      setImageFile(null);
+      setImageFiles([]);
       setPreviewUrl(null);
       onSuccess();
     } catch (err: any) {
@@ -141,25 +156,25 @@ export default function InsightForm({ insight, onSuccess, onCancel }: InsightFor
         </div>
         {/* Flag Circles */}
         <div className="flex gap-1 mt-1">
-           <div className="w-2 h-2 rounded-full bg-[#009A44]"></div>
-           <div className="w-2 h-2 rounded-full bg-[#FEDD00]"></div>
-           <div className="w-2 h-2 rounded-full bg-[#E30613]"></div>
+          <div className="w-2 h-2 rounded-full bg-[#009A44]"></div>
+          <div className="w-2 h-2 rounded-full bg-[#FEDD00]"></div>
+          <div className="w-2 h-2 rounded-full bg-[#E30613]"></div>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="p-8">
-        
+
         {error && (
           <div className="mb-6 bg-red-50 border-l-4 border-[#E30613] p-4 rounded-r text-sm text-red-700 font-medium">
-             {error}
+            {error}
           </div>
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
+
           {/* Main Inputs */}
           <div className="lg:col-span-8 space-y-6">
-            
+
             <div>
               <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">
                 Headline <span className="text-[#E30613]">*</span>
@@ -202,9 +217,9 @@ export default function InsightForm({ insight, onSuccess, onCancel }: InsightFor
                 <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">
                   Category (ምድብ)
                 </label>
-                <select 
-                  name="category" 
-                  value={form.category} 
+                <select
+                  name="category"
+                  value={form.category}
                   onChange={handleChange}
                   className="w-full py-2.5 px-3 bg-gray-50 border border-gray-300 rounded focus:ring-1 focus:ring-[#009A44] focus:border-[#009A44] focus:bg-white transition-colors text-sm cursor-pointer"
                 >
@@ -248,69 +263,78 @@ export default function InsightForm({ insight, onSuccess, onCancel }: InsightFor
 
           {/* Sidebar / Image */}
           <div className="lg:col-span-4 flex flex-col">
-             <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">
-                Featured Image
-             </label>
-             <div className="flex-grow bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg hover:border-[#009A44] hover:bg-green-50/30 transition-all relative overflow-hidden group min-h-[250px] flex items-center justify-center cursor-pointer">
-                
-                {previewUrl ? (
-                   <>
-                     <img src={previewUrl} alt="Preview" className="absolute inset-0 w-full h-full object-cover" />
-                     <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <span className="text-white text-xs font-bold uppercase border border-white px-3 py-1 rounded">Change Photo</span>
-                     </div>
-                   </>
-                ) : (
-                  <div className="text-center p-6">
-                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-200 text-gray-400 mb-3 group-hover:bg-[#009A44] group-hover:text-white transition-colors">
-                      <UploadIcon />
-                    </div>
-                    <p className="text-sm font-medium text-gray-900">Click to upload</p>
-                    <p className="text-xs text-gray-500 mt-1">Max file size 5MB</p>
-                  </div>
-                )}
-                
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  onChange={handleFileChange}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" 
-                />
-             </div>
-             
-             {/* Action Buttons */}
-             <div className="mt-6 space-y-3">
-               <button
-                 type="submit"
-                 disabled={loading}
-                 className={`
-                   w-full flex items-center justify-center px-4 py-3 rounded text-sm font-bold text-white shadow-sm uppercase tracking-wide transition-all
-                   ${loading 
-                     ? 'bg-gray-400 cursor-not-allowed' 
-                     : 'bg-[#009A44] hover:bg-[#008037] hover:shadow-lg active:transform active:scale-95'
-                   }
-                 `}
-               >
-                 {loading ? <Spinner /> : null}
-                 {loading ? "Publishing..." : (insight ? "Save Changes" : "Publish Article")}
-               </button>
+            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">
+              Featured Images
+            </label>
 
-               {(insight || onCancel) && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setForm(initialForm);
-                      setImageFile(null);
-                      setPreviewUrl(null);
-                      onSuccess(); // Treats cancel as success to clear state
-                      if (onCancel) onCancel();
-                    }}
-                    className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded text-gray-600 text-sm font-bold uppercase tracking-wide hover:bg-gray-50 transition-colors"
-                  >
-                    Cancel
-                  </button>
-               )}
-             </div>
+            {/* Preview Grid */}
+            <div className="grid grid-cols-2 gap-2 mb-3">
+              {previewUrl ? (
+                // Show primary/first image larger
+                <div className="col-span-2 relative group aspect-video rounded-lg overflow-hidden border border-gray-200">
+                  <img src={previewUrl.split(',')[0]} alt="Main Preview" className="w-full h-full object-cover" />
+                  {previewUrl.includes(',') && (
+                    <div className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
+                      +{previewUrl.split(',').length - 1} more
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="col-span-2 aspect-video bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center text-gray-400">
+                  <UploadIcon />
+                </div>
+              )}
+            </div>
+
+            <div className="relative">
+              <input
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={handleFileChange}
+                className="block w-full text-sm text-gray-500
+                    file:mr-4 file:py-2 file:px-4
+                    file:rounded-full file:border-0
+                    file:text-xs file:font-semibold
+                    file:bg-[#009A44] file:text-white
+                    hover:file:bg-[#007A30] cursor-pointer"
+              />
+            </div>
+            <p className="text-xs text-gray-500 mt-2 text-center">Max 5MB per file. First image is featured.</p>
+
+            {/* Action Buttons */}
+            <div className="mt-6 space-y-3">
+              <button
+                type="submit"
+                disabled={loading}
+                className={`
+                   w-full flex items-center justify-center px-4 py-3 rounded text-sm font-bold text-white shadow-sm uppercase tracking-wide transition-all
+                   ${loading
+                    ? 'bg-gray-400 cursor-not-allowed'
+                    : 'bg-[#009A44] hover:bg-[#008037] hover:shadow-lg active:transform active:scale-95'
+                  }
+                 `}
+              >
+                {loading ? <Spinner /> : null}
+                {loading ? "Publishing..." : (insight ? "Save Changes" : "Publish Article")}
+              </button>
+
+              {(insight || onCancel) && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setForm(initialForm);
+                    setImageFiles([]);
+                    setPreviewUrl(null);
+                    onSuccess(); // Treats cancel as success to clear state
+                    if (onCancel) onCancel();
+                  }}
+                  className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded text-gray-600 text-sm font-bold uppercase tracking-wide hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </form>

@@ -17,7 +17,7 @@ namespace PlayerAssociationAPI.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.0")
+                .HasAnnotation("ProductVersion", "8.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -42,10 +42,6 @@ namespace PlayerAssociationAPI.Migrations
                     b.Property<DateTime>("EventDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ImagePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -62,6 +58,28 @@ namespace PlayerAssociationAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("PlayerAssociationAPI.Models.EventImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("EventImages");
                 });
 
             modelBuilder.Entity("PlayerAssociationAPI.Models.Insight", b =>
@@ -94,10 +112,6 @@ namespace PlayerAssociationAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImagePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -110,6 +124,28 @@ namespace PlayerAssociationAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Insights");
+                });
+
+            modelBuilder.Entity("PlayerAssociationAPI.Models.InsightImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("InsightId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InsightId");
+
+                    b.ToTable("InsightImages");
                 });
 
             modelBuilder.Entity("PlayerAssociationAPI.Models.Player", b =>
@@ -141,9 +177,6 @@ namespace PlayerAssociationAPI.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("ImagePath")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Nationality")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -159,6 +192,76 @@ namespace PlayerAssociationAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Players");
+                });
+
+            modelBuilder.Entity("PlayerAssociationAPI.Models.PlayerImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PlayerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlayerId");
+
+                    b.ToTable("PlayerImages");
+                });
+
+            modelBuilder.Entity("PlayerAssociationAPI.Models.EventImage", b =>
+                {
+                    b.HasOne("PlayerAssociationAPI.Models.Event", "Event")
+                        .WithMany("Images")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+                });
+
+            modelBuilder.Entity("PlayerAssociationAPI.Models.InsightImage", b =>
+                {
+                    b.HasOne("PlayerAssociationAPI.Models.Insight", "Insight")
+                        .WithMany("Images")
+                        .HasForeignKey("InsightId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Insight");
+                });
+
+            modelBuilder.Entity("PlayerAssociationAPI.Models.PlayerImage", b =>
+                {
+                    b.HasOne("PlayerAssociationAPI.Models.Player", "Player")
+                        .WithMany("Images")
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Player");
+                });
+
+            modelBuilder.Entity("PlayerAssociationAPI.Models.Event", b =>
+                {
+                    b.Navigation("Images");
+                });
+
+            modelBuilder.Entity("PlayerAssociationAPI.Models.Insight", b =>
+                {
+                    b.Navigation("Images");
+                });
+
+            modelBuilder.Entity("PlayerAssociationAPI.Models.Player", b =>
+                {
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }

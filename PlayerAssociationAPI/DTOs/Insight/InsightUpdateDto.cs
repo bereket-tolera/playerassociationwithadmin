@@ -9,6 +9,6 @@ namespace PlayerAssociationAPI.DTOs.Insight
         public string? Content { get; set; }
         public string? Author { get; set; }
         public string? Category { get; set; } // Accept string from frontend
-        public IFormFile? ImageFile { get; set; }
+        public List<IFormFile>? ImageFiles { get; set; }
     }
 }

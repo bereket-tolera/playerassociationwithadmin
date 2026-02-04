@@ -12,15 +12,15 @@ using PlayerAssociationAPI.Data;
 namespace PlayerAssociationAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251228105432_Initialinshight")]
-    partial class Initialinshight
+    [Migration("20260204070856_InitialMigrationFresh")]
+    partial class InitialMigrationFresh
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.0")
+                .HasAnnotation("ProductVersion", "8.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);

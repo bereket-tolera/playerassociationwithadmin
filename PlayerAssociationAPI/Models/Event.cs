@@ -10,7 +10,7 @@ namespace PlayerAssociationAPI.Models
 
         public string Description { get; set; } = string.Empty;
 
-        public string ImagePath { get; set; } = string.Empty;
+        public List<EventImage> Images { get; set; } = new List<EventImage>();
 
         public DateTime EventDate { get; set; }
 

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { InsightService } from "../api/insightService";
 import InsightCard from "../components/insights/InsightCard";
 import Loader from "../components/common/Loader";
+import { getImageUrl } from "../utils/imageUtils";
 import { Newspaper, Rss, ArrowUpRight } from "lucide-react";
 
 interface Insight {
@@ -11,7 +12,8 @@ interface Insight {
   content: string;
   author: string;
   category: string;
-  imagePath: string;
+  imagePath?: string;
+  imagePaths?: string[];
 }
 
 export default function Insights() {
@@ -62,7 +64,7 @@ export default function Insights() {
         {insights.length > 0 && (
           <div className="mb-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="group relative rounded-2xl overflow-hidden shadow-2xl h-[400px]">
-              <img src={insights[0].imagePath} alt={insights[0].title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <img src={getImageUrl(insights[0].imagePaths || insights[0].imagePath)} alt={insights[0].title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
               <div className="absolute bottom-6 left-6 right-6">
                 <span className="px-3 py-1 bg-[#FF0000] text-white text-xs font-bold uppercase tracking-widest rounded mb-3 inline-block">Featured</span>

@@ -10,7 +10,7 @@ namespace PlayerAssociationAPI.Models
 
         public string Description { get; set; } = string.Empty;
 
-        public string ImagePath { get; set; } = string.Empty;
+        public List<InsightImage> Images { get; set; } = new List<InsightImage>();
 
         public string Content { get; set; } = string.Empty;
 

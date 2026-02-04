@@ -6,7 +6,7 @@ namespace PlayerAssociationAPI.DTOs.Event
     {
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public IFormFile? ImageFile { get; set; } // Changed from ImagePath to ImageFile
+        public List<IFormFile> ImageFiles { get; set; } = new List<IFormFile>();
         public DateTime EventDate { get; set; }
         public string Location { get; set; } = string.Empty;
     }

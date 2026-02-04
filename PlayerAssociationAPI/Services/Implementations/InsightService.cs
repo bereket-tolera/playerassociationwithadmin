@@ -27,13 +27,13 @@ namespace PlayerAssociationAPI.Services.Implementations
 
         public async Task<IEnumerable<InsightReadDto>> GetAllAsync()
         {
-            var insights = await _context.Insights.ToListAsync();
+            var insights = await _context.Insights.Include(i => i.Images).ToListAsync();
             return insights.Select(i => ConvertToDto(i));
         }
 
         public async Task<InsightReadDto?> GetByIdAsync(int id)
         {
-            var insight = await _context.Insights.FindAsync(id);
+            var insight = await _context.Insights.Include(i => i.Images).FirstOrDefaultAsync(i => i.Id == id);
             if (insight == null) return null;
             return ConvertToDto(insight);
         }
@@ -41,6 +41,7 @@ namespace PlayerAssociationAPI.Services.Implementations
         public async Task<IEnumerable<InsightReadDto>> GetByCategoryAsync(InsightCategory category)
         {
             var insights = await _context.Insights
+                .Include(i => i.Images)
                 .Where(i => i.Category == category)
                 .ToListAsync();
             return insights.Select(i => ConvertToDto(i));
@@ -69,11 +70,16 @@ namespace PlayerAssociationAPI.Services.Implementations
                     CreatedAt = DateTime.UtcNow
                 };
 
-                if (dto.ImageFile != null && dto.ImageFile.Length > 0)
+                if (dto.ImageFiles != null && dto.ImageFiles.Any())
                 {
-                    Console.WriteLine($"Processing image file: {dto.ImageFile.FileName}, Size: {dto.ImageFile.Length}");
-                    insight.ImagePath = await SaveImageAsync(dto.ImageFile);
-                    Console.WriteLine($"Image saved at: {insight.ImagePath}");
+                    foreach (var file in dto.ImageFiles)
+                    {
+                        if (file.Length > 0)
+                        {
+                            var imagePath = await SaveImageAsync(file);
+                            insight.Images.Add(new InsightImage { ImagePath = imagePath });
+                        }
+                    }
                 }
 
                 _context.Insights.Add(insight);
@@ -91,7 +97,7 @@ namespace PlayerAssociationAPI.Services.Implementations
 
         public async Task<InsightReadDto?> UpdateAsync(int id, InsightUpdateDto dto)
         {
-            var insight = await _context.Insights.FindAsync(id);
+            var insight = await _context.Insights.Include(i => i.Images).FirstOrDefaultAsync(i => i.Id == id);
             if (insight == null) return null;
 
             if (!string.IsNullOrWhiteSpace(dto.Title))
@@ -115,13 +121,16 @@ namespace PlayerAssociationAPI.Services.Implementations
                 }
             }
 
-            if (dto.ImageFile != null && dto.ImageFile.Length > 0)
+            if (dto.ImageFiles != null && dto.ImageFiles.Any())
             {
-                // Delete old image if exists
-                if (!string.IsNullOrEmpty(insight.ImagePath))
-                    DeleteImage(insight.ImagePath);
-
-                insight.ImagePath = await SaveImageAsync(dto.ImageFile);
+                foreach (var file in dto.ImageFiles)
+                {
+                    if (file.Length > 0)
+                    {
+                        var imagePath = await SaveImageAsync(file);
+                        insight.Images.Add(new InsightImage { ImagePath = imagePath });
+                    }
+                }
             }
 
             insight.UpdatedAt = DateTime.UtcNow;
@@ -133,12 +142,14 @@ namespace PlayerAssociationAPI.Services.Implementations
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var insight = await _context.Insights.FindAsync(id);
+            var insight = await _context.Insights.Include(i => i.Images).FirstOrDefaultAsync(i => i.Id == id);
             if (insight == null) return false;
 
             // Delete image file if exists
-            if (!string.IsNullOrEmpty(insight.ImagePath))
-                DeleteImage(insight.ImagePath);
+            foreach (var img in insight.Images)
+            {
+                DeleteImage(img.ImagePath);
+            }
 
             _context.Insights.Remove(insight);
             await _context.SaveChangesAsync();
@@ -215,9 +226,8 @@ namespace PlayerAssociationAPI.Services.Implementations
                 Content = insight.Content,
                 Author = insight.Author,
                 Category = categoryString, // Send as string
-                ImagePath = !string.IsNullOrEmpty(insight.ImagePath) 
-                    ? $"{baseUrl}{insight.ImagePath}" 
-                    : insight.ImagePath
+                ImagePaths = insight.Images.Select(i => 
+                    !string.IsNullOrEmpty(i.ImagePath) ? $"{baseUrl}{i.ImagePath}" : i.ImagePath).ToList()
             };
         }
     }

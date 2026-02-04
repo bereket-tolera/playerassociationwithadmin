@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Shirt } from "lucide-react";
+import { getImageUrl } from "../../utils/imageUtils";
 
 interface PlayerProps {
   id: number;
@@ -9,10 +10,13 @@ interface PlayerProps {
   position: string;
   nationality: string;
   description: string;
-  imagePath: string;
+  imagePath?: string;
 }
 
 export default function PlayerCard({ id, fullName, position, club, imagePath }: PlayerProps) {
+  const displayImage = getImageUrl(imagePath);
+  console.log(`Player ${fullName}:`, { imagePath, displayImage });
+
   return (
     <Link to={`/players/${id}`} className="group relative block h-[400px] w-full perspective-1000">
       <div className="relative h-full w-full transform transition-all duration-500 group-hover:-translate-y-2 group-hover:rotate-1">
@@ -21,9 +25,9 @@ export default function PlayerCard({ id, fullName, position, club, imagePath }: 
         <div className="absolute inset-0 rounded-2xl overflow-hidden bg-gray-900 border border-white/10 shadow-2xl">
           <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10 opacity-90" />
           <img
-            src={imagePath}
+            src={displayImage}
             alt={fullName}
-            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+            className="h-full w-full object-contain transition-transform duration-700 group-hover:scale-110"
           />
         </div>
 

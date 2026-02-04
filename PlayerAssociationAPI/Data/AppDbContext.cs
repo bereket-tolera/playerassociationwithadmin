@@ -12,8 +12,11 @@ namespace PlayerAssociationAPI.Data
         // REMOVED: OnConfiguring method - it conflicts with DI configuration
 
         public DbSet<Player> Players { get; set; }
+        public DbSet<PlayerImage> PlayerImages { get; set; }
         public DbSet<Event> Events { get; set; }
+        public DbSet<EventImage> EventImages { get; set; }
         public DbSet<Insight> Insights { get; set; }
+        public DbSet<InsightImage> InsightImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

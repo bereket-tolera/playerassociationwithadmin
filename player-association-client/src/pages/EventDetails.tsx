@@ -2,13 +2,16 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { EventService } from "../api/eventService";
 import Loader from "../components/common/Loader";
+import ImageSlider from "../components/ImageSlider";
+import { getImageUrl, getImageUrls } from "../utils/imageUtils";
 import { ArrowLeft, MapPin, Clock, Calendar } from "lucide-react";
 
 interface Event {
     id: number;
     title: string;
     description: string;
-    imagePath: string;
+    imagePath?: string;
+    imagePaths?: string[];
     eventDate: string;
     location: string;
 }
@@ -46,16 +49,29 @@ export default function EventDetails() {
     return (
         <div className="min-h-screen bg-[#f8f9fa] dark:bg-gray-900 font-sans transition-colors duration-500 pb-20">
 
-            {/* 1. Hero Image */}
-            <div className="relative h-[400px] w-full overflow-hidden">
-                <div className="absolute inset-0 bg-black/50 z-10"></div>
-                <img
-                    src={event.imagePath}
-                    alt={event.title}
-                    className="absolute inset-0 w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent z-20"></div>
+            {/* 1. Hero Image Gallery */}
+            <div className="relative h-[400px] w-full overflow-hidden bg-gray-900">
+                {/* Image Layer - z-0 */}
+                <div className="absolute inset-0 z-0">
+                    {event.imagePaths && event.imagePaths.length > 0 ? (
+                        <ImageSlider
+                            images={getImageUrls(event.imagePaths)}
+                            alt={event.title}
+                            className="h-full"
+                        />
+                    ) : (
+                        <img
+                            src={getImageUrl(event.imagePaths || event.imagePath)}
+                            alt={event.title}
+                            className="w-full h-full object-contain"
+                        />
+                    )}
+                </div>
 
+                {/* Gradient Overlays - z-10 */}
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent z-10 pointer-events-none"></div>
+
+                {/* Back Button - z-30 */}
                 <div className="absolute top-6 left-6 z-30">
                     <Link to="/events" className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-colors uppercase text-xs font-bold tracking-widest">
                         <ArrowLeft size={14} className="mr-2" /> All Events

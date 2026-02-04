@@ -14,13 +14,15 @@ interface EventFormProps {
 }
 
 export default function EventForm({ event, onSuccess }: EventFormProps) {
+  /* eslint-disable react-hooks/exhaustive-deps */
   const [form, setForm] = useState({
     title: "",
     description: "",
     eventDate: "",
     location: "",
   });
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -32,9 +34,32 @@ export default function EventForm({ event, onSuccess }: EventFormProps) {
         eventDate: event.eventDate ? event.eventDate.split("T")[0] : "",
         location: event.location || "",
       });
-      setImageFile(null);
+      setImageFiles([]);
+      // Mock logic: event.imagePath might be comma separated string from backend or single
+      const imgPath = typeof event.imagePath === 'string' ? event.imagePath : '';
+      setPreviewUrl(imgPath || null);
+    } else {
+      setForm({
+        title: "",
+        description: "",
+        eventDate: "",
+        location: "",
+      });
+      setImageFiles([]);
+      setPreviewUrl(null);
     }
   }, [event]);
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl && !previewUrl.startsWith('http')) {
+        const urls = previewUrl.split(',');
+        urls.forEach(url => {
+          if (url.startsWith('blob:')) URL.revokeObjectURL(url);
+        });
+      }
+    };
+  }, [previewUrl]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -42,8 +67,14 @@ export default function EventForm({ event, onSuccess }: EventFormProps) {
   };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setImageFile(e.target.files[0]);
+    if (e.target.files && e.target.files.length > 0) {
+      const files = Array.from(e.target.files);
+      setImageFiles(files);
+
+      const objectUrls = files.map(file => URL.createObjectURL(file));
+      setPreviewUrl(objectUrls.join(','));
+
+      setError(null);
     }
   };
 
@@ -64,7 +95,12 @@ export default function EventForm({ event, onSuccess }: EventFormProps) {
       formData.append("Description", form.description.trim());
       formData.append("EventDate", form.eventDate);
       formData.append("Location", form.location.trim());
-      if (imageFile) formData.append("ImageFile", imageFile);
+
+      if (imageFiles.length > 0) {
+        imageFiles.forEach((file) => {
+          formData.append("ImageFiles", file);
+        });
+      }
 
       if (event && event.id) {
         await EventService.update(event.id, formData);
@@ -73,7 +109,8 @@ export default function EventForm({ event, onSuccess }: EventFormProps) {
       }
 
       setForm({ title: "", description: "", eventDate: "", location: "" });
-      setImageFile(null);
+      setImageFiles([]);
+      setPreviewUrl(null);
       onSuccess();
     } catch (err: any) {
       console.error(err);
@@ -104,7 +141,7 @@ export default function EventForm({ event, onSuccess }: EventFormProps) {
       </div>
 
       <form onSubmit={handleSubmit} className="p-8">
-        
+
         {/* Error Message */}
         {error && (
           <div className="mb-6 p-4 rounded-md bg-red-50 border-l-4 border-[#E30613] text-red-700 text-sm font-medium flex items-center">
@@ -114,7 +151,7 @@ export default function EventForm({ event, onSuccess }: EventFormProps) {
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          
+
           {/* Left Column */}
           <div className="space-y-6">
             <div>
@@ -177,38 +214,51 @@ export default function EventForm({ event, onSuccess }: EventFormProps) {
               </div>
             </div>
 
-             <div>
+            <div>
               <label className="block text-sm font-bold text-gray-700 mb-1">
-                Cover Image
+                Event Images
                 <span className="text-gray-400 font-normal ml-2 text-xs">(ምስል)</span>
               </label>
-              <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md hover:border-[#009A44] hover:bg-green-50/30 transition-all cursor-pointer relative">
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  onChange={handleFileChange} 
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                />
-                <div className="space-y-1 text-center">
-                  {imageFile ? (
-                    <div className="text-[#009A44] font-medium flex flex-col items-center">
-                      <svg className="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                      <span className="text-sm">{imageFile.name}</span>
+
+              <div className="mt-1">
+                {/* Preview Area */}
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-3">
+                  {previewUrl && (
+                    <div className="relative group aspect-video rounded-md overflow-hidden border border-gray-200 col-span-2 row-span-2">
+                      <img src={previewUrl.split(',')[0]} alt="Main" className="w-full h-full object-cover" />
+                      {previewUrl.includes(',') && (
+                        <div className="absolute bottom-1 right-1 bg-black/60 text-white text-[10px] px-1.5 py-0.5 rounded">
+                          +{previewUrl.split(',').length - 1}
+                        </div>
+                      )}
                     </div>
-                  ) : (
-                    <>
-                      <div className="mx-auto flex justify-center">
-                        <UploadIcon />
-                      </div>
-                      <div className="flex text-sm text-gray-600 justify-center">
-                        <span className="relative cursor-pointer bg-white rounded-md font-medium text-[#009A44] hover:text-[#007A30] focus-within:outline-none">
-                          Upload a file
-                        </span>
-                        <p className="pl-1">or drag and drop</p>
-                      </div>
-                      <p className="text-xs text-gray-500">PNG, JPG, GIF up to 5MB</p>
-                    </>
                   )}
+                  {/* Placeholder if no image */}
+                  {!previewUrl && (
+                    <div className="aspect-video col-span-2 flex flex-col items-center justify-center bg-gray-50 border-2 border-dashed border-gray-300 rounded-md text-gray-400">
+                      <UploadIcon />
+                      <span className="text-xs mt-1">No images selected</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md hover:border-[#009A44] hover:bg-green-50/30 transition-all cursor-pointer relative">
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                  />
+                  <div className="space-y-1 text-center">
+                    <div className="flex text-sm text-gray-600 justify-center">
+                      <span className="relative cursor-pointer bg-white rounded-md font-medium text-[#009A44] hover:text-[#007A30] focus-within:outline-none">
+                        Browse files
+                      </span>
+                      <p className="pl-1">or drag and drop</p>
+                    </div>
+                    <p className="text-xs text-gray-500">PNG, JPG, GIF up to 5MB</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -216,18 +266,18 @@ export default function EventForm({ event, onSuccess }: EventFormProps) {
 
           {/* Right Column */}
           <div className="flex flex-col h-full">
-             <label className="block text-sm font-bold text-gray-700 mb-1">
-                Description / Notes
-                <span className="text-gray-400 font-normal ml-2 text-xs">(ዝርዝር መግለጫ)</span>
-              </label>
-              <textarea
-                name="description"
-                rows={8}
-                value={form.description}
-                onChange={handleChange}
-                className="block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-[#009A44] focus:border-[#009A44] sm:text-sm resize-none flex-grow"
-                placeholder="Enter detailed information about the event..."
-              ></textarea>
+            <label className="block text-sm font-bold text-gray-700 mb-1">
+              Description / Notes
+              <span className="text-gray-400 font-normal ml-2 text-xs">(ዝርዝር መግለጫ)</span>
+            </label>
+            <textarea
+              name="description"
+              rows={8}
+              value={form.description}
+              onChange={handleChange}
+              className="block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-[#009A44] focus:border-[#009A44] sm:text-sm resize-none flex-grow"
+              placeholder="Enter detailed information about the event..."
+            ></textarea>
           </div>
 
         </div>
@@ -239,7 +289,7 @@ export default function EventForm({ event, onSuccess }: EventFormProps) {
               type="button"
               onClick={() => {
                 setForm({ title: "", description: "", eventDate: "", location: "" });
-                setImageFile(null);
+                setImageFiles([]);
                 onSuccess();
               }}
               className="px-6 py-2 bg-white border border-gray-300 rounded-md text-sm font-bold text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009A44]"
@@ -252,8 +302,8 @@ export default function EventForm({ event, onSuccess }: EventFormProps) {
             disabled={loading}
             className={`
               inline-flex items-center px-8 py-2 border border-transparent text-sm font-bold rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#009A44]
-              ${loading 
-                ? 'bg-gray-400 cursor-not-allowed' 
+              ${loading
+                ? 'bg-gray-400 cursor-not-allowed'
                 : 'bg-[#009A44] hover:bg-[#008037]'
               }
             `}

@@ -11,7 +11,7 @@ namespace PlayerAssociationAPI.DTOs.Player
         public string Nationality { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
 
-        // This will hold the uploaded image file
-        public IFormFile? ImageFile { get; set; }
+        // This will hold the uploaded image files
+        public List<IFormFile> ImageFiles { get; set; } = new List<IFormFile>();
     }
 }

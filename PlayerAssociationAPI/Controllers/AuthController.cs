@@ -20,16 +20,40 @@ namespace PlayerAssociationAPI.Controllers
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest request)
         {
-            // Hardcoded admin credentials (for simplicity)
+            if (request == null)
+            {
+                Console.WriteLine("Login request body is null");
+                return BadRequest(new { message = "Invalid request" });
+            }
+
+            // Get credentials from config with fallbacks
             var adminUsername = _configuration["AdminCredentials:Username"] ?? "admin";
             var adminPassword = _configuration["AdminCredentials:Password"] ?? "Daf@Admin";
 
-            if (request.Username == adminUsername && request.Password == adminPassword)
+            Console.WriteLine($"[AUTH] Login attempt - Username provided: '{request.Username}'");
+            
+            // Basic validation
+            if (string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
             {
-                var token = GenerateJwtToken(request.Username);
-                return Ok(new { token, username = request.Username });
+                return Unauthorized(new { message = "Username and password are required" });
             }
 
+            if (request.Username == adminUsername && request.Password == adminPassword)
+            {
+                try 
+                {
+                    var token = GenerateJwtToken(request.Username);
+                    Console.WriteLine($"[AUTH] Login successful for: {request.Username}");
+                    return Ok(new { token, username = request.Username });
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[AUTH] ERROR generating token: {ex}");
+                    return StatusCode(500, new { message = "Internal error during authentication", details = ex.Message });
+                }
+            }
+
+            Console.WriteLine($"[AUTH] Login failed - Incorrect credentials for: {request.Username}");
             return Unauthorized(new { message = "Invalid username or password" });
         }
 
@@ -65,8 +89,10 @@ namespace PlayerAssociationAPI.Controllers
 
         private string GenerateJwtToken(string username)
         {
+            var secret = _configuration["Jwt:Secret"] ?? "a-very-long-and-secure-default-secret-key-32-chars";
+            var key = Encoding.ASCII.GetBytes(secret);
+            
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Secret"]);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
