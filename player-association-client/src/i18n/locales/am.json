@@ -1,0 +1,134 @@
+{
+    "nav": {
+        "home": "መነሻ",
+        "players": "ተጫዋቾች",
+        "events": "ክስተቶች",
+        "insights": "ግንዛቤዎች",
+        "login": "ይግቡ",
+        "logout": "ይውጡ"
+    },
+    "hero": {
+        "badge": "ይፋዊ ማህበር",
+        "title_elite": "ምርጥ",
+        "title_ethiopian": "ኢትዮጵያዊ",
+        "title_talent": "ተሰጥኦ",
+        "description": "በኢትዮጵያ ውስጥ ላሉ ፕሮፌሽናል እግር ኳስ ተጫዋቾች ገለልተኛ ድምጽ። መብቶችን እንጠብቃለን፣ መንገዶችን እናጸዳለን፣ እና የጨዋታውን የወደፊት ሁኔታ እንገነባለን።",
+        "explore_btn": "ቡድኑን ይመርምሩ",
+        "fixtures_btn": "ጨዋታዎች"
+    },
+    "stats": {
+        "members": "ፕሮ አባላት",
+        "clubs": "አጋር ክለቦች",
+        "hubs": "ክልላዊ ማዕከላት"
+    },
+    "squad": {
+        "badge": "ቡድኑ",
+        "title_meet": "ምርጦቹን",
+        "title_elite": "ያግኙ",
+        "view_all": "ሁሉንም ይመልከቱ",
+        "view_all_players": "ሁሉንም ተጫዋቾች ይመልከቱ"
+    },
+    "matchday": {
+        "title": "የግጥሚያ ቀን",
+        "live": "በቀጥታ",
+        "subtitle": "ይፋዊ የፌዴሬሽን መርሃ ግብሮች እና የማህበረሰብ ክስተቶች",
+        "calendar": "ሙሉ የቀን መቁጠሪያ"
+    },
+    "newsroom": {
+        "badge": "የዜና ክፍል",
+        "title": "የቅርብ ጊዜ",
+        "subtitle": "ግንዛቤዎች",
+        "read_all": "ሁሉንም ጽሁፎች ያንብቡ"
+    },
+    "cta": {
+        "title": "እንቅስቃሴውን",
+        "movement": "ይቀላቀሉ",
+        "description": "ለኢትዮጵያ እግር ኳስ ቅርስ እየገነባን ነው። ተጫዋች፣ ደጋፊ፣ ወይም አጋር ቢሆኑ—የእርስዎ ድምጽ አስፈላጊ ነው።",
+        "explore": "ተጫዋቾችን ይመርምሩ",
+        "admin": "የአስተዳዳሪ መግቢያ"
+    },
+    "footer": {
+        "description": "በኢትዮጵያ ውስጥ የተጫዋቾች የበላይ አካል። መብቶችን መጠበቅ እና ደህንነትን ማሳደግ።",
+        "tagline": "የኢትዮጵያ ተጫዋቾች ማህበር",
+        "quick_links": "ፈጣን አገናኞች",
+        "contact_us": "ያግኙን",
+        "follow_us": "ይከተሉን",
+        "privacy": "የግላዊነት ፖሊሲ",
+        "terms": "የአገልግሎት ውል",
+        "cookies": "የኩኪ ፖሊሲ",
+        "rights": "መብቱ በህግ የተጠበቀ ነው።"
+    },
+    "players_page": {
+        "badge": "ይፋዊ ዝርዝር",
+        "title_national": "ብሔራዊ",
+        "title_squad": "ቡድን",
+        "description": "የኢትዮጵያ ኩራት። ሀገራችንን በዓለም አቀፍ ደረጃ የሚወክሉ ምርጥ አትሌቶችን ያግኙ።",
+        "search_placeholder": "በስም ወይም በክለብ ይፈልጉ...",
+        "all_players": "ሁሉም ተጫዋቾች",
+        "not_found": "ምንም ተጫዋቾች አልተገኙም",
+        "no_matches": "ምንም ግጥሚያ የለም ለ",
+        "empty_list": "የቡድኑ ዝርዝር ባዶ ነው።"
+    },
+    "positions": {
+        "all": "ሁሉም",
+        "goalkeeper": "ግብ ጠባቂ",
+        "defender": "ተከላካይ",
+        "midfielder": "አማካይ",
+        "attacker": "አጥቂ",
+        "goalkeepers": "ግብ ጠባቂዎች",
+        "defenders": "ተከላካዮች",
+        "midfielders": "አማካዮች",
+        "attackers": "አጥቂዎች"
+    },
+    "events_page": {
+        "badge": "የክስተት ቀን መቁጠሪያ",
+        "title": "የሚመጡ",
+        "subtitle": "ክስተቶች",
+        "description": "በአገር አቀፍ ደረጃ የቅርብ ጊዜ ግጥሚያዎችን፣ ሙከራዎችን እና የማህበረሰብ ስብሰባዎችን ይከታተሉ።",
+        "no_events": "ምንም የሚመጡ ክስተቶች የሉም",
+        "empty_list": "ለጨዋታ መርሃ ግብሮች ቆይተው ይመለሱ።"
+    },
+    "insights_page": {
+        "badge": "ዜና እና ትንታኔ",
+        "title": "የእግር ኳስ",
+        "subtitle": "ግንዛቤዎች",
+        "description": "የባለሙያ ትንታኔ፣ የተጫዋቾች ቃለ ምልልስ፣ እና ከኢትዮጵያ እግር ኳስ ልብ የተገኙ የቅርብ ጊዜ ዜናዎች።",
+        "read_more": "ተጨማሪ ያንብቡ"
+    },
+    "details": {
+        "back_to_squad": "ወደ ቡድን ተመለስ",
+        "back_to_events": "ወደ ክስተቶች ተመለስ",
+        "back_to_insights": "ወደ ግንዛቤዎች ተመለስ",
+        "biography": "የህይወት ታሪክ",
+        "no_biography": "ለዚህ ተጫዋች ምንም የህይወት ታሪክ የለም።",
+        "career_highlights": "የሙያ ድምቀቶች",
+        "age": "ዕድሜ",
+        "position": "ቦታ",
+        "current_club": "የአሁኑ ክለብ",
+        "player_details": "የተጫዋች ዝርዝሮች",
+        "nationality": "ዜግነት",
+        "member_epa": "የኢተማ አባል",
+        "member_desc": "የተረጋገጠ ፕሮፌሽናል ተጫዋች እና ንቁ የማህበሩ አባል።",
+        "years": "ዓመታት"
+    },
+    "login": {
+        "sign_in": "ይግቡ",
+        "dashboard_title": "ወደ ዳሽቦርድ ይግቡ",
+        "subtitle": "እባክዎ ለመቀጠል የአስተዳዳሪ ምስክርነቶችን ያስገቡ።",
+        "username": "የተጠቃሚ ስም",
+        "password": "የይለፍ ቃል",
+        "forgot_password": "የይለፍ ቃልዎን ረስተዋል?",
+        "secure_sign_in": "ደህንነቱ የተጠበቀ መግቢያ",
+        "authenticating": "በማረጋገጥ ላይ...",
+        "invalid_credentials": "የተሳሳተ መረጃ። እባክዎ እንደገና ይሞክሩ።",
+        "unity_sport": "በስፖርት አንድነት።",
+        "excellence_action": "ጥራት በተግባር።",
+        "welcome_admin": "ወደ የኢትዮጵያ ተጫዋቾች ማህበር ይፋዊ የአስተዳደር ፖርታል እንኳን በደህና መጡ። የብሔራዊ ተሰጥኦዎቻችንን የወደፊት ሁኔታ ማስተዳደር።"
+    },
+    "common": {
+        "loading": "በመጫን ላይ...",
+        "error": "ችግር ተፈጥሯል",
+        "back": "ተመለስ",
+        "not_found": "አልተገኘም"
+    }
+}

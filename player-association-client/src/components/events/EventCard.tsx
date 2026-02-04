@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { MapPin, Clock, Images, ChevronLeft, ChevronRight } from "lucide-react";
 import { getImageUrl, getImageUrls } from "../../utils/imageUtils";
 import { useState } from "react";
@@ -14,8 +15,9 @@ interface EventProps {
 }
 
 export default function EventCard({ id, title, imagePath, imagePaths, eventDate, location }: EventProps) {
+  const { t, i18n } = useTranslation();
   const dateObj = new Date(eventDate);
-  const month = dateObj.toLocaleString("default", { month: "short" });
+  const month = dateObj.toLocaleString(i18n.language === 'am' ? 'am-ET' : 'en-US', { month: "short" });
   const day = dateObj.getDate();
 
   // Handle multiple images
@@ -95,13 +97,13 @@ export default function EventCard({ id, title, imagePath, imagePaths, eventDate,
           </span>
           <span className="flex items-center gap-2">
             <Clock size={16} className="text-[#FEDD00]" />
-            <span className="font-medium">Upcoming</span>
+            <span className="font-medium">{t('matchday.live')}</span>
           </span>
         </div>
 
         {/* Hover indicator */}
         <div className="mt-4 flex items-center justify-between">
-          <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">View Details</span>
+          <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">{t('insights_page.read_more')}</span>
           <div className="w-8 h-8 rounded-full bg-[#FEDD00] flex items-center justify-center transform translate-x-0 group-hover:translate-x-2 transition-transform">
             <svg className="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

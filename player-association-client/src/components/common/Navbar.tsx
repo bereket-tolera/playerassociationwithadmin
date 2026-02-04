@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useTheme } from "../../context/ThemeContext";
-import { Sun, Moon, Menu, X, Lock } from "lucide-react";
+import { Sun, Moon, Menu, X, Lock, Languages } from "lucide-react";
 
 // --- Icons ---
 const WaliaIcon = () => (
@@ -13,6 +14,12 @@ const WaliaIcon = () => (
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
+  const { t, i18n } = useTranslation();
+
+  const toggleLanguage = () => {
+    const newLang = i18n.language === 'en' ? 'am' : 'en';
+    i18n.changeLanguage(newLang);
+  };
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     `text-sm font-bold tracking-wide uppercase transition-colors duration-300 hover:text-[#009A44] ${isActive ? "text-[#009A44]" : "text-gray-600 dark:text-gray-300"
@@ -52,33 +59,52 @@ export default function Navbar() {
 
           {/* 3. Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <NavLink to="/" className={linkClass}>Home</NavLink>
-            <NavLink to="/players" className={linkClass}>Players</NavLink>
-            <NavLink to="/events" className={linkClass}>Events</NavLink>
-            <NavLink to="/insights" className={linkClass}>Insights</NavLink>
+            <NavLink to="/" className={linkClass}>{t('nav.home')}</NavLink>
+            <NavLink to="/players" className={linkClass}>{t('nav.players')}</NavLink>
+            <NavLink to="/events" className={linkClass}>{t('nav.events')}</NavLink>
+            <NavLink to="/insights" className={linkClass}>{t('nav.insights')}</NavLink>
 
             {/* Divider */}
             <div className="h-6 w-px bg-gray-200 dark:bg-gray-700"></div>
 
-            <button
-              onClick={toggleTheme}
-              className="p-2 text-gray-500 dark:text-gray-400 hover:text-[#009A44] dark:hover:text-[#009A44] transition-colors"
-              aria-label="Toggle Theme"
-            >
-              {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={toggleLanguage}
+                className="flex items-center gap-1 p-2 text-gray-500 dark:text-gray-400 hover:text-[#009A44] dark:hover:text-[#009A44] transition-colors"
+                aria-label="Toggle Language"
+              >
+                <Languages size={20} />
+                <span className="text-xs font-bold uppercase">{i18n.language === 'en' ? 'AM' : 'EN'}</span>
+              </button>
+
+              <button
+                onClick={toggleTheme}
+                className="p-2 text-gray-500 dark:text-gray-400 hover:text-[#009A44] dark:hover:text-[#009A44] transition-colors"
+                aria-label="Toggle Theme"
+              >
+                {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+              </button>
+            </div>
 
             <Link
               to="/login"
               className="flex items-center gap-2 bg-gray-900 dark:bg-gray-700 text-white px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider hover:bg-[#009A44] dark:hover:bg-[#009A44] transition-all transform hover:-translate-y-0.5 shadow-lg"
             >
               <Lock size={16} />
-              <span>Admin Portal</span>
+              <span>{t('nav.login')}</span>
             </Link>
           </div>
 
           {/* 4. Mobile Menu Button */}
-          <div className="md:hidden flex items-center gap-4">
+          <div className="md:hidden flex items-center gap-2">
+            <button
+              onClick={toggleLanguage}
+              className="flex items-center gap-1 p-2 text-gray-500 dark:text-gray-400 hover:text-[#009A44]"
+              aria-label="Toggle Language"
+            >
+              <Languages size={20} />
+              <span className="text-xs font-bold uppercase">{i18n.language === 'en' ? 'AM' : 'EN'}</span>
+            </button>
             <button
               onClick={toggleTheme}
               className="p-2 text-gray-500 dark:text-gray-400 hover:text-[#009A44]"
@@ -100,16 +126,16 @@ export default function Navbar() {
         <div className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 absolute w-full shadow-xl animate-fade-in-down">
           <div className="px-4 pt-2 pb-6 space-y-2">
             <NavLink to="/" onClick={() => setIsOpen(false)} className={mobileLinkClass}>
-              Home
+              {t('nav.home')}
             </NavLink>
             <NavLink to="/players" onClick={() => setIsOpen(false)} className={mobileLinkClass}>
-              Players
+              {t('nav.players')}
             </NavLink>
             <NavLink to="/events" onClick={() => setIsOpen(false)} className={mobileLinkClass}>
-              Events
+              {t('nav.events')}
             </NavLink>
             <NavLink to="/insights" onClick={() => setIsOpen(false)} className={mobileLinkClass}>
-              Insights
+              {t('nav.insights')}
             </NavLink>
             <div className="pt-4 mt-2 border-t border-gray-100 dark:border-gray-800">
               <Link
@@ -117,7 +143,7 @@ export default function Navbar() {
                 onClick={() => setIsOpen(false)}
                 className="flex items-center justify-center gap-2 w-full bg-gray-900 dark:bg-gray-800 text-white px-4 py-3 rounded-lg text-sm font-bold uppercase hover:bg-[#009A44] transition-colors"
               >
-                <Lock size={16} /> Access Admin Portal
+                <Lock size={16} /> {t('nav.login')}
               </Link>
             </div>
           </div>

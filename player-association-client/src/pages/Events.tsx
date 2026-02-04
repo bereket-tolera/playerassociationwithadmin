@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { EventService } from "../api/eventService";
 import EventCard from "../components/events/EventCard";
 import Loader from "../components/common/Loader";
@@ -15,6 +16,7 @@ interface Event {
 }
 
 export default function Events() {
+  const { t } = useTranslation();
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -49,15 +51,15 @@ export default function Events() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#FEDD00]/10 backdrop-blur border border-[#FEDD00]/20 rounded-full text-[#FEDD00] font-bold text-xs uppercase tracking-[0.2em] mb-6">
-            <Calendar size={14} /> Official Fixtures
+            <Calendar size={14} /> {t('events_page.badge')}
           </div>
 
           <h1 className="text-5xl md:text-7xl font-black uppercase mb-4 leading-tight text-white">
-            Matchday <span className="text-[#FEDD00]">Calendar</span>
+            {t('matchday.title')} <span className="text-[#FEDD00]">{t('matchday.live')}</span>
           </h1>
 
           <p className="text-xl text-gray-400 max-w-2xl mx-auto font-light leading-relaxed">
-            From premier league clashes to community events. Never miss a moment of the action.
+            {t('events_page.description')}
           </p>
         </div>
       </div>
@@ -68,11 +70,11 @@ export default function Events() {
         {/* Featured Block */}
         <div className="bg-[#FEDD00] text-black rounded-xl shadow-xl p-8 mb-12 flex flex-col md:flex-row justify-between items-center gap-6 relative overflow-hidden">
           <div className="relative z-10">
-            <h3 className="font-black text-2xl uppercase mb-1">Official Federation Schedule</h3>
-            <p className="font-medium opacity-80">Stay updated with all national team activities and league fixtures.</p>
+            <h3 className="font-black text-2xl uppercase mb-1">{t('matchday.subtitle')}</h3>
+            <p className="font-medium opacity-80">{t('events_page.description')}</p>
           </div>
           <div className="relative z-10 px-6 py-3 bg-black text-white font-bold uppercase tracking-wider rounded flex items-center gap-2">
-            <Calendar size={18} /> View Full Calendar
+            <Calendar size={18} /> {t('matchday.calendar')}
           </div>
           <div className="absolute right-0 top-0 w-32 h-32 bg-white/20 rounded-full blur-2xl transform translate-x-10 -translate-y-10"></div>
         </div>
@@ -81,8 +83,8 @@ export default function Events() {
         {events.length === 0 ? (
           <div className="text-center py-24 bg-white dark:bg-gray-800 rounded-2xl border-2 border-dashed border-gray-200 dark:border-gray-700">
             <Calendar size={48} className="mx-auto text-gray-300 mb-4" />
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white">No Events Scheduled</h3>
-            <p className="text-gray-500 dark:text-gray-400 mt-2">Check back later for fixture announcements.</p>
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white">{t('events_page.no_events')}</h3>
+            <p className="text-gray-500 dark:text-gray-400 mt-2">{t('events_page.empty_list')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

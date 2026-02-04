@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { PlayerService } from "../api/playerService";
 import { EventService } from "../api/eventService";
 import { InsightService } from "../api/insightService";
@@ -41,6 +42,7 @@ interface Insight {
 }
 
 export default function Home() {
+  const { t } = useTranslation();
   const [players, setPlayers] = useState<Player[]>([]);
   const [events, setEvents] = useState<Event[]>([]);
   const [insights, setInsights] = useState<Insight[]>([]);
@@ -93,19 +95,19 @@ export default function Home() {
           {/* Text Content */}
           <div className="space-y-8 animate-fade-in-up">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/10 rounded-full text-xs font-bold tracking-[0.2em] uppercase text-[#009A44]">
-              <Star size={12} className="fill-current" /> Official Association
+              <Star size={12} className="fill-current" /> {t('hero.badge')}
             </div>
 
             <h1 className="text-5xl lg:text-8xl font-black leading-[0.9]">
-              ELITE <br />
+              {t('hero.title_elite')} <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#009A44] via-[#FEDD00] to-[#FF0000]">
-                ETHIOPIAN
+                {t('hero.title_ethiopian')}
               </span> <br />
-              TALENT
+              {t('hero.title_talent')}
             </h1>
 
             <p className="text-lg text-gray-300 max-w-xl leading-relaxed font-light border-l-4 border-[#FEDD00] pl-6">
-              The independent voice for professional footballers in Ethiopia. We protect rights, clear pathways, and build the future of the game.
+              {t('hero.description')}
             </p>
 
             <div className="flex flex-wrap gap-4 pt-4">
@@ -113,7 +115,7 @@ export default function Home() {
                 to="/players"
                 className="group relative px-8 py-4 bg-[#009A44] text-white font-bold text-sm tracking-widest uppercase overflow-hidden rounded-lg transition-all hover:shadow-[0_0_20px_rgba(0,154,68,0.5)]"
               >
-                <span className="relative z-10 flex items-center gap-2">Explore Squad <ArrowRight className="group-hover:translate-x-1 transition-transform" /></span>
+                <span className="relative z-10 flex items-center gap-2">{t('hero.explore_btn')} <ArrowRight className="group-hover:translate-x-1 transition-transform" /></span>
                 <div className="absolute inset-0 bg-gradient-to-r from-[#007A30] to-[#009A44] opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </Link>
 
@@ -121,7 +123,7 @@ export default function Home() {
                 to="/events"
                 className="px-8 py-4 glass-panel text-white font-bold text-sm tracking-widest uppercase rounded-lg hover:bg-white/20 transition-all"
               >
-                Fixtures
+                {t('hero.fixtures_btn')}
               </Link>
             </div>
           </div>
@@ -134,7 +136,7 @@ export default function Home() {
                 <div className="p-3 bg-red-500/20 rounded-lg text-red-400"><Users size={24} /></div>
                 <span className="text-4xl font-black text-white">300+</span>
               </div>
-              <p className="text-xs uppercase tracking-widest text-gray-400">Pro Members</p>
+              <p className="text-xs uppercase tracking-widest text-gray-400">{t('stats.members')}</p>
             </div>
 
             {/* Floating Card 2 */}
@@ -143,7 +145,7 @@ export default function Home() {
                 <div className="p-3 bg-yellow-500/20 rounded-lg text-yellow-400"><Trophy size={24} /></div>
                 <span className="text-4xl font-black text-white">16</span>
               </div>
-              <p className="text-xs uppercase tracking-widest text-gray-400">Partner Clubs</p>
+              <p className="text-xs uppercase tracking-widest text-gray-400">{t('stats.clubs')}</p>
             </div>
 
             {/* Floating Card 3 */}
@@ -152,7 +154,7 @@ export default function Home() {
                 <div className="p-3 bg-green-500/20 rounded-lg text-green-400"><MapPin size={24} /></div>
                 <span className="text-4xl font-black text-white">5</span>
               </div>
-              <p className="text-xs uppercase tracking-widest text-gray-400">Regional Hubs</p>
+              <p className="text-xs uppercase tracking-widest text-gray-400">{t('stats.hubs')}</p>
             </div>
 
             {/* Abstract Shapes */}
@@ -170,12 +172,11 @@ export default function Home() {
       </section>
 
       {/* ================= FEATURED PLAYERS ================= */}
-      {/* ================= FEATURED PLAYERS ================= */}
       <section className="py-24 max-w-7xl mx-auto px-6 relative z-10">
         <div className="flex flex-col items-center mb-16 text-center">
-          <span className="text-[#009A44] font-bold text-sm tracking-[0.3em] uppercase mb-4 animate-pulse">The Squad</span>
+          <span className="text-[#009A44] font-bold text-sm tracking-[0.3em] uppercase mb-4 animate-pulse">{t('squad.badge')}</span>
           <h2 className="text-4xl md:text-6xl font-black text-gray-900 dark:text-white mb-6">
-            MEET THE <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#009A44] to-[#007A30]">ELITE</span>
+            {t('squad.title_meet')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#009A44] to-[#007A30]">{t('squad.title_elite')}</span>
           </h2>
           <div className="w-24 h-1.5 bg-gradient-to-r from-[#009A44] via-[#FEDD00] to-[#FF0000] rounded-full"></div>
         </div>
@@ -194,7 +195,7 @@ export default function Home() {
               <div className="w-16 h-16 rounded-full bg-white dark:bg-gray-700 flex items-center justify-center text-gray-400 group-hover/more:text-[#009A44] group-hover/more:scale-110 transition-all shadow-sm">
                 <ArrowRight size={24} />
               </div>
-              <span className="mt-4 font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest text-sm group-hover/more:text-[#009A44]">View All</span>
+              <span className="mt-4 font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest text-sm group-hover/more:text-[#009A44]">{t('squad.view_all')}</span>
             </Link>
           </div>
 
@@ -206,7 +207,7 @@ export default function Home() {
         {/* View All Players Button */}
         <div className="mt-12 text-center">
           <Link to="/players" className="inline-block px-10 py-3 bg-[#009A44] text-white hover:bg-[#007A30] font-bold uppercase tracking-widest text-sm rounded shadow-lg hover:shadow-green-900/20 transition-all">
-            View All Players
+            {t('squad.view_all_players')}
           </Link>
         </div>
       </section>
@@ -217,8 +218,8 @@ export default function Home() {
 
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="mb-16 border-l-4 border-[#FEDD00] pl-6">
-            <h2 className="text-4xl md:text-5xl font-black mb-2 uppercase">Matchday <span className="text-[#FEDD00]">Live</span></h2>
-            <p className="text-gray-400 font-light text-lg">Official federation schedules and community events</p>
+            <h2 className="text-4xl md:text-5xl font-black mb-2 uppercase">{t('matchday.title')} <span className="text-[#FEDD00]">{t('matchday.live')}</span></h2>
+            <p className="text-gray-400 font-light text-lg">{t('matchday.subtitle')}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -229,7 +230,7 @@ export default function Home() {
 
           <div className="mt-12 text-center">
             <Link to="/events" className="inline-block px-10 py-3 border border-[#FEDD00] text-[#FEDD00] hover:bg-[#FEDD00] hover:text-black font-bold uppercase tracking-widest text-sm rounded transition-all">
-              Full Calendar
+              {t('matchday.calendar')}
             </Link>
           </div>
         </div>
@@ -239,12 +240,12 @@ export default function Home() {
       <section className="py-24 max-w-7xl mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 px-4">
           <div className="text-center md:text-left">
-            <span className="block text-[#FF0000] font-bold text-sm tracking-[0.3em] uppercase mb-2">Newsroom</span>
-            <h2 className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white">LATEST <span className="stroke-text">INSIGHTS</span></h2>
+            <span className="block text-[#FF0000] font-bold text-sm tracking-[0.3em] uppercase mb-2">{t('newsroom.badge')}</span>
+            <h2 className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white">{t('newsroom.title')} <span className="stroke-text">{t('newsroom.subtitle')}</span></h2>
           </div>
 
           <Link to="/insights" className="mt-6 md:mt-0 text-gray-500 hover:text-[#FF0000] font-bold text-sm uppercase tracking-widest transition-colors flex items-center gap-2">
-            Read All Articles <ArrowRight size={16} />
+            {t('newsroom.read_all')} <ArrowRight size={16} />
           </Link>
         </div>
 
@@ -262,9 +263,9 @@ export default function Home() {
 
         <div className="max-w-4xl mx-auto px-6 text-center relative z-10 text-white">
           <Star size={48} className="mx-auto mb-8 text-[#FEDD00] animate-spin-slow" />
-          <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight">JOIN THE <br />MOVEMENT</h2>
+          <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight">{t('cta.title')} <br />{t('cta.movement')}</h2>
           <p className="text-xl text-white/90 mb-12 font-light leading-relaxed max-w-2xl mx-auto">
-            We are building a legacy for Ethiopian football. Whether you are a player, fan, or partner—your voice matters.
+            {t('cta.description')}
           </p>
 
           <div className="flex flex-col sm:flex-row justify-center gap-6">
@@ -272,14 +273,14 @@ export default function Home() {
               to="/players"
               className="px-10 py-4 bg-white text-[#009A44] font-black uppercase tracking-widest rounded shadow-2xl hover:scale-105 transition-transform"
             >
-              Explore Players
+              {t('cta.explore')}
             </Link>
             {!isAdmin && (
               <Link
                 to="/login"
                 className="px-10 py-4 bg-[#007A30] text-white font-black uppercase tracking-widest rounded border border-white/20 hover:bg-[#006025] transition-colors"
               >
-                Admin Access
+                {t('cta.admin')}
               </Link>
             )}
           </div>

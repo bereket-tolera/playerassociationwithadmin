@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { InsightService } from "../api/insightService";
 import Loader from "../components/common/Loader";
 import ImageSlider from "../components/ImageSlider";
@@ -20,6 +21,7 @@ interface Insight {
 
 export default function InsightDetails() {
     const { id } = useParams<{ id: string }>();
+    const { t } = useTranslation();
     const [insight, setInsight] = useState<Insight | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -40,7 +42,7 @@ export default function InsightDetails() {
     }, [id]);
 
     if (loading) return <Loader />;
-    if (!insight) return <div className="text-center py-24 text-gray-500">Article not found.</div>;
+    if (!insight) return <div className="text-center py-24 text-gray-500">{t('common.not_found')}</div>;
 
     return (
         <div className="min-h-screen bg-white dark:bg-gray-900 font-sans transition-colors duration-500">
@@ -69,7 +71,7 @@ export default function InsightDetails() {
 
                 <div className="absolute top-6 left-6 z-30">
                     <Link to="/insights" className="inline-flex items-center text-white/80 hover:text-white uppercase text-xs font-bold tracking-widest transition-colors bg-black/20 backdrop-blur px-4 py-2 rounded-full">
-                        <ArrowLeft size={14} className="mr-2" /> Back to Insights
+                        <ArrowLeft size={14} className="mr-2" /> {t('details.back_to_insights')}
                     </Link>
                 </div>
 

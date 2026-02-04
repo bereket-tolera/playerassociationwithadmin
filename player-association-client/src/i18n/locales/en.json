@@ -1,0 +1,134 @@
+{
+    "nav": {
+        "home": "Home",
+        "players": "Players",
+        "events": "Events",
+        "insights": "Insights",
+        "login": "Login",
+        "logout": "Logout"
+    },
+    "hero": {
+        "badge": "Official Association",
+        "title_elite": "ELITE",
+        "title_ethiopian": "ETHIOPIAN",
+        "title_talent": "TALENT",
+        "description": "The independent voice for professional footballers in Ethiopia. We protect rights, clear pathways, and build the future of the game.",
+        "explore_btn": "Explore Squad",
+        "fixtures_btn": "Fixtures"
+    },
+    "stats": {
+        "members": "Pro Members",
+        "clubs": "Partner Clubs",
+        "hubs": "Regional Hubs"
+    },
+    "squad": {
+        "badge": "The Squad",
+        "title_meet": "MEET THE",
+        "title_elite": "ELITE",
+        "view_all": "View All",
+        "view_all_players": "View All Players"
+    },
+    "matchday": {
+        "title": "Matchday",
+        "live": "Live",
+        "subtitle": "Official federation schedules and community events",
+        "calendar": "Full Calendar"
+    },
+    "newsroom": {
+        "badge": "Newsroom",
+        "title": "LATEST",
+        "subtitle": "INSIGHTS",
+        "read_all": "Read All Articles"
+    },
+    "cta": {
+        "title": "JOIN THE",
+        "movement": "MOVEMENT",
+        "description": "We are building a legacy for Ethiopian football. Whether you are a player, fan, or partner—your voice matters.",
+        "explore": "Explore Players",
+        "admin": "Admin Access"
+    },
+    "footer": {
+        "description": "Governing body for players in Ethiopia. Protecting rights and promoting welfare.",
+        "tagline": "Ethiopian Players Association",
+        "quick_links": "Quick Links",
+        "contact_us": "Contact Us",
+        "follow_us": "Follow Us",
+        "privacy": "Privacy Policy",
+        "terms": "Terms of Service",
+        "cookies": "Cookie Policy",
+        "rights": "All rights reserved."
+    },
+    "players_page": {
+        "badge": "Official Roster",
+        "title_national": "National",
+        "title_squad": "Squad",
+        "description": "The pride of Ethiopia. Meet the elite athletes representing our nation on the international stage.",
+        "search_placeholder": "Search by name or club...",
+        "all_players": "All Players",
+        "not_found": "No Players Found",
+        "no_matches": "No matches for",
+        "empty_list": "The squad list is empty."
+    },
+    "positions": {
+        "all": "All",
+        "goalkeeper": "Goalkeeper",
+        "defender": "Defender",
+        "midfielder": "Midfielder",
+        "attacker": "Attacker",
+        "goalkeepers": "Goalkeepers",
+        "defenders": "Defenders",
+        "midfielders": "Midfielders",
+        "attackers": "Attackers"
+    },
+    "events_page": {
+        "badge": "Match Calendar",
+        "title": "Upcoming",
+        "subtitle": "Events",
+        "description": "Stay updated with the latest matches, trials, and community gatherings across the nation.",
+        "no_events": "No Upcoming Events",
+        "empty_list": "Check back later for match schedules."
+    },
+    "insights_page": {
+        "badge": "News & Analysis",
+        "title": "Football",
+        "subtitle": "Insights",
+        "description": "Expert analysis, player interviews, and the latest news from the heart of Ethiopian football.",
+        "read_more": "Read More"
+    },
+    "details": {
+        "back_to_squad": "Back to Squad",
+        "back_to_events": "Back to Events",
+        "back_to_insights": "Back to Insights",
+        "biography": "Biography",
+        "no_biography": "No biography available for this player.",
+        "career_highlights": "Career Highlights",
+        "age": "Age",
+        "position": "Position",
+        "current_club": "Current Club",
+        "player_details": "Player Details",
+        "nationality": "Nationality",
+        "member_epa": "Member of EPA",
+        "member_desc": "Verified professional player and active member of the association.",
+        "years": "Years"
+    },
+    "login": {
+        "sign_in": "Sign In",
+        "dashboard_title": "Sign in to Dashboard",
+        "subtitle": "Please enter your admin credentials to proceed.",
+        "username": "Username",
+        "password": "Password",
+        "forgot_password": "Forgot your password?",
+        "secure_sign_in": "Secure Sign In",
+        "authenticating": "Authenticating...",
+        "invalid_credentials": "Invalid credentials. Please try again.",
+        "unity_sport": "Unity in Sport.",
+        "excellence_action": "Excellence in Action.",
+        "welcome_admin": "Welcome to the official administration portal of the Ethiopian Players Association. Managing the future of our national talent."
+    },
+    "common": {
+        "loading": "Loading...",
+        "error": "Something went wrong",
+        "back": "Back",
+        "not_found": "Not Found"
+    }
+}

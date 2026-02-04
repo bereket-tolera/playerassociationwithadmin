@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { InsightService } from "../api/insightService";
 import InsightCard from "../components/insights/InsightCard";
 import Loader from "../components/common/Loader";
@@ -17,6 +18,7 @@ interface Insight {
 }
 
 export default function Insights() {
+  const { t } = useTranslation();
   const [insights, setInsights] = useState<Insight[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -44,15 +46,15 @@ export default function Insights() {
       <div className="relative pt-20 pb-24 bg-white dark:bg-black text-gray-900 dark:text-white overflow-hidden border-b border-gray-100 dark:border-gray-800">
         <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-red-50 dark:bg-red-900/20 text-[#FF0000] border border-red-100 dark:border-red-900/30 rounded-full font-bold text-xs uppercase tracking-[0.2em] mb-6">
-            <Newspaper size={14} /> The Press Room
+            <Newspaper size={14} /> {t('insights_page.badge')}
           </div>
 
           <h1 className="text-5xl md:text-7xl font-black uppercase mb-4 leading-tight">
-            Latest <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF0000] to-red-800">Insights</span>
+            {t('newsroom.title')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF0000] to-red-800">{t('newsroom.subtitle')}</span>
           </h1>
 
           <p className="text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto font-light leading-relaxed">
-            Exclusive interviews, tactical analysis, and official statements from the heart of the federation.
+            {t('insights_page.description')}
           </p>
         </div>
       </div>
@@ -79,7 +81,7 @@ export default function Insights() {
                 {insights[0].description}
               </p>
               <a href={`/insights/${insights[0].id}`} className="inline-flex items-center gap-2 text-[#FF0000] font-bold uppercase tracking-widest hover:text-red-700 transition-colors">
-                Read Full Article <ArrowUpRight size={20} />
+                {t('insights_page.read_more')} <ArrowUpRight size={20} />
               </a>
             </div>
           </div>

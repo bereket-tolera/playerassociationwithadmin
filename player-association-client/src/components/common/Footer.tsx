@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 // --- Icons ---
 const FacebookIcon = () => (
@@ -17,6 +18,7 @@ const WaliaIcon = () => (
 );
 
 export default function Footer() {
+  const { t } = useTranslation();
   return (
     <footer className="w-full bg-[#111827] dark:bg-black text-gray-300 dark:text-gray-400 mt-auto border-t border-gray-800 dark:border-gray-900">
       {/* 1. Flag Gradient Stripe */}
@@ -32,29 +34,29 @@ export default function Footer() {
               <WaliaIcon />
               <div>
                 <h3 className="text-white font-black text-lg leading-none uppercase tracking-wider">EPA</h3>
-                <p className="text-[10px] text-[#009A44] font-bold">Ethiopian Players Association</p>
+                <p className="text-[10px] text-[#009A44] font-bold">{t('footer.tagline')}</p>
               </div>
             </div>
             <p className="text-sm text-gray-400 leading-relaxed">
-              Governing body for players in Ethiopia. Protecting rights and promoting welfare.
+              {t('footer.description')}
             </p>
             <p className="font-amharic text-sm text-gray-500">የኢትዮጵያ ተጫዋቾች ማህበር</p>
           </div>
 
           {/* Links Column */}
           <div>
-            <h4 className="text-white font-bold uppercase tracking-wider text-sm mb-4 border-b border-gray-700 pb-2 inline-block">Quick Links</h4>
+            <h4 className="text-white font-bold uppercase tracking-wider text-sm mb-4 border-b border-gray-700 pb-2 inline-block">{t('footer.quick_links')}</h4>
             <ul className="space-y-2 text-sm">
-              <li><Link to="/" className="hover:text-[#009A44] transition-colors">Home</Link></li>
-              <li><Link to="/players" className="hover:text-[#009A44] transition-colors">Players</Link></li>
-              <li><Link to="/events" className="hover:text-[#009A44] transition-colors">Events</Link></li>
-              <li><Link to="/insights" className="hover:text-[#009A44] transition-colors">Insights</Link></li>
+              <li><Link to="/" className="hover:text-[#009A44] transition-colors">{t('nav.home')}</Link></li>
+              <li><Link to="/players" className="hover:text-[#009A44] transition-colors">{t('nav.players')}</Link></li>
+              <li><Link to="/events" className="hover:text-[#009A44] transition-colors">{t('nav.events')}</Link></li>
+              <li><Link to="/insights" className="hover:text-[#009A44] transition-colors">{t('nav.insights')}</Link></li>
             </ul>
           </div>
 
           {/* Contact Column */}
           <div>
-            <h4 className="text-white font-bold uppercase tracking-wider text-sm mb-4 border-b border-gray-700 pb-2 inline-block">Contact Us</h4>
+            <h4 className="text-white font-bold uppercase tracking-wider text-sm mb-4 border-b border-gray-700 pb-2 inline-block">{t('footer.contact_us')}</h4>
             <ul className="space-y-3 text-sm">
               <li className="flex items-start gap-3">
                 <span className="text-[#009A44]">📍</span>
@@ -73,7 +75,7 @@ export default function Footer() {
 
           {/* Socials Column */}
           <div>
-            <h4 className="text-white font-bold uppercase tracking-wider text-sm mb-4 border-b border-gray-700 pb-2 inline-block">Follow Us</h4>
+            <h4 className="text-white font-bold uppercase tracking-wider text-sm mb-4 border-b border-gray-700 pb-2 inline-block">{t('footer.follow_us')}</h4>
             <div className="flex gap-4">
               <a href="#" className="p-2 bg-gray-800 dark:bg-gray-900 rounded-full hover:bg-[#009A44] hover:text-white transition-all transform hover:-translate-y-1">
                 <FacebookIcon />
@@ -92,11 +94,11 @@ export default function Footer() {
       {/* 3. Bottom Bar */}
       <div className="bg-[#0f141f] dark:bg-black border-t border-gray-800 dark:border-gray-900">
         <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
-          <p>&copy; {new Date().getFullYear()} Ethiopian Players Association. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} {t('footer.tagline')}. {t('footer.rights')}</p>
           <div className="flex gap-6 mt-2 md:mt-0">
-            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-white transition-colors">Cookie Policy</a>
+            <a href="#" className="hover:text-white transition-colors">{t('footer.privacy')}</a>
+            <a href="#" className="hover:text-white transition-colors">{t('footer.terms')}</a>
+            <a href="#" className="hover:text-white transition-colors">{t('footer.cookies')}</a>
           </div>
         </div>
       </div>

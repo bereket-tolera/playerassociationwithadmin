@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { ArrowUpRight, Images, ChevronLeft, ChevronRight } from "lucide-react";
 import { getImageUrl, getImageUrls } from "../../utils/imageUtils";
 import { useState } from "react";
@@ -15,6 +16,7 @@ interface InsightProps {
 }
 
 export default function InsightCard({ id, title, description, category, imagePath, imagePaths }: InsightProps) {
+  const { t } = useTranslation();
   // Handle multiple images
   const images = imagePaths && imagePaths.length > 0 ? getImageUrls(imagePaths) : [getImageUrl(imagePath)];
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -90,7 +92,7 @@ export default function InsightCard({ id, title, description, category, imagePat
 
           {/* Read More Button */}
           <div className="flex items-center justify-between">
-            <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Read Article</span>
+            <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">{t('insights_page.read_more')}</span>
             <div className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center text-white shadow-lg transform group-hover:scale-110 transition-transform">
               <ArrowUpRight size={20} />
             </div>

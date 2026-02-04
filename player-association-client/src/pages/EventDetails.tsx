@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { EventService } from "../api/eventService";
 import Loader from "../components/common/Loader";
 import ImageSlider from "../components/ImageSlider";
@@ -18,6 +19,7 @@ interface Event {
 
 export default function EventDetails() {
     const { id } = useParams<{ id: string }>();
+    const { t, i18n } = useTranslation();
     const [event, setEvent] = useState<Event | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -38,13 +40,13 @@ export default function EventDetails() {
     }, [id]);
 
     if (loading) return <Loader />;
-    if (!event) return <div className="text-center py-24 text-gray-500">Event not found.</div>;
+    if (!event) return <div className="text-center py-24 text-gray-500">{t('common.not_found')}</div>;
 
     const dateObj = new Date(event.eventDate);
-    const month = dateObj.toLocaleString("default", { month: "long" });
+    const month = dateObj.toLocaleString(i18n.language === 'am' ? 'am-ET' : 'en-US', { month: "long" });
     const day = dateObj.getDate();
     const year = dateObj.getFullYear();
-    const time = dateObj.toLocaleTimeString("default", { hour: '2-digit', minute: '2-digit' });
+    const time = dateObj.toLocaleTimeString(i18n.language === 'am' ? 'am-ET' : 'en-US', { hour: '2-digit', minute: '2-digit' });
 
     return (
         <div className="min-h-screen bg-[#f8f9fa] dark:bg-gray-900 font-sans transition-colors duration-500 pb-20">
@@ -74,7 +76,7 @@ export default function EventDetails() {
                 {/* Back Button - z-30 */}
                 <div className="absolute top-6 left-6 z-30">
                     <Link to="/events" className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-colors uppercase text-xs font-bold tracking-widest">
-                        <ArrowLeft size={14} className="mr-2" /> All Events
+                        <ArrowLeft size={14} className="mr-2" /> {t('details.back_to_events')}
                     </Link>
                 </div>
             </div>
