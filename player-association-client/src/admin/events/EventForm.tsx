@@ -35,9 +35,14 @@ export default function EventForm({ event, onSuccess }: EventFormProps) {
         location: event.location || "",
       });
       setImageFiles([]);
-      // Mock logic: event.imagePath might be comma separated string from backend or single
-      const imgPath = typeof event.imagePath === 'string' ? event.imagePath : '';
-      setPreviewUrl(imgPath || null);
+      // Use imagePaths array if available, otherwise fallback to imagePath string
+      let imgPreview = "";
+      if (event.imagePaths && event.imagePaths.length > 0) {
+        imgPreview = event.imagePaths.join(',');
+      } else if (typeof event.imagePath === 'string') {
+        imgPreview = event.imagePath;
+      }
+      setPreviewUrl(imgPreview || null);
     } else {
       setForm({
         title: "",

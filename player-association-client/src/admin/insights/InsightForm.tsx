@@ -10,6 +10,7 @@ interface InsightData {
   author: string;
   category: string;
   imagePath?: string;
+  imagePaths?: string[];
 }
 
 interface InsightFormProps {
@@ -59,9 +60,14 @@ export default function InsightForm({ insight, onSuccess, onCancel }: InsightFor
         category: insight.category || categories[0],
       });
       setImageFiles([]);
-      // Mock logic: insight.imagePath might be comma separated string from backend or single
-      const imgPath = typeof insight.imagePath === 'string' ? insight.imagePath : '';
-      setPreviewUrl(imgPath || null);
+      // Use imagePaths array if available, otherwise fallback to imagePath string
+      let imgPreview = "";
+      if (insight.imagePaths && insight.imagePaths.length > 0) {
+        imgPreview = insight.imagePaths.join(',');
+      } else if (typeof insight.imagePath === 'string') {
+        imgPreview = insight.imagePath;
+      }
+      setPreviewUrl(imgPreview || null);
     } else {
       setForm(initialForm);
       setImageFiles([]);

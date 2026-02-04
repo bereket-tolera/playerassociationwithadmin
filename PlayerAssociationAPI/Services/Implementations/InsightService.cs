@@ -123,6 +123,14 @@ namespace PlayerAssociationAPI.Services.Implementations
 
             if (dto.ImageFiles != null && dto.ImageFiles.Any())
             {
+                // Clear existing images
+                foreach (var img in insight.Images.ToList())
+                {
+                    DeleteImage(img.ImagePath);
+                    _context.InsightImages.Remove(img);
+                }
+                insight.Images.Clear(); // Explicitly clear the collection for the current session
+
                 foreach (var file in dto.ImageFiles)
                 {
                     if (file.Length > 0)

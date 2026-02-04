@@ -102,12 +102,13 @@ namespace PlayerAssociationAPI.Services.Implementations
 
             if (dto.ImageFiles != null && dto.ImageFiles.Any())
             {
-                // Replace old images with the new one (as requested: single profile image)
-                foreach (var oldImg in player.Images) 
+                // Replace old images with the new one
+                foreach (var oldImg in player.Images.ToList()) 
                 {
                     DeleteImage(oldImg.ImagePath);
+                    _context.PlayerImages.Remove(oldImg);
                 }
-                player.Images.Clear();
+                player.Images.Clear(); // Explicitly clear the collection for the current session
                 
                 foreach (var file in dto.ImageFiles)
                 {
