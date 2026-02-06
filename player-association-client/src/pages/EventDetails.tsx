@@ -43,9 +43,11 @@ export default function EventDetails() {
     if (!event) return <div className="text-center py-24 text-gray-500">{t('common.not_found')}</div>;
 
     const dateObj = new Date(event.eventDate);
-    const day = dateObj.getDate();
-    const year = dateObj.getFullYear();
     const time = dateObj.toLocaleTimeString(i18n.language === 'am' ? 'am-ET' : 'en-US', { hour: '2-digit', minute: '2-digit' });
+
+    const titleParts = event.title.split(' ');
+    const lastWord = titleParts[titleParts.length - 1];
+    const restTitle = titleParts.slice(0, -1).join(' ');
 
     return (
         <div className="min-h-screen bg-white dark:bg-gray-950 font-sans transition-colors duration-500">
@@ -83,33 +85,33 @@ export default function EventDetails() {
                 <div>
                     <div className="flex items-center gap-3 mb-6">
                         <div className="px-3 py-1 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600 text-[10px] font-black uppercase tracking-widest rounded-full">
-                            Official Schedule
+                            {t('details.official_schedule')}
                         </div>
                         <div className="text-[10px] font-black text-gray-300 uppercase tracking-widest">#{event.id}</div>
                     </div>
 
                     <h1 className="text-4xl md:text-5xl font-light text-gray-900 dark:text-white tracking-tight leading-none mb-8">
-                        {event.title.split(' ').slice(0, -1).join(' ')} <span className="font-bold">{event.title.split(' ').slice(-1)}</span>
+                        {restTitle} <span className="font-bold">{lastWord}</span>
                     </h1>
 
                     {/* Quick Meta */}
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-6 py-8 border-y border-gray-50 dark:border-gray-900 mb-12">
                         <div className="space-y-1">
-                            <span className="text-[10px] font-black text-gray-300 uppercase tracking-widest block">Occurrence</span>
+                            <span className="text-[10px] font-black text-gray-300 uppercase tracking-widest block">{t('details.occurrence')}</span>
                             <div className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
                                 <Calendar size={14} className="text-[#009A44]" />
-                                {dateObj.toLocaleString('en-US', { month: 'long', day: 'numeric' })}
+                                {dateObj.toLocaleString(i18n.language === 'am' ? 'am-ET' : 'en-US', { month: 'long', day: 'numeric' })}
                             </div>
                         </div>
                         <div className="space-y-1">
-                            <span className="text-[10px] font-black text-gray-300 uppercase tracking-widest block">Timing</span>
+                            <span className="text-[10px] font-black text-gray-300 uppercase tracking-widest block">{t('details.timing')}</span>
                             <div className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
                                 <Clock size={14} className="text-[#009A44]" />
                                 {time}
                             </div>
                         </div>
                         <div className="space-y-1">
-                            <span className="text-[10px] font-black text-gray-300 uppercase tracking-widest block">Venue</span>
+                            <span className="text-[10px] font-black text-gray-300 uppercase tracking-widest block">{t('details.venue')}</span>
                             <div className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
                                 <MapPin size={14} className="text-[#009A44]" />
                                 {event.location}
@@ -118,7 +120,7 @@ export default function EventDetails() {
                     </div>
 
                     <div className="prose dark:prose-invert">
-                        <h3 className="text-xs font-black uppercase tracking-[0.2em] text-gray-400 mb-4">Event Intelligence</h3>
+                        <h3 className="text-xs font-black uppercase tracking-[0.2em] text-gray-400 mb-4">{t('details.event_intelligence')}</h3>
                         <p className="text-gray-500 dark:text-gray-400 font-medium leading-relaxed">
                             {event.description}
                         </p>
@@ -128,8 +130,8 @@ export default function EventDetails() {
                         <div className="flex items-center gap-4">
                             <div className="w-3 h-3 bg-[#009A44] rounded-full animate-pulse"></div>
                             <div>
-                                <h4 className="text-xs font-black uppercase text-gray-900 dark:text-white tracking-wider">Active Status</h4>
-                                <p className="text-[10px] font-medium text-gray-400 tracking-wide mt-1">This event is currently live in the system registry.</p>
+                                <h4 className="text-xs font-black uppercase text-gray-900 dark:text-white tracking-wider">{t('details.active_status')}</h4>
+                                <p className="text-[10px] font-medium text-gray-400 tracking-wide mt-1">{t('details.event_live_msg')}</p>
                             </div>
                         </div>
                     </div>
@@ -139,7 +141,7 @@ export default function EventDetails() {
             {/* Foot Detail */}
             <div className="max-w-7xl mx-auto px-8 py-20 border-t border-gray-50 dark:border-gray-900 mt-20">
                 <p className="text-[9px] font-bold text-gray-300 uppercase tracking-[0.4em] text-center">
-                    EPA GLOBAL INFRASTRUCTURE • ADDIS ABABA
+                    {t('details.global_infrastructure')}
                 </p>
             </div>
         </div>

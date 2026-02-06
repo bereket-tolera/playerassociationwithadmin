@@ -8,7 +8,7 @@ import PlayerCard from "../components/players/PlayerCard";
 import EventCard from "../components/events/EventCard";
 import InsightCard from "../components/insights/InsightCard";
 import Loader from "../components/common/Loader";
-import { ArrowRight, Star, Plus } from "lucide-react";
+import { ArrowRight, Star } from "lucide-react";
 
 interface Player {
   id: number;
@@ -96,8 +96,8 @@ export default function Home() {
           </div>
 
           <h1 className="text-5xl md:text-7xl font-light text-gray-900 dark:text-white tracking-tight leading-none mb-8">
-            Elevating <span className="font-bold text-[#009A44]">Talent</span> <br />
-            Empowering <span className="italic font-medium">Future</span>
+            {t('home.hero_title_1')} <span className="font-bold text-[#009A44]">{t('home.hero_title_2')}</span> <br />
+            {t('home.hero_title_3')} <span className="italic font-medium">{t('home.hero_title_4')}</span>
           </h1>
 
           <p className="text-sm md:text-base text-gray-500 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed font-medium mb-12">
@@ -125,11 +125,11 @@ export default function Home() {
       <section className="py-24 max-w-7xl mx-auto px-6">
         <div className="flex flex-col md:flex-row items-end justify-between mb-16 px-4">
           <div>
-            <span className="text-[10px] font-black text-[#009A44] uppercase tracking-[0.3em] mb-3 block">Top Profiles</span>
-            <h2 className="text-3xl font-light text-gray-900 dark:text-white tracking-tight">Meet the <span className="font-bold">National Icons</span></h2>
+            <span className="text-[10px] font-black text-[#009A44] uppercase tracking-[0.3em] mb-3 block">{t('home.section_players_badge')}</span>
+            <h2 className="text-3xl font-light text-gray-900 dark:text-white tracking-tight">{t('home.section_players_title_1')} <span className="font-bold">{t('home.section_players_title_2')}</span></h2>
           </div>
           <Link to="/players" className="group flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest hover:text-[#009A44] transition-colors mt-6 md:mt-0">
-            View All Talent <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+            {t('home.section_players_link')} <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
 
@@ -143,8 +143,8 @@ export default function Home() {
       {/* ================= SECTION: UPCOMING ================= */}
       <section className="py-24 bg-white dark:bg-gray-900 border-y border-gray-50 dark:border-gray-800">
         <div className="max-w-7xl mx-auto px-6 text-center mb-16">
-          <span className="text-[10px] font-black text-yellow-600 uppercase tracking-[0.3em] mb-3 block">Fixture List</span>
-          <h2 className="text-3xl font-light text-gray-900 dark:text-white tracking-tight">Active <span className="font-bold">Engagements</span></h2>
+          <span className="text-[10px] font-black text-yellow-600 uppercase tracking-[0.3em] mb-3 block">{t('home.section_events_badge')}</span>
+          <h2 className="text-3xl font-light text-gray-900 dark:text-white tracking-tight">{t('home.section_events_title_1')} <span className="font-bold">{t('home.section_events_title_2')}</span></h2>
         </div>
 
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -155,7 +155,7 @@ export default function Home() {
 
         <div className="text-center mt-12">
           <Link to="/events" className="text-[10px] font-bold text-[#009A44] uppercase tracking-widest border border-[#009A44]/20 px-6 py-2.5 rounded-full hover:bg-[#009A44] hover:text-white transition-all">
-            Access Calendar
+            {t('home.section_events_link')}
           </Link>
         </div>
       </section>
@@ -164,11 +164,11 @@ export default function Home() {
       <section className="py-24 max-w-7xl mx-auto px-6">
         <div className="flex flex-col md:flex-row items-end justify-between mb-16 px-4">
           <div>
-            <span className="text-[10px] font-black text-[#FF0000] uppercase tracking-[0.3em] mb-3 block">Media Room</span>
-            <h2 className="text-3xl font-light text-gray-900 dark:text-white tracking-tight">Latest <span className="font-bold pr-2">Communications</span> <FileTextIcon /></h2>
+            <span className="text-[10px] font-black text-[#FF0000] uppercase tracking-[0.3em] mb-3 block">{t('home.section_insights_badge')}</span>
+            <h2 className="text-3xl font-light text-gray-900 dark:text-white tracking-tight">{t('home.section_insights_title_1')} <span className="font-bold pr-2">{t('home.section_insights_title_2')}</span> <FileTextIcon /></h2>
           </div>
           <Link to="/insights" className="group flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest hover:text-[#FF0000] transition-colors mt-6 md:mt-0">
-            Full Press Feed <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+            {t('home.section_insights_link')} <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
 
@@ -183,14 +183,14 @@ export default function Home() {
       <section className="py-32 bg-[#fafafa] dark:bg-gray-950 relative overflow-hidden">
         <div className="max-w-3xl mx-auto px-6 text-center relative z-10">
           <Star size={32} className="mx-auto mb-8 text-[#FEDD00]" />
-          <h2 className="text-4xl font-light text-gray-900 dark:text-white tracking-tight mb-8">Part of something <br /><span className="font-bold">Bigger</span></h2>
+          <h2 className="text-4xl font-light text-gray-900 dark:text-white tracking-tight mb-8">{t('home.cta_title_1')} <br /><span className="font-bold">{t('home.cta_title_2')}</span></h2>
           <div className="h-0.5 w-12 bg-[#009A44] mx-auto mb-8 rounded-full"></div>
           <p className="text-sm text-gray-500 dark:text-gray-400 font-medium leading-relaxed mb-12">
-            Join our mission to transform Ethiopian football through excellence, transparency, and association support.
+            {t('home.cta_description')}
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-6">
             <Link to="/players" className="px-10 py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-[11px] font-black uppercase tracking-widest rounded-full hover:bg-[#009A44] dark:hover:bg-[#009A44] dark:hover:text-white transition-all">
-              Register Interest
+              {t('home.cta_btn')}
             </Link>
           </div>
         </div>

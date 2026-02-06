@@ -44,9 +44,9 @@ export default function Events() {
       <div className="max-w-7xl mx-auto px-8 pt-20 pb-12 border-b border-gray-100 dark:border-gray-900">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div>
-            <span className="text-[10px] font-black text-yellow-600 uppercase tracking-[0.3em] mb-4 block">System Calendar</span>
+            <span className="text-[10px] font-black text-yellow-600 uppercase tracking-[0.3em] mb-4 block">{t('events_page.header_badge')}</span>
             <h1 className="text-4xl md:text-5xl font-light text-gray-900 dark:text-white tracking-tight leading-none">
-              Fixture <span className="font-bold pr-2">Timeline</span> <CalendarIcon />
+              {t('events_page.header_title_1')} <span className="font-bold pr-2">{t('events_page.header_title_2')}</span> <CalendarIcon />
             </h1>
           </div>
         </div>
@@ -56,7 +56,7 @@ export default function Events() {
       <div className="max-w-7xl mx-auto px-8 py-16">
         {events.length === 0 ? (
           <div className="py-24 text-center">
-            <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest italic">Zero scheduled occurrences found.</p>
+            <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest italic">{t('events_page.empty')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

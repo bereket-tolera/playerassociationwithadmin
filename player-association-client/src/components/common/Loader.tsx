@@ -1,4 +1,7 @@
+import { useTranslation } from "react-i18next";
+
 export default function Loader() {
+  const { t } = useTranslation();
   return (
     <div className="w-full flex flex-col items-center justify-center py-40 bg-white/50 dark:bg-gray-950/50 backdrop-blur-sm">
       <div className="relative flex items-center justify-center">
@@ -8,7 +11,7 @@ export default function Loader() {
 
       <div className="mt-8 text-center">
         <p className="text-[10px] font-black text-gray-400 dark:text-gray-600 uppercase tracking-[0.3em] animate-pulse">
-          Synchronizing
+          {t('common.synchronizing')}
         </p>
       </div>
     </div>

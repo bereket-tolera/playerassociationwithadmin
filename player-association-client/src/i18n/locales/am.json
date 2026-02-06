@@ -5,63 +5,45 @@
         "events": "ክስተቶች",
         "insights": "ግንዛቤዎች",
         "login": "ይግቡ",
-        "logout": "ይውጡ"
+        "logout": "ይውጡ",
+        "admin_console": "ኮንሶል",
+        "global_portal": "የማህበር ፖርታል"
     },
     "hero": {
         "badge": "ይፋዊ ማህበር",
-        "title_elite": "ምርጥ",
-        "title_ethiopian": "ኢትዮጵያዊ",
-        "title_talent": "ተሰጥኦ",
         "description": "በኢትዮጵያ ውስጥ ላሉ ፕሮፌሽናል እግር ኳስ ተጫዋቾች ገለልተኛ ድምጽ። መብቶችን እንጠብቃለን፣ መንገዶችን እናጸዳለን፣ እና የጨዋታውን የወደፊት ሁኔታ እንገነባለን።",
         "explore_btn": "ቡድኑን ይመርምሩ",
         "fixtures_btn": "ጨዋታዎች"
     },
-    "stats": {
-        "members": "ፕሮ አባላት",
-        "clubs": "አጋር ክለቦች",
-        "hubs": "ክልላዊ ማዕከላት"
-    },
-    "squad": {
-        "badge": "ቡድኑ",
-        "title_meet": "ምርጦቹን",
-        "title_elite": "ያግኙ",
-        "view_all": "ሁሉንም ይመልከቱ",
-        "view_all_players": "ሁሉንም ተጫዋቾች ይመልከቱ"
-    },
-    "matchday": {
-        "title": "የግጥሚያ ቀን",
-        "live": "በቀጥታ",
-        "subtitle": "ይፋዊ የፌዴሬሽን መርሃ ግብሮች እና የማህበረሰብ ክስተቶች",
-        "calendar": "ሙሉ የቀን መቁጠሪያ"
-    },
-    "newsroom": {
-        "badge": "የዜና ክፍል",
-        "title": "የቅርብ ጊዜ",
-        "subtitle": "ግንዛቤዎች",
-        "read_all": "ሁሉንም ጽሁፎች ያንብቡ"
-    },
-    "cta": {
-        "title": "እንቅስቃሴውን",
-        "movement": "ይቀላቀሉ",
-        "description": "ለኢትዮጵያ እግር ኳስ ቅርስ እየገነባን ነው። ተጫዋች፣ ደጋፊ፣ ወይም አጋር ቢሆኑ—የእርስዎ ድምጽ አስፈላጊ ነው።",
-        "explore": "ተጫዋቾችን ይመርምሩ",
-        "admin": "የአስተዳዳሪ መግቢያ"
-    },
-    "footer": {
-        "description": "በኢትዮጵያ ውስጥ የተጫዋቾች የበላይ አካል። መብቶችን መጠበቅ እና ደህንነትን ማሳደግ።",
-        "tagline": "የኢትዮጵያ ተጫዋቾች ማህበር",
-        "quick_links": "ፈጣን አገናኞች",
-        "contact_us": "ያግኙን",
-        "follow_us": "ይከተሉን",
-        "privacy": "የግላዊነት ፖሊሲ",
-        "terms": "የአገልግሎት ውል",
-        "cookies": "የኩኪ ፖሊሲ",
-        "rights": "መብቱ በህግ የተጠበቀ ነው።"
+    "home": {
+        "hero_title_1": "ችሎታን",
+        "hero_title_2": "ማሳደግ",
+        "hero_title_3": "ወደፊትን",
+        "hero_title_4": "ማጎልበት",
+        "section_players_badge": "ምርጥ ፕሮፋይሎች",
+        "section_players_title_1": "ምርጥ",
+        "section_players_title_2": "ብሔራዊ አዶዎችን ያግኙ",
+        "section_players_link": "ሁሉንም ተሰጥኦዎች ይመልከቱ",
+        "section_events_badge": "የጨዋታ ዝርዝር",
+        "section_events_title_1": "ንቁ",
+        "section_events_title_2": "ተሳትፎዎች",
+        "section_events_link": "የቀን መቁጠሪያውን ይክፈቱ",
+        "section_insights_badge": "የሚዲያ ክፍል",
+        "section_insights_title_1": "የቅርብ ጊዜ",
+        "section_insights_title_2": "ግንኙነቶች",
+        "section_insights_link": "ሙሉ የፕሬስ መረጃ",
+        "cta_title_1": "የትልቅ",
+        "cta_title_2": "ነገር አካል ይሁኑ",
+        "cta_description": "የኢትዮጵያን እግር ኳስ በጥራት፣ በግልጽነት እና በማህበር ድጋፍ ለመለወጥ ያለንን ተልዕኮ ይቀላቀሉ።",
+        "cta_btn": "ፍላጎትዎን ያስመዝግቡ"
     },
     "players_page": {
         "badge": "ይፋዊ ዝርዝር",
         "title_national": "ብሔራዊ",
         "title_squad": "ቡድን",
+        "header_badge": "ብሔራዊ ዝርዝር",
+        "header_title_1": "የአፈጻጸም",
+        "header_title_2": "ዳታቤዝ",
         "description": "የኢትዮጵያ ኩራት። ሀገራችንን በዓለም አቀፍ ደረጃ የሚወክሉ ምርጥ አትሌቶችን ያግኙ።",
         "search_placeholder": "በስም ወይም በክለብ ይፈልጉ...",
         "all_players": "ሁሉም ተጫዋቾች",
@@ -82,18 +64,25 @@
     },
     "events_page": {
         "badge": "የክስተት ቀን መቁጠሪያ",
-        "title": "የሚመጡ",
-        "subtitle": "ክስተቶች",
+        "header_badge": "የስርዓት የቀን መቁጠሪያ",
+        "header_title_1": "የጨዋታ",
+        "header_title_2": "የጊዜ መስመር",
         "description": "በአገር አቀፍ ደረጃ የቅርብ ጊዜ ግጥሚያዎችን፣ ሙከራዎችን እና የማህበረሰብ ስብሰባዎችን ይከታተሉ።",
         "no_events": "ምንም የሚመጡ ክስተቶች የሉም",
-        "empty_list": "ለጨዋታ መርሃ ግብሮች ቆይተው ይመለሱ።"
+        "empty_list": "ለጨዋታ መርሃ ግብሮች ቆይተው ይመለሱ።",
+        "empty": "ምንም የታቀዱ ክስተቶች አልተገኙም።"
     },
     "insights_page": {
         "badge": "ዜና እና ትንታኔ",
-        "title": "የእግር ኳስ",
-        "subtitle": "ግንዛቤዎች",
+        "header_badge": "መዝገብ ቤት እና ፕሬስ",
+        "header_title_1": "የአርትኦት",
+        "header_title_2": "ጆርናል",
+        "filter_latest": "የቅርብ ጊዜ",
+        "filter_research": "ምርምር",
+        "filter_updates": "ወቅታዊ መረጃዎች",
         "description": "የባለሙያ ትንታኔ፣ የተጫዋቾች ቃለ ምልልስ፣ እና ከኢትዮጵያ እግር ኳስ ልብ የተገኙ የቅርብ ጊዜ ዜናዎች።",
-        "read_more": "ተጨማሪ ያንብቡ"
+        "read_more": "ተጨማሪ ያንብቡ",
+        "empty": "ምንም የአርትኦት ይዘት አልተገኘም።"
     },
     "details": {
         "back_to_squad": "ወደ ቡድን ተመለስ",
@@ -109,7 +98,51 @@
         "nationality": "ዜግነት",
         "member_epa": "የኢተማ አባል",
         "member_desc": "የተረጋገጠ ፕሮፌሽናል ተጫዋች እና ንቁ የማህበሩ አባል።",
-        "years": "ዓመታት"
+        "years": "ዓመታት",
+        "official_profile": "ይፋዊ ፕሮፋይል",
+        "registry_verified": "የተረጋገጠ የኢተማ መለያ ቁጥር",
+        "member_national": "የብሔራዊ ማህበሩ አባል",
+        "official_schedule": "ይፋዊ መርሃ ግብር",
+        "occurrence": "ክስተት",
+        "timing": "ሰዓት",
+        "venue": "ቦታ",
+        "event_intelligence": "የክስተት መረጃ",
+        "active_status": "ንቁ ሁኔታ",
+        "event_live_msg": "ይህ ክስተት በአሁኑ ጊዜ በስርዓት መዝገብ ውስጥ ንቁ ነው።",
+        "global_infrastructure": "የኢተማ ዓለም አቀፍ መሠረተ ልማት • አዲስ አበባ",
+        "editorial_press": "አርትኦት /",
+        "press_team": "የፕሬስ ቡድን",
+        "latest_communication": "የቅርብ ጊዜ ግንኙነት",
+        "official_press_channel": "ይፋዊ የፕሬስ ቻናል • ኢተማ"
+    },
+    "admin": {
+        "dashboard_title": "የዳሽቦርድ አጠቃላይ እይታ",
+        "live_metrics": "የቀጥታ መለኪያዎች",
+        "total_players": "ጠቅላላ ተጫዋቾች",
+        "active_events": "ንቁ ክስተቶች",
+        "insights_published": "የታተሙ ግንዛቤዎች",
+        "system_health": "የስርዓት ጤና",
+        "integrity": "የፌዴሬሽን ታማኝነት",
+        "engagement": "የተጫዋቾች ተሳትፎ",
+        "status": "የምዝገባ ሁኔታ",
+        "quick_controls": "ፈጣን መቆጣጠሪያዎች",
+        "add_player": "ተጫዋች ያክሉ",
+        "add_event": "ክስተት ያክሉ",
+        "create_article": "ጽሑፍ ይፍጠሩ",
+        "sidebar_core": "ዋና አሰሳ",
+        "sidebar_ops": "ክንውኖች",
+        "sidebar_network": "አውታረ መረብ",
+        "system_overview": "የስርዓት አጠቃላይ እይታ",
+        "central_management": "የኢተማ ማዕከላዊ አስተዳደር",
+        "sync": "ማመሳሰል",
+        "total_entries": "ጠቅላላ ግቤቶች",
+        "metrics_health": "መለኪያዎች እና ጤና",
+        "profile_integrity": "የፕሮፋይል ዳታ ትክክለኛነት",
+        "calendar_accuracy": "የቀን መቁጠሪያ ትክክለኛነት",
+        "media_optimization": "የሚዲያ ማመቻቸት",
+        "express_actions": "ፈጣን እርምጃዎች",
+        "sync_calendar": "የቀን መቁጠሪያ አመሳስል",
+        "secure_instance": "ደህንነቱ የተጠበቀ ኢንስታንስ"
     },
     "login": {
         "sign_in": "ይግቡ",
@@ -125,10 +158,40 @@
         "excellence_action": "ጥራት በተግባር።",
         "welcome_admin": "ወደ የኢትዮጵያ ተጫዋቾች ማህበር ይፋዊ የአስተዳደር ፖርታል እንኳን በደህና መጡ። የብሔራዊ ተሰጥኦዎቻችንን የወደፊት ሁኔታ ማስተዳደር።"
     },
+    "footer": {
+        "directory": "ማውጫ",
+        "presence": "መኖር",
+        "official_channel": "ይፋዊ ቻናል",
+        "newsletter_msg": "ከቅርብ ጊዜ እድገቶቻችን ጋር ተመሳስለው ይቆዩ።",
+        "staff_access": "የሰራተኞች መግቢያ",
+        "description": "በኢትዮጵያ ውስጥ የተጫዋቾች የበላይ አካል። መብቶችን መጠበቅ እና ደህንነትን ማሳደግ።",
+        "tagline": "የኢትዮጵያ ተጫዋቾች ማህበር",
+        "quick_links": "ፈጣን አገናኞች",
+        "contact_us": "ያግኙን",
+        "follow_us": "ይከተሉን",
+        "privacy": "የግላዊነት ፖሊሲ",
+        "terms": "የአገልግሎት ውል",
+        "cookies": "የኩኪ ፖሊሲ",
+        "rights": "መብቱ በህግ የተጠበቀ ነው።",
+        "copyright": "የኢትዮጵያ ተጫዋቾች ማህበር • መብቱ በህግ የተጠበቀ ነው"
+    },
+    "matchday": {
+        "title": "የግጥሚያ ቀን",
+        "live": "በቀጥታ",
+        "subtitle": "ይፋዊ የፌዴሬሽን መርሃ ግብሮች እና የማህበረሰብ ክስተቶች",
+        "calendar": "ሙሉ የቀን መቁጠሪያ"
+    },
+    "newsroom": {
+        "badge": "የዜና ክፍል",
+        "title": "የቅርብ ጊዜ",
+        "subtitle": "ግንዛቤዎች",
+        "read_all": "ሁሉንም ጽሁፎች ያንብቡ"
+    },
     "common": {
         "loading": "በመጫን ላይ...",
         "error": "ችግር ተፈጥሯል",
         "back": "ተመለስ",
-        "not_found": "አልተገኘም"
+        "not_found": "አልተገኘም",
+        "synchronizing": "በማመሳሰል ላይ"
     }
 }

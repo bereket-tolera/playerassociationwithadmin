@@ -5,63 +5,45 @@
         "events": "Events",
         "insights": "Insights",
         "login": "Login",
-        "logout": "Logout"
+        "logout": "Logout",
+        "admin_console": "Console",
+        "global_portal": "Association Portal"
     },
     "hero": {
         "badge": "Official Association",
-        "title_elite": "ELITE",
-        "title_ethiopian": "ETHIOPIAN",
-        "title_talent": "TALENT",
         "description": "The independent voice for professional footballers in Ethiopia. We protect rights, clear pathways, and build the future of the game.",
         "explore_btn": "Explore Squad",
         "fixtures_btn": "Fixtures"
     },
-    "stats": {
-        "members": "Pro Members",
-        "clubs": "Partner Clubs",
-        "hubs": "Regional Hubs"
-    },
-    "squad": {
-        "badge": "The Squad",
-        "title_meet": "MEET THE",
-        "title_elite": "ELITE",
-        "view_all": "View All",
-        "view_all_players": "View All Players"
-    },
-    "matchday": {
-        "title": "Matchday",
-        "live": "Live",
-        "subtitle": "Official federation schedules and community events",
-        "calendar": "Full Calendar"
-    },
-    "newsroom": {
-        "badge": "Newsroom",
-        "title": "LATEST",
-        "subtitle": "INSIGHTS",
-        "read_all": "Read All Articles"
-    },
-    "cta": {
-        "title": "JOIN THE",
-        "movement": "MOVEMENT",
-        "description": "We are building a legacy for Ethiopian football. Whether you are a player, fan, or partner—your voice matters.",
-        "explore": "Explore Players",
-        "admin": "Admin Access"
-    },
-    "footer": {
-        "description": "Governing body for players in Ethiopia. Protecting rights and promoting welfare.",
-        "tagline": "Ethiopian Players Association",
-        "quick_links": "Quick Links",
-        "contact_us": "Contact Us",
-        "follow_us": "Follow Us",
-        "privacy": "Privacy Policy",
-        "terms": "Terms of Service",
-        "cookies": "Cookie Policy",
-        "rights": "All rights reserved."
+    "home": {
+        "hero_title_1": "Elevating",
+        "hero_title_2": "Talent",
+        "hero_title_3": "Empowering",
+        "hero_title_4": "Future",
+        "section_players_badge": "Top Profiles",
+        "section_players_title_1": "Meet the",
+        "section_players_title_2": "National Icons",
+        "section_players_link": "View All Talent",
+        "section_events_badge": "Fixture List",
+        "section_events_title_1": "Active",
+        "section_events_title_2": "Engagements",
+        "section_events_link": "Access Calendar",
+        "section_insights_badge": "Media Room",
+        "section_insights_title_1": "Latest",
+        "section_insights_title_2": "Communications",
+        "section_insights_link": "Full Press Feed",
+        "cta_title_1": "Part of something",
+        "cta_title_2": "Bigger",
+        "cta_description": "Join our mission to transform Ethiopian football through excellence, transparency, and association support.",
+        "cta_btn": "Register Interest"
     },
     "players_page": {
         "badge": "Official Roster",
         "title_national": "National",
         "title_squad": "Squad",
+        "header_badge": "National Roster",
+        "header_title_1": "Performance",
+        "header_title_2": "Database",
         "description": "The pride of Ethiopia. Meet the elite athletes representing our nation on the international stage.",
         "search_placeholder": "Search by name or club...",
         "all_players": "All Players",
@@ -82,18 +64,25 @@
     },
     "events_page": {
         "badge": "Match Calendar",
-        "title": "Upcoming",
-        "subtitle": "Events",
+        "header_badge": "System Calendar",
+        "header_title_1": "Fixture",
+        "header_title_2": "Timeline",
         "description": "Stay updated with the latest matches, trials, and community gatherings across the nation.",
         "no_events": "No Upcoming Events",
-        "empty_list": "Check back later for match schedules."
+        "empty_list": "Check back later for match schedules.",
+        "empty": "Zero scheduled occurrences found."
     },
     "insights_page": {
         "badge": "News & Analysis",
-        "title": "Football",
-        "subtitle": "Insights",
+        "header_badge": "Archive & Press",
+        "header_title_1": "Editorial",
+        "header_title_2": "Journal",
+        "filter_latest": "Latest",
+        "filter_research": "Research",
+        "filter_updates": "Updates",
         "description": "Expert analysis, player interviews, and the latest news from the heart of Ethiopian football.",
-        "read_more": "Read More"
+        "read_more": "Read More",
+        "empty": "Zero editorial content found."
     },
     "details": {
         "back_to_squad": "Back to Squad",
@@ -109,7 +98,51 @@
         "nationality": "Nationality",
         "member_epa": "Member of EPA",
         "member_desc": "Verified professional player and active member of the association.",
-        "years": "Years"
+        "years": "Years",
+        "official_profile": "Official Profile",
+        "registry_verified": "VERIFIED EPA REGISTRY ID EXHIBIT",
+        "member_national": "Member of the National Association",
+        "official_schedule": "Official Schedule",
+        "occurrence": "Occurrence",
+        "timing": "Timing",
+        "venue": "Venue",
+        "event_intelligence": "Event Intelligence",
+        "active_status": "Active Status",
+        "event_live_msg": "This event is currently live in the system registry.",
+        "global_infrastructure": "EPA GLOBAL INFRASTRUCTURE • ADDIS ABABA",
+        "editorial_press": "Editorial /",
+        "press_team": "Press Team",
+        "latest_communication": "Latest Communication",
+        "official_press_channel": "OFFICIAL PRESS CHANNEL • EPA"
+    },
+    "admin": {
+        "dashboard_title": "Dashboard Overview",
+        "live_metrics": "Live Metrics",
+        "total_players": "Total Players",
+        "active_events": "Active Events",
+        "insights_published": "Insights Published",
+        "system_health": "System Health",
+        "integrity": "Federation Integrity",
+        "engagement": "Player Engagement",
+        "status": "Registry Status",
+        "quick_controls": "Quick Controls",
+        "add_player": "Add Player",
+        "add_event": "Add Event",
+        "create_article": "Create Article",
+        "sidebar_core": "Core Navigation",
+        "sidebar_ops": "Operations",
+        "sidebar_network": "Network",
+        "system_overview": "System Overview",
+        "central_management": "EPA Central Management",
+        "sync": "Sync",
+        "total_entries": "Total Entries",
+        "metrics_health": "Metrics & Health",
+        "profile_integrity": "Profile Data Integrity",
+        "calendar_accuracy": "Calendar Accuracy",
+        "media_optimization": "Media Optimization",
+        "express_actions": "Express Actions",
+        "sync_calendar": "Sync Calendar",
+        "secure_instance": "SECURE INSTANCE"
     },
     "login": {
         "sign_in": "Sign In",
@@ -125,10 +158,40 @@
         "excellence_action": "Excellence in Action.",
         "welcome_admin": "Welcome to the official administration portal of the Ethiopian Players Association. Managing the future of our national talent."
     },
+    "footer": {
+        "directory": "Directory",
+        "presence": "Presence",
+        "official_channel": "Official Channel",
+        "newsletter_msg": "Stay synchronized with our latest developments.",
+        "staff_access": "Staff Access",
+        "description": "Governing body for players in Ethiopia. Protecting rights and promoting welfare.",
+        "tagline": "Ethiopian Players Association",
+        "quick_links": "Quick Links",
+        "contact_us": "Contact Us",
+        "follow_us": "Follow Us",
+        "privacy": "Privacy Policy",
+        "terms": "Terms of Service",
+        "cookies": "Cookie Policy",
+        "rights": "All rights reserved.",
+        "copyright": "ETHIOPIAN PLAYERS ASSOCIATION • ALL RIGHTS RESERVED"
+    },
+    "matchday": {
+        "title": "Matchday",
+        "live": "Live",
+        "subtitle": "Official federation schedules and community events",
+        "calendar": "Full Calendar"
+    },
+    "newsroom": {
+        "badge": "Newsroom",
+        "title": "LATEST",
+        "subtitle": "INSIGHTS",
+        "read_all": "Read All Articles"
+    },
     "common": {
         "loading": "Loading...",
         "error": "Something went wrong",
         "back": "Back",
-        "not_found": "Not Found"
+        "not_found": "Not Found",
+        "synchronizing": "Synchronizing"
     }
 }

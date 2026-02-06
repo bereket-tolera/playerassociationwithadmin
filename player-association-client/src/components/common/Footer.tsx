@@ -30,7 +30,7 @@ export default function Footer() {
 
           {/* Navigation */}
           <div>
-            <span className="text-[10px] font-black uppercase text-gray-900 dark:text-gray-500 tracking-[0.2em] mb-8 block">Directory</span>
+            <span className="text-[10px] font-black uppercase text-gray-900 dark:text-gray-500 tracking-[0.2em] mb-8 block">{t('footer.directory')}</span>
             <ul className="space-y-3 text-[11px] font-bold uppercase tracking-widest">
               <li><Link to="/" className="hover:text-[#009A44] transition-colors">{t('nav.home')}</Link></li>
               <li><Link to="/players" className="hover:text-[#009A44] transition-colors">{t('nav.players')}</Link></li>
@@ -41,7 +41,7 @@ export default function Footer() {
 
           {/* Information */}
           <div>
-            <span className="text-[10px] font-black uppercase text-gray-900 dark:text-gray-500 tracking-[0.2em] mb-8 block">Presence</span>
+            <span className="text-[10px] font-black uppercase text-gray-900 dark:text-gray-500 tracking-[0.2em] mb-8 block">{t('footer.presence')}</span>
             <ul className="space-y-4 text-[11px] font-medium">
               <li className="flex items-start gap-3">
                 <MapPin size={14} className="text-[#009A44] mt-0.5" />
@@ -60,10 +60,10 @@ export default function Footer() {
 
           {/* Newsletter / CTA */}
           <div className="bg-gray-50 dark:bg-gray-900 rounded-3xl p-8 border border-gray-100 dark:border-gray-800">
-            <span className="text-[9px] font-black uppercase text-[#009A44] tracking-[0.2em] mb-3 block">Official Channel</span>
-            <h4 className="text-gray-900 dark:text-white font-bold text-sm tracking-tight mb-4">Stay synchronized with our latest developments.</h4>
+            <span className="text-[9px] font-black uppercase text-[#009A44] tracking-[0.2em] mb-3 block">{t('footer.official_channel')}</span>
+            <h4 className="text-gray-900 dark:text-white font-bold text-sm tracking-tight mb-4">{t('footer.newsletter_msg')}</h4>
             <Link to="/login" className="text-[10px] font-black uppercase tracking-widest text-center block w-full outline outline-1 outline-gray-200 dark:outline-gray-800 py-3 rounded-full hover:bg-gray-900 hover:text-white transition-all">
-              Staff Access
+              {t('footer.staff_access')}
             </Link>
           </div>
 
@@ -71,11 +71,11 @@ export default function Footer() {
 
         <div className="mt-20 pt-10 border-t border-gray-50 dark:border-gray-900 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-[9px] font-bold uppercase tracking-[0.2em]">
-            &copy; {new Date().getFullYear()} ETHIOPIAN PLAYERS ASSOCIATION • ALL RIGHTS RESERVED
+            &copy; {new Date().getFullYear()} {t('footer.copyright')}
           </p>
           <div className="flex gap-8 text-[9px] font-bold uppercase tracking-[0.2em]">
-            <a href="#" className="hover:text-gray-900 transition-colors">Privacy</a>
-            <a href="#" className="hover:text-gray-900 transition-colors">Terms</a>
+            <a href="#" className="hover:text-gray-900 transition-colors">{t('footer.privacy')}</a>
+            <a href="#" className="hover:text-gray-900 transition-colors">{t('footer.terms')}</a>
           </div>
         </div>
       </div>

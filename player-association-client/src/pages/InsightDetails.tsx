@@ -58,7 +58,7 @@ export default function InsightDetails() {
             <article className="max-w-4xl mx-auto px-8 py-12">
                 <div className="mb-12">
                     <span className="px-3 py-1 bg-red-500 text-white text-[10px] font-black uppercase tracking-widest rounded-full mb-6 inline-block">
-                        Editorial / {insight.category}
+                        {t('details.editorial_press')} {insight.category}
                     </span>
                     <h1 className="text-4xl md:text-6xl font-light text-gray-900 dark:text-white tracking-tighter leading-[1.1] mb-8">
                         {insight.title}
@@ -69,13 +69,13 @@ export default function InsightDetails() {
                             <div className="p-1.5 bg-gray-50 dark:bg-gray-900 rounded-lg text-red-500">
                                 <User size={14} />
                             </div>
-                            <span className="text-[10px] font-black text-gray-900 dark:text-white uppercase tracking-widest">{insight.author || "Press Team"}</span>
+                            <span className="text-[10px] font-black text-gray-900 dark:text-white uppercase tracking-widest">{insight.author || t('details.press_team')}</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <div className="p-1.5 bg-gray-50 dark:bg-gray-900 rounded-lg text-gray-400">
                                 <Calendar size={14} />
                             </div>
-                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Latest Communication</span>
+                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('details.latest_communication')}</span>
                         </div>
                     </div>
                 </div>
@@ -112,7 +112,7 @@ export default function InsightDetails() {
             {/* Foot Detail */}
             <div className="max-w-7xl mx-auto px-8 py-20 border-t border-gray-50 dark:border-gray-900 mt-20">
                 <p className="text-[9px] font-bold text-gray-300 uppercase tracking-[0.4em] text-center">
-                    OFFICIAL PRESS CHANNEL • EPA
+                    {t('details.official_press_channel')}
                 </p>
             </div>
         </div>

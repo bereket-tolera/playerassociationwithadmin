@@ -45,16 +45,16 @@ export default function Insights() {
       <div className="max-w-7xl mx-auto px-8 pt-20 pb-12 border-b border-gray-100 dark:border-gray-900">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div>
-            <span className="text-[10px] font-black text-red-600 uppercase tracking-[0.3em] mb-4 block">Archive & Press</span>
+            <span className="text-[10px] font-black text-red-600 uppercase tracking-[0.3em] mb-4 block">{t('insights_page.header_badge')}</span>
             <h1 className="text-4xl md:text-5xl font-light text-gray-900 dark:text-white tracking-tight leading-none">
-              Editorial <span className="font-bold pr-2">Journal</span> <NewsIcon />
+              {t('insights_page.header_title_1')} <span className="font-bold pr-2">{t('insights_page.header_title_2')}</span> <NewsIcon />
             </h1>
           </div>
 
           <div className="flex gap-4">
-            <button className="text-[10px] font-black uppercase text-red-600 tracking-widest px-4 py-2 border-b-2 border-red-600 transition-all">Latest</button>
-            <button className="text-[10px] font-black uppercase text-gray-400 tracking-widest px-4 py-2 hover:text-[#009A44] transition-all">Research</button>
-            <button className="text-[10px] font-black uppercase text-gray-400 tracking-widest px-4 py-2 hover:text-[#009A44] transition-all">Updates</button>
+            <button className="text-[10px] font-black uppercase text-red-600 tracking-widest px-4 py-2 border-b-2 border-red-600 transition-all">{t('insights_page.filter_latest')}</button>
+            <button className="text-[10px] font-black uppercase text-gray-400 tracking-widest px-4 py-2 hover:text-[#009A44] transition-all">{t('insights_page.filter_research')}</button>
+            <button className="text-[10px] font-black uppercase text-gray-400 tracking-widest px-4 py-2 hover:text-[#009A44] transition-all">{t('insights_page.filter_updates')}</button>
           </div>
         </div>
       </div>
@@ -63,7 +63,7 @@ export default function Insights() {
       <div className="max-w-7xl mx-auto px-8 py-16">
         {insights.length === 0 ? (
           <div className="py-24 text-center">
-            <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest italic">Zero editorial content found.</p>
+            <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest italic">{t('insights_page.empty')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
@@ -80,6 +80,8 @@ export default function Insights() {
 
 const NewsIcon = () => (
   <div className="inline-flex p-2 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 ml-2 shadow-sm">
-    <Newspaper size={18} />
+    <NewsIconInner />
   </div>
 );
+
+const NewsIconInner = () => <Newspaper size={18} />;

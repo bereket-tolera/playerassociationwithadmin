@@ -1,4 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface AdminSidebarProps {
   onLogout?: () => void;
@@ -34,28 +35,29 @@ const DashboardIcon = () => (
 
 export default function AdminSidebar({ onLogout }: AdminSidebarProps) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   // Navigation Config
   const navItems = [
     {
       path: "/admin",
-      label: "Dashboard",
+      label: t('nav.home'),
       icon: <DashboardIcon />,
       end: true
     },
     {
       path: "/admin/players",
-      label: "Players",
+      label: t('nav.players'),
       icon: <PlayerIcon />
     },
     {
       path: "/admin/events",
-      label: "Events",
+      label: t('nav.events'),
       icon: <EventIcon />
     },
     {
       path: "/admin/insights",
-      label: "Insights",
+      label: t('nav.insights'),
       icon: <InsightIcon />
     },
   ];
@@ -83,7 +85,7 @@ export default function AdminSidebar({ onLogout }: AdminSidebarProps) {
             EPA <span className="text-[#009A44]">ADMIN</span>
           </span>
           <span className="text-[8px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">
-            Console
+            {t('nav.admin_console')}
           </span>
         </div>
       </div>
@@ -123,7 +125,7 @@ export default function AdminSidebar({ onLogout }: AdminSidebarProps) {
           onClick={handleLogout}
           className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-[10px] font-bold text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all duration-200 uppercase tracking-widest"
         >
-          <span>Sign Out</span>
+          <span>{t('nav.logout')}</span>
           <LogoutIcon />
         </button>
       </div>

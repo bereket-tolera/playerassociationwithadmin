@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../../context/ThemeContext";
-import { Sun, Moon, Menu, X, Lock, Languages } from "lucide-react";
+import { Sun, Moon, Menu, X } from "lucide-react";
 
 // --- Icons ---
 const WaliaIcon = () => (
@@ -44,7 +44,7 @@ export default function Navbar() {
                 EPA <span className="text-[#009A44]">GLOBAL</span>
               </span>
               <span className="text-[8px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em] mt-0.5">
-                Association Portal
+                {t('nav.global_portal')}
               </span>
             </div>
           </Link>
@@ -103,7 +103,7 @@ export default function Navbar() {
             <NavLink to="/events" onClick={() => setIsOpen(false)} className={mobileLinkClass}>{t('nav.events')}</NavLink>
             <NavLink to="/insights" onClick={() => setIsOpen(false)} className={mobileLinkClass}>{t('nav.insights')}</NavLink>
             <div className="pt-4 border-t border-gray-50 flex justify-between items-center">
-              <Link to="/login" onClick={() => setIsOpen(false)} className="text-[10px] font-black uppercase text-[#009A44]">Admin Access</Link>
+              <Link to="/login" onClick={() => setIsOpen(false)} className="text-[10px] font-black uppercase text-[#009A44]">{t('nav.login')}</Link>
               <div className="flex gap-4">
                 <button onClick={toggleLanguage} className="text-[10px] font-black uppercase text-gray-400">{i18n.language === 'en' ? 'Amharic' : 'English'}</button>
                 <button onClick={toggleTheme} className="text-gray-400">{theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}</button>

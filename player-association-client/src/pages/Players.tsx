@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { PlayerService } from "../api/playerService";
 import PlayerCard from "../components/players/PlayerCard";
 import Loader from "../components/common/Loader";
-import { Search, ChevronDown } from "lucide-react";
+import { Search } from "lucide-react";
 
 interface Player {
   id: number;
@@ -75,9 +75,9 @@ export default function Players() {
       <div className="max-w-7xl mx-auto px-8 pt-20 pb-12 border-b border-gray-100 dark:border-gray-900">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div>
-            <span className="text-[10px] font-black text-[#009A44] uppercase tracking-[0.3em] mb-4 block">National Roster</span>
+            <span className="text-[10px] font-black text-[#009A44] uppercase tracking-[0.3em] mb-4 block">{t('players_page.header_badge')}</span>
             <h1 className="text-4xl md:text-5xl font-light text-gray-900 dark:text-white tracking-tight leading-none">
-              Performance <span className="font-bold">Database</span>
+              {t('players_page.header_title_1')} <span className="font-bold">{t('players_page.header_title_2')}</span>
             </h1>
           </div>
 

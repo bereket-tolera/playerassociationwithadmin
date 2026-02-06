@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { PlayerService } from "../api/playerService";
 import Loader from "../components/common/Loader";
-import { ArrowLeft, User, Shirt, Globe, Target } from "lucide-react";
+import { ArrowLeft, Shirt, Target } from "lucide-react";
 
 interface Player {
     id: number;
@@ -50,6 +50,9 @@ export default function PlayerDetails() {
     if (loading) return <Loader />;
     if (!player) return <div className="text-center py-24 text-gray-500">{t('common.not_found')}</div>;
 
+    const firstName = player.fullName.split(' ')[0];
+    const restName = player.fullName.split(' ').slice(1).join(' ');
+
     return (
         <div className="min-h-screen bg-white dark:bg-gray-950 font-sans transition-colors duration-500">
 
@@ -72,9 +75,9 @@ export default function PlayerDetails() {
                 </div>
 
                 <div>
-                    <span className="text-[10px] font-black text-[#009A44] uppercase tracking-[0.3em] mb-4 block">Official Profile</span>
+                    <span className="text-[10px] font-black text-[#009A44] uppercase tracking-[0.3em] mb-4 block">{t('details.official_profile')}</span>
                     <h1 className="text-5xl md:text-7xl font-light text-gray-900 dark:text-white tracking-tighter leading-none mb-6">
-                        {player.fullName.split(' ')[0]} <br /><span className="font-bold">{player.fullName.split(' ').slice(1).join(' ')}</span>
+                        {firstName} <br /><span className="font-bold">{restName}</span>
                     </h1>
 
                     <div className="flex flex-wrap gap-4 mb-12">
@@ -119,10 +122,10 @@ export default function PlayerDetails() {
                 <div className="max-w-3xl mx-auto px-8 text-center">
                     <div className="w-1.5 h-12 bg-[#009A44] mx-auto mb-8 rounded-full"></div>
                     <h2 className="text-2xl font-light text-gray-900 dark:text-white tracking-tight mb-6">
-                        Member of the <span className="font-bold">National Association</span>
+                        {t('details.member_national')}
                     </h2>
                     <p className="text-xs text-gray-400 font-bold uppercase tracking-widest leading-loose">
-                        VERIFIED EPA REGISTRY ID EXHIBIT #{player.id.toString().padStart(6, '0')} <br />
+                        {t('details.registry_verified')} #{player.id.toString().padStart(6, '0')} <br />
                         ADDIS ABABA • ETHIOPIA
                     </p>
                 </div>
