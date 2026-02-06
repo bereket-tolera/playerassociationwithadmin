@@ -28,33 +28,39 @@ const LogoutIcon = () => (
   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
 );
 
+const DashboardIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+);
+
 export default function AdminSidebar({ onLogout }: AdminSidebarProps) {
   const navigate = useNavigate();
 
   // Navigation Config
   const navItems = [
     {
+      path: "/admin",
+      label: "Dashboard",
+      icon: <DashboardIcon />,
+      end: true
+    },
+    {
       path: "/admin/players",
-      label: "Squad Manager",
-      sub: "ተጫዋቾች (Squad)",
+      label: "Players",
       icon: <PlayerIcon />
     },
     {
       path: "/admin/events",
-      label: "Fixtures & Events",
-      sub: "መርሃ ግብር (Events)",
+      label: "Events",
       icon: <EventIcon />
     },
     {
       path: "/admin/insights",
-      label: "News & Insights",
-      sub: "ዜና (News)",
+      label: "Insights",
       icon: <InsightIcon />
     },
   ];
 
   const handleLogout = () => {
-    // Logic usually handled by parent, but fallback provided
     if (onLogout) {
       onLogout();
     } else {
@@ -65,54 +71,46 @@ export default function AdminSidebar({ onLogout }: AdminSidebarProps) {
   };
 
   return (
-    <div className="w-64 h-full bg-white flex flex-col font-sans border-r border-gray-200 shadow-[4px_0_24px_rgba(0,0,0,0.02)] z-30">
+    <div className="w-56 h-full bg-white flex flex-col font-sans border-r border-gray-100 z-30">
 
-      {/* 1. Brand Header */}
-      <div className="px-6 py-8 flex flex-col items-center border-b border-gray-100 bg-gradient-to-b from-gray-50 to-white">
-        <div className="h-16 w-16 bg-white rounded-full shadow-lg flex items-center justify-center border-[3px] border-[#009A44] mb-3 p-2">
+      {/* 1. Brand: Minimal */}
+      <div className="px-6 py-10 flex items-center gap-3">
+        <div className="h-8 w-8 text-[#009A44]">
           <WaliaLogo />
         </div>
-        <h2 className="text-lg font-black text-gray-800 tracking-tight text-center leading-none">
-          EFF ADMIN
-        </h2>
-        <p className="text-[10px] text-[#009A44] font-bold tracking-[0.2em] uppercase mt-1">
-          Ethiopia
-        </p>
+        <div className="flex flex-col">
+          <span className="text-xs font-black text-gray-900 tracking-tighter leading-none">
+            EPA <span className="text-[#009A44]">ADMIN</span>
+          </span>
+          <span className="text-[8px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">
+            Console
+          </span>
+        </div>
       </div>
 
       {/* 2. Navigation Items */}
-      <nav className="flex-grow px-3 py-6 space-y-1">
-        <p className="px-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3 font-oswald">
-          Management Console
-        </p>
-
+      <nav className="flex-grow px-3 space-y-1">
         {navItems.map((item) => (
           <NavLink
             key={item.path}
             to={item.path}
+            end={item.end}
             className={({ isActive }) => `
-              group flex items-center justify-between px-4 py-3.5 rounded-xl transition-all duration-200 border border-transparent
+              group flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200
               ${isActive
-                ? "bg-gradient-to-r from-[#009A44]/10 to-transparent text-[#009A44] border-l-4 border-l-[#009A44] border-y-[#009A44]/5 border-r-[#009A44]/5 shadow-sm"
-                : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                ? "bg-gray-50 text-[#009A44]"
+                : "text-gray-500 hover:text-gray-900 hover:bg-gray-50/50"
               }
             `}
           >
             {({ isActive }) => (
               <>
-                <div className="flex items-center gap-3.5">
-                  <span className={`transition-colors duration-200 ${isActive ? "text-[#009A44]" : "text-gray-400 group-hover:text-gray-600"}`}>
-                    {item.icon}
-                  </span>
-                  <div>
-                    <span className={`block text-sm font-bold ${isActive ? "text-gray-900" : ""}`}>
-                      {item.label}
-                    </span>
-                    <span className={`text-[10px] block font-medium ${isActive ? "text-[#009A44]" : "text-gray-400"}`}>
-                      {item.sub}
-                    </span>
-                  </div>
-                </div>
+                <span className={`transition-colors duration-200 ${isActive ? "text-[#009A44]" : "text-gray-400 group-hover:text-gray-600"}`}>
+                  {item.icon}
+                </span>
+                <span className={`text-[11px] font-bold uppercase tracking-wider ${isActive ? "text-gray-900" : ""}`}>
+                  {item.label}
+                </span>
               </>
             )}
           </NavLink>
@@ -120,21 +118,14 @@ export default function AdminSidebar({ onLogout }: AdminSidebarProps) {
       </nav>
 
       {/* 3. Footer / Logout */}
-      <div className="p-4 border-t border-gray-100 bg-gray-50/50">
+      <div className="p-4 border-t border-gray-50">
         <button
           onClick={handleLogout}
-          className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-bold text-gray-600 hover:text-red-600 hover:bg-red-50 hover:shadow-sm border border-transparent hover:border-red-100 transition-all duration-200 group"
+          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-[10px] font-bold text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all duration-200 uppercase tracking-widest"
         >
-          <span className="group-hover:-translate-x-1 transition-transform">Sign Out</span>
+          <span>Sign Out</span>
           <LogoutIcon />
         </button>
-
-        {/* Subtle decorative dots */}
-        <div className="mt-4 flex justify-center gap-1.5 opacity-30">
-          <div className="h-1 w-1 rounded-full bg-[#009A44]"></div>
-          <div className="h-1 w-1 rounded-full bg-[#FEDD00]"></div>
-          <div className="h-1 w-1 rounded-full bg-[#FF0000]"></div>
-        </div>
       </div>
     </div>
   );

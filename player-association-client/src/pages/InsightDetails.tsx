@@ -5,7 +5,7 @@ import { InsightService } from "../api/insightService";
 import Loader from "../components/common/Loader";
 import ImageSlider from "../components/ImageSlider";
 import { getImageUrl, getImageUrls } from "../utils/imageUtils";
-import { ArrowLeft, Calendar, User, Tag } from "lucide-react";
+import { ArrowLeft, User, Calendar } from "lucide-react";
 
 interface Insight {
     id: number;
@@ -16,7 +16,7 @@ interface Insight {
     category: string;
     imagePath?: string;
     imagePaths?: string[];
-    createdAt?: string; // Assuming API returns createdAt or similar
+    createdAt?: string;
 }
 
 export default function InsightDetails() {
@@ -45,12 +45,42 @@ export default function InsightDetails() {
     if (!insight) return <div className="text-center py-24 text-gray-500">{t('common.not_found')}</div>;
 
     return (
-        <div className="min-h-screen bg-white dark:bg-gray-900 font-sans transition-colors duration-500">
+        <div className="min-h-screen bg-white dark:bg-gray-950 font-sans transition-colors duration-500">
 
-            {/* 1. Hero Header with Image Gallery */}
-            <div className="relative h-[60vh] min-h-[500px] w-full overflow-hidden bg-gray-900">
-                {/* Image Layer - z-0 */}
-                <div className="absolute inset-0 z-0">
+            {/* 1. Header Navigation */}
+            <div className="max-w-4xl mx-auto px-8 pt-10 pb-6">
+                <Link to="/insights" className="inline-flex items-center text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-[#009A44] transition-colors group">
+                    <ArrowLeft size={14} className="mr-2 group-hover:-translate-x-1 transition-transform" /> {t('details.back_to_insights')}
+                </Link>
+            </div>
+
+            {/* 2. Article Surface */}
+            <article className="max-w-4xl mx-auto px-8 py-12">
+                <div className="mb-12">
+                    <span className="px-3 py-1 bg-red-500 text-white text-[10px] font-black uppercase tracking-widest rounded-full mb-6 inline-block">
+                        Editorial / {insight.category}
+                    </span>
+                    <h1 className="text-4xl md:text-6xl font-light text-gray-900 dark:text-white tracking-tighter leading-[1.1] mb-8">
+                        {insight.title}
+                    </h1>
+
+                    <div className="flex items-center gap-6 pt-6 border-t border-gray-100 dark:border-gray-900">
+                        <div className="flex items-center gap-2">
+                            <div className="p-1.5 bg-gray-50 dark:bg-gray-900 rounded-lg text-red-500">
+                                <User size={14} />
+                            </div>
+                            <span className="text-[10px] font-black text-gray-900 dark:text-white uppercase tracking-widest">{insight.author || "Press Team"}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <div className="p-1.5 bg-gray-50 dark:bg-gray-900 rounded-lg text-gray-400">
+                                <Calendar size={14} />
+                            </div>
+                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Latest Communication</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="relative aspect-video rounded-3xl overflow-hidden bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 mb-16">
                     {insight.imagePaths && insight.imagePaths.length > 0 ? (
                         <ImageSlider
                             images={getImageUrls(insight.imagePaths)}
@@ -61,67 +91,30 @@ export default function InsightDetails() {
                         <img
                             src={getImageUrl(insight.imagePaths || insight.imagePath)}
                             alt={insight.title}
-                            className="w-full h-full object-contain"
+                            className="w-full h-full object-cover"
                         />
                     )}
                 </div>
 
-                {/* Gradient Overlays - z-10 */}
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent z-10 pointer-events-none"></div>
+                <div className="max-w-2xl mx-auto">
+                    <p className="text-xl md:text-2xl text-gray-400 font-light leading-relaxed mb-16 italic text-center">
+                        "{insight.description}"
+                    </p>
 
-                <div className="absolute top-6 left-6 z-30">
-                    <Link to="/insights" className="inline-flex items-center text-white/80 hover:text-white uppercase text-xs font-bold tracking-widest transition-colors bg-black/20 backdrop-blur px-4 py-2 rounded-full">
-                        <ArrowLeft size={14} className="mr-2" /> {t('details.back_to_insights')}
-                    </Link>
-                </div>
-
-                <div className="absolute bottom-0 left-0 w-full p-6 md:p-12 z-30 max-w-5xl mx-auto">
-                    <span className="px-3 py-1 bg-red-600 text-white text-xs font-bold uppercase tracking-widest rounded mb-4 inline-block">
-                        {insight.category}
-                    </span>
-                    <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-tight font-oswald mb-6 text-shadow-xl">
-                        {insight.title}
-                    </h1>
-
-                    <div className="flex flex-wrap items-center gap-6 text-white/80 text-sm font-medium">
-                        <div className="flex items-center gap-2">
-                            <User size={16} className="text-[#FEDD00]" />
-                            By <span className="text-white underline decoration-[#FEDD00] underline-offset-4">{insight.author}</span>
-                        </div>
-                        {/* If we had date */}
-                        <div className="flex items-center gap-2">
-                            <Calendar size={16} className="text-[#FEDD00]" />
-                            <span>Latest Update</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* 2. Article Content */}
-            <article className="max-w-3xl mx-auto px-6 py-16">
-                <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 font-light leading-relaxed mb-10 border-l-4 border-[#009A44] pl-6 italic">
-                    {insight.description}
-                </p>
-
-                <div className="prose dark:prose-invert prose-lg max-w-none prose-green">
-                    {/* Rendering content - assuming plain text or basic HTML here. For rich text, might need dangerouslySetInnerHTML */}
-                    <div className="whitespace-pre-line text-gray-800 dark:text-gray-200 leading-8">
-                        {insight.content}
-                    </div>
-                </div>
-
-                <div className="mt-16 pt-8 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
-                    <div className="flex gap-2">
-                        <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">Share this:</span>
-                        {/* Social placeholders */}
-                        <div className="flex gap-2">
-                            <div className="w-6 h-6 bg-blue-600 rounded-full cursor-pointer hover:opacity-80"></div>
-                            <div className="w-6 h-6 bg-sky-500 rounded-full cursor-pointer hover:opacity-80"></div>
+                    <div className="prose prose-lg dark:prose-white max-w-none">
+                        <div className="whitespace-pre-line text-gray-700 dark:text-gray-300 leading-[1.8] font-medium">
+                            {insight.content}
                         </div>
                     </div>
                 </div>
             </article>
 
+            {/* Foot Detail */}
+            <div className="max-w-7xl mx-auto px-8 py-20 border-t border-gray-50 dark:border-gray-900 mt-20">
+                <p className="text-[9px] font-bold text-gray-300 uppercase tracking-[0.4em] text-center">
+                    OFFICIAL PRESS CHANNEL • EPA
+                </p>
+            </div>
         </div>
     );
 }

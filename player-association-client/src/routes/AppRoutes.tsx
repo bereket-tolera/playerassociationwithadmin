@@ -8,13 +8,11 @@ import Insights from "../pages/Insights";
 // import NotFound from "../pages/NotFound";
 import Login from "../pages/Login";
 import ProtectedRoute from "../pages/ProtectedRoute";
-// Admin Pages
+import AdminDashboard from "../admin/dashboard/AdminDashboard";
 import AdminLayout from "../admin/layout/AdminLayout";
 import PlayerList from "../admin/players/PlayerList";
 import EventList from "../admin/events/EventList";
 import InsightList from "../admin/insights/InsightList";
-
-// Shared Layout
 import Layout from "../components/common/Layout";
 import PlayerDetails from "../pages/PlayerDetails";
 import EventDetails from "../pages/EventDetails";
@@ -35,6 +33,7 @@ export default function AppRoutes() {
           <Route path="/insights/:id" element={<InsightDetails />} />
         </Route>
 
+
         {/* <Route path="*" element={<NotFound />} /> */}
         <Route path="/login" element={<Login />} />
 
@@ -45,11 +44,12 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }>
           {/* Nested routes under /admin */}
-          <Route index element={<Navigate to="players" replace />} />
+          <Route index element={<AdminDashboard />} />
           <Route path="players" element={<PlayerList />} />
           <Route path="events" element={<EventList />} />
           <Route path="insights" element={<InsightList />} />
         </Route>
+
 
         {/* Legacy admin routes (optional, can be removed) */}
         <Route path="/admin/players" element={

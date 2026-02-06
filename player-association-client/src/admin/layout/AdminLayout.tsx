@@ -1,6 +1,7 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import AdminSidebar from "./AdminSidebar";
 import { useEffect, useState } from "react";
+import { Clock } from "lucide-react";
 
 // --- Header Icons ---
 const UserCircleIcon = () => (
@@ -15,22 +16,20 @@ const CalendarIcon = () => (
 
 export default function AdminLayout() {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("Administrator");
+  const [username, setUsername] = useState("Admin");
   const [formattedDate, setFormattedDate] = useState("");
 
   useEffect(() => {
-    // 1. Get User
     const storedUser = localStorage.getItem('username');
     if (storedUser) setUsername(storedUser);
 
-    // 2. Format Date (e.g., "Monday, Oct 24")
     const date = new Date();
-    const options: Intl.DateTimeFormatOptions = { weekday: 'long', month: 'short', day: 'numeric' };
+    const options: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', year: 'numeric' };
     setFormattedDate(date.toLocaleDateString('en-US', options));
   }, []);
 
   const handleLogout = () => {
-    if (window.confirm("Are you sure you want to log out of the Federation portal?")) {
+    if (window.confirm("Sign out of the management console?")) {
       localStorage.removeItem('token');
       localStorage.removeItem('username');
       navigate('/login');
@@ -39,84 +38,61 @@ export default function AdminLayout() {
   };
 
   return (
-    <div className="flex h-screen bg-[#F3F4F6] font-sans overflow-hidden selection:bg-[#009A44] selection:text-white">
+    <div className="flex h-screen bg-[#fcfcfc] font-sans overflow-hidden text-gray-800">
 
-      {/* 1. Sidebar (Desktop Fixed) */}
+      {/* 1. Sidebar */}
       <aside className="hidden md:block h-full flex-shrink-0 relative z-20">
         <AdminSidebar onLogout={handleLogout} />
       </aside>
 
-      {/* 2. Main Content Wrapper */}
+      {/* 2. Main Content */}
       <div className="flex-1 flex flex-col h-full relative w-full min-w-0">
 
-        {/* --- Top Header --- */}
-        <header className="bg-white shadow-sm z-10 flex-shrink-0">
-          {/* Ethiopian Flag Stripe (Top Border) */}
-          <div className="h-1 w-full flex">
-            <div className="flex-1 bg-[#009A44]"></div>
-            <div className="flex-1 bg-[#FEDD00]"></div>
-            <div className="flex-1 bg-[#E30613]"></div>
+        {/* --- Top Header: Minimalist --- */}
+        <header className="bg-white/80 backdrop-blur-md border-b border-gray-100 z-10 flex-shrink-0 px-8 py-3 flex justify-between items-center">
+
+          <div className="flex items-center gap-4">
+            <div className="md:hidden h-6 w-6 text-[#009A44]">
+              {/* Mobile logo placeholder */}
+            </div>
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-300 leading-none mb-1">Current Instance</p>
+              <h1 className="text-sm font-bold text-gray-800 tracking-tight leading-none uppercase">
+                Management Console
+              </h1>
+            </div>
           </div>
 
-          <div className="px-6 py-4 flex justify-between items-center">
-            {/* Left: Dashboard Title & Date */}
-            <div>
-              <h1 className="text-xl font-black text-gray-800 tracking-tight leading-none">
-                Federation Dashboard
-              </h1>
-              <div className="flex items-center mt-1 text-xs font-medium text-gray-500">
-                <CalendarIcon />
-                <span>{formattedDate}</span>
-                <span className="mx-2 text-gray-300">|</span>
-                <span className="text-[#009A44] font-bold">Addis Ababa, ET</span>
-              </div>
+          <div className="flex items-center gap-8">
+            {/* Live Clock / Date */}
+            <div className="hidden lg:flex items-center text-[10px] font-bold text-gray-400 uppercase tracking-widest border-r border-gray-100 pr-8">
+              <Clock size={12} className="mr-2 text-[#009A44]" /> {formattedDate}
             </div>
 
-            {/* Right: User Profile */}
-            <div className="flex items-center gap-6">
-              {/* Notifications */}
-              <div className="relative group">
-                <BellIcon />
-                <span className="absolute top-0 right-0 block h-2 w-2 rounded-full ring-2 ring-white bg-[#E30613] transform translate-x-1/4 -translate-y-1/4 animate-pulse"></span>
+            {/* Profile */}
+            <div className="flex items-center gap-3 group cursor-pointer">
+              <div className="text-right">
+                <p className="text-[11px] font-black text-gray-900 leading-none">{username}</p>
+                <p className="text-[9px] text-[#009A44] font-bold uppercase tracking-widest mt-1">Verified Admin</p>
               </div>
-
-              <div className="h-8 w-px bg-gray-200"></div>
-
-              {/* User Info */}
-              <div className="flex items-center gap-3">
-                <div className="text-right hidden sm:block">
-                  <p className="text-sm font-bold text-gray-900 leading-none">{username}</p>
-                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">Admin Access</p>
-                </div>
-                <div className="rounded-full bg-gray-50 p-1 border border-gray-100 shadow-sm">
-                  <UserCircleIcon />
-                </div>
+              <div className="h-8 w-8 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-300 group-hover:border-[#009A44] transition-colors">
+                <UserCircleIcon />
               </div>
             </div>
           </div>
         </header>
 
-        {/* --- Scrollable Content Area --- */}
-        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-[#F3F4F6] p-6 relative scroll-smooth">
-          {/* Subtle Watermark/Pattern - Carbon Fibre */}
-          <div className="absolute inset-0 opacity-[0.03] pointer-events-none z-0"
-            style={{
-              backgroundImage: `url("https://www.transparenttextures.com/patterns/carbon-fibre.png")`
-            }}>
-          </div>
+        {/* --- Area --- */}
+        <main className="flex-1 overflow-y-auto bg-[#fafafa] p-8 relative">
 
-          {/* Dynamic Page Content */}
-          <div className="max-w-7xl mx-auto relative z-10 fade-in-up">
+          <div className="max-w-6xl mx-auto relative z-10">
             <Outlet />
           </div>
 
-          {/* Footer */}
-          <footer className="mt-12 mb-6 text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-sm border border-gray-100">
-              <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                © {new Date().getFullYear()} Ethiopian Football Federation
-              </span>
-            </div>
+          <footer className="mt-20 py-8 border-t border-gray-50 text-center">
+            <p className="text-[9px] font-bold text-gray-300 uppercase tracking-[0.3em]">
+              © {new Date().getFullYear()} EPA GLOBAL SYSTEM • ADDIS ABABA
+            </p>
           </footer>
         </main>
 
