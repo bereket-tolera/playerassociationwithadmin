@@ -53,6 +53,10 @@
       "PackagePath": "staticwebassets\\uploads\\878439f5-9215-4c86-a167-32416c9718c4.jpg"
     },
     {
+      "Id": "C:\\Users\\Yonas\\Desktop\\playerassociationwithadmin\\PlayerAssociationAPI\\wwwroot\\uploads\\8b2d5439-5212-4645-ad39-0c6b46692bcf.webp",
+      "PackagePath": "staticwebassets\\uploads\\8b2d5439-5212-4645-ad39-0c6b46692bcf.webp"
+    },
+    {
       "Id": "C:\\Users\\Yonas\\Desktop\\playerassociationwithadmin\\PlayerAssociationAPI\\wwwroot\\uploads\\8e4b5290-ef3b-45e0-b1ab-947659902211.webp",
       "PackagePath": "staticwebassets\\uploads\\8e4b5290-ef3b-45e0-b1ab-947659902211.webp"
     },
@@ -111,10 +115,6 @@
     {
       "Id": "C:\\Users\\Yonas\\Desktop\\playerassociationwithadmin\\PlayerAssociationAPI\\wwwroot\\uploads\\fa0bea6d-53af-4941-b0f4-7bff0d9e05b5.png",
       "PackagePath": "staticwebassets\\uploads\\fa0bea6d-53af-4941-b0f4-7bff0d9e05b5.png"
-    },
-    {
-      "Id": "C:\\Users\\Yonas\\Desktop\\playerassociationwithadmin\\PlayerAssociationAPI\\wwwroot\\uploads\\fb9c906b-f206-44d6-87a3-5f95985ad9be.png",
-      "PackagePath": "staticwebassets\\uploads\\fb9c906b-f206-44d6-87a3-5f95985ad9be.png"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.PlayerAssociationAPI.Microsoft.AspNetCore.StaticWebAssets.props",

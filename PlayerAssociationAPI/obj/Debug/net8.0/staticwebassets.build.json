@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "gptFU0/abpdwu/BLhi2NvBTYNi0Y//G7YqCnytniCSQ=",
+  "Hash": "nyJRVjI4JGRtfWf5vOaaa6PNkhYOeEpJE5ZgreSBOJA=",
   "Source": "PlayerAssociationAPI",
   "BasePath": "_content/PlayerAssociationAPI",
   "Mode": "Default",
@@ -262,6 +262,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\uploads\\878439f5-9215-4c86-a167-32416c9718c4.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\Yonas\\Desktop\\playerassociationwithadmin\\PlayerAssociationAPI\\wwwroot\\uploads\\8b2d5439-5212-4645-ad39-0c6b46692bcf.webp",
+      "SourceId": "PlayerAssociationAPI",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Yonas\\Desktop\\playerassociationwithadmin\\PlayerAssociationAPI\\wwwroot\\",
+      "BasePath": "_content/PlayerAssociationAPI",
+      "RelativePath": "uploads/8b2d5439-5212-4645-ad39-0c6b46692bcf.webp",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\8b2d5439-5212-4645-ad39-0c6b46692bcf.webp"
     },
     {
       "Identity": "C:\\Users\\Yonas\\Desktop\\playerassociationwithadmin\\PlayerAssociationAPI\\wwwroot\\uploads\\8e4b5290-ef3b-45e0-b1ab-947659902211.webp",
@@ -547,25 +566,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\uploads\\fa0bea6d-53af-4941-b0f4-7bff0d9e05b5.png"
-    },
-    {
-      "Identity": "C:\\Users\\Yonas\\Desktop\\playerassociationwithadmin\\PlayerAssociationAPI\\wwwroot\\uploads\\fb9c906b-f206-44d6-87a3-5f95985ad9be.png",
-      "SourceId": "PlayerAssociationAPI",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\Yonas\\Desktop\\playerassociationwithadmin\\PlayerAssociationAPI\\wwwroot\\",
-      "BasePath": "_content/PlayerAssociationAPI",
-      "RelativePath": "uploads/fb9c906b-f206-44d6-87a3-5f95985ad9be.png",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\uploads\\fb9c906b-f206-44d6-87a3-5f95985ad9be.png"
     }
   ]
 }
