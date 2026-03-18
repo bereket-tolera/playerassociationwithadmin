@@ -66,7 +66,7 @@ namespace PlayerAssociationAPI.Services.Implementations
                     Description = dto.Description?.Trim() ?? "",
                     Content = dto.Content?.Trim() ?? "",
                     Author = dto.Author?.Trim() ?? "",
-                    Category = categoryEnum, // Use parsed enum
+                    Category = categoryEnum,
                     CreatedAt = DateTime.UtcNow
                 };
 

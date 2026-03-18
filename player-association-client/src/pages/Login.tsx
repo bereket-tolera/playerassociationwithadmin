@@ -116,7 +116,7 @@ export default function Login() {
                   type="text"
                   required
                   className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg leading-5 bg-gray-50 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm transition-all duration-200"
-                  placeholder={t('login.username')}
+                  placeholder={t('login.username') as string}
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                 />
@@ -132,7 +132,7 @@ export default function Login() {
                   type="password"
                   required
                   className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg leading-5 bg-gray-50 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm transition-all duration-200"
-                  placeholder={t('login.password')}
+                  placeholder={t('login.password') as string}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />

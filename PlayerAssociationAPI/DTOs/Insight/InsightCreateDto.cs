@@ -5,10 +5,10 @@ namespace PlayerAssociationAPI.DTOs.Insight
     public class InsightCreateDto
     {
         public string Title { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
-        public string Content { get; set; } = string.Empty;
-        public string Author { get; set; } = string.Empty;
-        public string Category { get; set; } = string.Empty; // Accept string from frontend
-        public List<IFormFile> ImageFiles { get; set; } = new List<IFormFile>();
+        public string? Description { get; set; }
+        public string? Content { get; set; }
+        public string? Author { get; set; }
+        public string Category { get; set; } = string.Empty;
+        public List<IFormFile>? ImageFiles { get; set; }
     }
 }

@@ -52,8 +52,6 @@ namespace PlayerAssociationAPI.Services.Implementations
                     Description = dto.Description?.Trim() ?? "",
                     CreatedAt = DateTime.UtcNow
                 };
-
-                if (dto.ImageFiles != null && dto.ImageFiles.Any())
                 {
                     foreach (var file in dto.ImageFiles)
                     {
@@ -204,6 +202,9 @@ namespace PlayerAssociationAPI.Services.Implementations
 
         private PlayerReadDto ConvertToDto(Player player)
         {
+            var request = _httpContextAccessor.HttpContext?.Request;
+            var baseUrl = $"{request?.Scheme}://{request?.Host}";
+
             return new PlayerReadDto
             {
                 Id = player.Id,
@@ -213,7 +214,11 @@ namespace PlayerAssociationAPI.Services.Implementations
                 Position = player.Position,
                 Nationality = player.Nationality,
                 Description = player.Description,
-                ImagePath = player.Images.FirstOrDefault()?.ImagePath,
+                ImagePath = player.Images.FirstOrDefault()?.ImagePath != null
+                    ? $"{baseUrl}{player.Images.FirstOrDefault()!.ImagePath}"
+                    : null,
+                ImagePaths = player.Images.Select(i =>
+                    !string.IsNullOrEmpty(i.ImagePath) ? $"{baseUrl}{i.ImagePath}" : i.ImagePath).ToList(),
                 CreatedAt = player.CreatedAt,
                 UpdatedAt = player.UpdatedAt
             };

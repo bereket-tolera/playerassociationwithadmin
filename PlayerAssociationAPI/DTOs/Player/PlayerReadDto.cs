@@ -10,6 +10,7 @@ namespace PlayerAssociationAPI.DTOs.Player
         public string Nationality { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public string? ImagePath { get; set; }
+        public List<string> ImagePaths { get; set; } = new List<string>();
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }

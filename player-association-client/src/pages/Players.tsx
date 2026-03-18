@@ -86,7 +86,7 @@ export default function Players() {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
               <input
                 type="text"
-                placeholder={t('players_page.search_placeholder')}
+                placeholder={t('players_page.search_placeholder') as string}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-11 pr-6 py-3 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl focus:outline-none focus:ring-1 focus:ring-[#009A44] text-[11px] font-bold uppercase tracking-widest text-gray-900 dark:text-white dark:placeholder:text-gray-600 transition-all w-full md:w-64"

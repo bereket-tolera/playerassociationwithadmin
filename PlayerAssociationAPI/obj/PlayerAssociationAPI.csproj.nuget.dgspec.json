@@ -1,25 +1,32 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Yonas\\Desktop\\playerassociationwithadmin\\PlayerAssociationAPI\\PlayerAssociationAPI.csproj": {}
+    "C:\\Users\\yorda\\OneDrive\\Documents\\DAFTECH\\playerassociationwithadmin\\PlayerAssociationAPI\\PlayerAssociationAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Yonas\\Desktop\\playerassociationwithadmin\\PlayerAssociationAPI\\PlayerAssociationAPI.csproj": {
+    "C:\\Users\\yorda\\OneDrive\\Documents\\DAFTECH\\playerassociationwithadmin\\PlayerAssociationAPI\\PlayerAssociationAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Yonas\\Desktop\\playerassociationwithadmin\\PlayerAssociationAPI\\PlayerAssociationAPI.csproj",
+        "projectUniqueName": "C:\\Users\\yorda\\OneDrive\\Documents\\DAFTECH\\playerassociationwithadmin\\PlayerAssociationAPI\\PlayerAssociationAPI.csproj",
         "projectName": "PlayerAssociationAPI",
-        "projectPath": "C:\\Users\\Yonas\\Desktop\\playerassociationwithadmin\\PlayerAssociationAPI\\PlayerAssociationAPI.csproj",
-        "packagesPath": "C:\\Users\\Yonas\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Yonas\\Desktop\\playerassociationwithadmin\\PlayerAssociationAPI\\obj\\",
+        "projectPath": "C:\\Users\\yorda\\OneDrive\\Documents\\DAFTECH\\playerassociationwithadmin\\PlayerAssociationAPI\\PlayerAssociationAPI.csproj",
+        "packagesPath": "C:\\Users\\yorda\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\yorda\\OneDrive\\Documents\\DAFTECH\\playerassociationwithadmin\\PlayerAssociationAPI\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Yonas\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\yorda\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -37,7 +44,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -91,6 +99,24 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.24, 8.0.24]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[8.0.24, 8.0.24]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[8.0.24, 8.0.24]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[8.0.24, 8.0.24]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -99,7 +125,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.417/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
