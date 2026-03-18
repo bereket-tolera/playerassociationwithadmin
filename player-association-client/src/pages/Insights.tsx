@@ -3,17 +3,11 @@ import { useTranslation } from "react-i18next";
 import { InsightService } from "../api/insightService";
 import InsightCard from "../components/insights/InsightCard";
 import Loader from "../components/common/Loader";
-import { Newspaper } from "lucide-react";
+import { PageHero, EmptyState } from "./Players";
 
 interface Insight {
-  id: number;
-  title: string;
-  description: string;
-  content: string;
-  author: string;
-  category: string;
-  imagePath?: string;
-  imagePaths?: string[];
+  id: number; title: string; description: string; content: string;
+  author: string; category: string; imagePath?: string; imagePaths?: string[];
 }
 
 export default function Insights() {
@@ -22,66 +16,51 @@ export default function Insights() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchInsights = async () => {
+    (async () => {
       try {
-        setLoading(true);
         const res = await InsightService.getAll();
-        setInsights(res.data.reverse()); // Show newest first
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchInsights();
+        setInsights(res.data.reverse());
+      } catch (e) { console.error(e); }
+      finally { setLoading(false); }
+    })();
   }, []);
 
   if (loading) return <Loader />;
 
   return (
-    <div className="min-h-screen bg-[#fafafa] dark:bg-gray-950 font-sans transition-colors duration-500">
-
-      {/* 1. Header Area: Minimalist */}
-      <div className="max-w-7xl mx-auto px-8 pt-20 pb-12 border-b border-gray-100 dark:border-gray-900">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-          <div>
-            <span className="text-[10px] font-black text-red-600 uppercase tracking-[0.3em] mb-4 block">{t('insights_page.header_badge')}</span>
-            <h1 className="text-4xl md:text-5xl font-light text-gray-900 dark:text-white tracking-tight leading-none">
-              {t('insights_page.header_title_1')} <span className="font-bold pr-2">{t('insights_page.header_title_2')}</span> <NewsIcon />
-            </h1>
-          </div>
-
-          <div className="flex gap-4">
-            <button className="text-[10px] font-black uppercase text-red-600 tracking-widest px-4 py-2 border-b-2 border-red-600 transition-all">{t('insights_page.filter_latest')}</button>
-            <button className="text-[10px] font-black uppercase text-gray-400 tracking-widest px-4 py-2 hover:text-[#009A44] transition-all">{t('insights_page.filter_research')}</button>
-            <button className="text-[10px] font-black uppercase text-gray-400 tracking-widest px-4 py-2 hover:text-[#009A44] transition-all">{t('insights_page.filter_updates')}</button>
+    <div className="min-h-screen bg-[#FAF7F0] dark:bg-[#0D0D0D] transition-colors duration-500">
+      {/* Custom header with filter tabs */}
+      <div className="bg-gray-900 dark:bg-[#0D0D0D] relative overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.04]"
+          style={{ backgroundImage: "repeating-linear-gradient(45deg, #C9A84C 0, #C9A84C 1px, transparent 0, transparent 50%)", backgroundSize: "20px 20px" }}
+        />
+        <div className="relative z-10 max-w-7xl mx-auto px-8 pt-20 pb-16">
+          <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#C9A84C] mb-4 block">{t("insights_page.header_badge")}</span>
+          <h1 className="text-5xl md:text-6xl font-black text-white leading-tight mb-6" style={{ fontFamily: "'Playfair Display', serif" }}>
+            {t("insights_page.header_title_1")} <span className="gold-text italic">{t("insights_page.header_title_2")}</span>
+          </h1>
+          <div className="w-16 h-px bg-gradient-to-r from-[#C9A84C] to-transparent mb-8" />
+          <div className="flex gap-6">
+            {[t("insights_page.filter_latest"), t("insights_page.filter_research"), t("insights_page.filter_updates")].map((label, i) => (
+              <button key={label} className={`text-[10px] font-bold uppercase tracking-widest pb-2 transition-all border-b
+                ${i === 0 ? "text-[#C9A84C] border-[#C9A84C]" : "text-gray-500 border-transparent hover:text-[#C9A84C]"}`}>
+                {label}
+              </button>
+            ))}
           </div>
         </div>
+        <div className="absolute bottom-0 left-0 w-full h-8 bg-gradient-to-t from-[#FAF7F0] dark:from-[#0D0D0D] to-transparent" />
       </div>
 
-      {/* 2. Content */}
-      <div className="max-w-7xl mx-auto px-8 py-16">
+      <div className="max-w-7xl mx-auto px-8 py-16 pb-24">
         {insights.length === 0 ? (
-          <div className="py-24 text-center">
-            <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest italic">{t('insights_page.empty')}</p>
-          </div>
+          <EmptyState label={t("insights_page.empty")} />
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {insights.map((insight) => (
-              <InsightCard key={insight.id} {...insight} />
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {insights.map((i) => <InsightCard key={i.id} {...i} />)}
           </div>
         )}
       </div>
-
     </div>
   );
 }
-
-const NewsIcon = () => (
-  <div className="inline-flex p-2 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 ml-2 shadow-sm">
-    <NewsIconInner />
-  </div>
-);
-
-const NewsIconInner = () => <Newspaper size={18} />;

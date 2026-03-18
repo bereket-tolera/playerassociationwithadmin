@@ -3,17 +3,15 @@ import { useTranslation } from "react-i18next";
 export default function Loader() {
   const { t } = useTranslation();
   return (
-    <div className="w-full flex flex-col items-center justify-center py-40 bg-white/50 dark:bg-gray-950/50 backdrop-blur-sm">
-      <div className="relative flex items-center justify-center">
-        {/* Minimalist Spinner */}
-        <div className="h-8 w-8 rounded-full border-2 border-gray-100 dark:border-gray-800 border-t-[#009A44] animate-spin"></div>
+    <div className="w-full min-h-[60vh] flex flex-col items-center justify-center bg-[#FAF7F0] dark:bg-[#0D0D0D]">
+      <div className="relative w-12 h-12">
+        <div className="absolute inset-0 rounded-full border border-gray-200 dark:border-[#C9A84C]/20" />
+        <div className="absolute inset-0 rounded-full border-t border-[#C9A84C] animate-spin" />
+        <div className="absolute inset-2 rounded-full border border-gray-100 dark:border-[#009A44]/20" />
       </div>
-
-      <div className="mt-8 text-center">
-        <p className="text-[10px] font-black text-gray-400 dark:text-gray-600 uppercase tracking-[0.3em] animate-pulse">
-          {t('common.synchronizing')}
-        </p>
-      </div>
+      <p className="mt-6 text-[10px] font-semibold uppercase tracking-[0.3em] text-[#C9A84C]/70 animate-pulse">
+        {t("common.synchronizing")}
+      </p>
     </div>
   );
 }
