@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PlayerAssociationAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d9eced572ea77be5d473fb31065e4b432add727f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0ae73e80ef2f908a5f45fa391290292fc2ceae55")]
 [assembly: System.Reflection.AssemblyProductAttribute("PlayerAssociationAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PlayerAssociationAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
