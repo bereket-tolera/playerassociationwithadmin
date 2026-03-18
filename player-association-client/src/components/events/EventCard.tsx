@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { MapPin, Clock } from "lucide-react";
 import { getImageUrl } from "../../utils/imageUtils";
+import { formatEthiopianShort, ethiopianMonthName, ethiopianDay } from "../../utils/ethiopianDate";
 
 interface EventProps {
   id: number; title: string; description: string;
@@ -13,7 +14,8 @@ export default function EventCard({ id, title, imagePath, imagePaths, eventDate,
   const { i18n } = useTranslation();
   const dateObj = new Date(eventDate);
   const displayImage = getImageUrl(imagePaths || imagePath);
-  const formattedDate = dateObj.toLocaleDateString(i18n.language === "am" ? "am-ET" : "en-US", { month: "long", day: "numeric" });
+  const lang = i18n.language === "am" ? "am" : "en";
+  const formattedDate = formatEthiopianShort(dateObj, lang);
 
   return (
     <Link to={`/events/${id}`} className="group block luxury-card">
@@ -26,10 +28,10 @@ export default function EventCard({ id, title, imagePath, imagePaths, eventDate,
           {/* Date badge */}
           <div className="absolute top-4 left-4 bg-white/90 dark:bg-[#0D0D0D]/80 backdrop-blur-sm border border-gray-200 dark:border-[#C9A84C]/30 px-3 py-2 rounded-xl text-center shadow-sm">
             <span className="block text-[9px] font-bold uppercase text-[#C9A84C] tracking-wider leading-none">
-              {dateObj.toLocaleString("en-US", { month: "short" })}
+              {ethiopianMonthName(dateObj, lang)}
             </span>
             <span className="block text-xl font-black text-gray-900 dark:text-white leading-none mt-0.5" style={{ fontFamily: "'Playfair Display', serif" }}>
-              {dateObj.getDate()}
+              {ethiopianDay(dateObj)}
             </span>
           </div>
 

@@ -96,28 +96,29 @@ function PlayerForm({ player, onSuccess, onCancel }: PlayerFormProps) {
       <form onSubmit={handleSubmit} className="p-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div className="flex flex-col items-center gap-3">
-            <div className="relative w-28 h-28 rounded-2xl overflow-hidden bg-gray-50 border-2 border-dashed border-gray-200 group cursor-pointer">
+            <div className="w-28 h-28 rounded-2xl overflow-hidden bg-gray-50 border-2 border-dashed border-gray-200 flex-shrink-0">
               {previewUrl ? (
-                <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
+                <img src={previewUrl} alt="Preview" className="w-full h-full object-contain" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-gray-300">
                   <UserPlus size={28} />
                 </div>
               )}
+            </div>
+            <label className="cursor-pointer px-4 py-1.5 bg-[#009A44]/10 hover:bg-[#009A44]/20 border border-[#009A44]/20 rounded-xl transition-all">
+              <span className="text-[9px] font-black text-[#009A44] uppercase tracking-widest whitespace-nowrap">
+                {previewUrl ? "Change Photo" : "Upload Photo"}
+              </span>
               <input
                 type="file"
                 accept="image/*"
+                className="hidden"
                 onChange={(e) => {
                   const file = e.target.files?.[0];
                   if (file) { setImageFile(file); setPreviewUrl(URL.createObjectURL(file)); }
                 }}
-                className="absolute inset-0 opacity-0 cursor-pointer"
               />
-              <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <span className="text-white text-[9px] font-black uppercase tracking-widest">Change</span>
-              </div>
-            </div>
-            <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Profile Photo</p>
+            </label>
           </div>
           <div className="md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="col-span-2">
@@ -269,7 +270,7 @@ export default function PlayerManager() {
               <div className="relative h-32 bg-gradient-to-br from-gray-100 to-gray-50 overflow-hidden">
                 <img
                   src={getImageUrl(player.imagePaths || player.imagePath)}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80 group-hover:opacity-100"
+                  className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 opacity-80 group-hover:opacity-100"
                   alt={player.fullName}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
@@ -310,3 +311,6 @@ export default function PlayerManager() {
     </div>
   );
 }
+
+
+

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { EventService } from "../../api/eventService";
 import EventForm from "./EventForm";
 import { Calendar, MapPin, Edit3, Trash2, Plus, Clock } from "lucide-react";
+import { ethiopianMonthName, ethiopianDay, ethiopianYear } from "../../utils/ethiopianDate";
 
 interface FederationEvent {
   id: number;
@@ -93,10 +94,10 @@ export default function EventList() {
                   {/* Date block */}
                   <div className="w-16 h-16 bg-gray-50 rounded-xl flex flex-col items-center justify-center border border-gray-100 flex-shrink-0">
                     <span className="text-[9px] font-black uppercase text-[#E30613]">
-                      {dateObj.toLocaleString('en-US', { month: 'short' })}
+                      {ethiopianMonthName(dateObj, "am")}
                     </span>
-                    <span className="text-2xl font-black text-gray-900 leading-none">{dateObj.getDate()}</span>
-                    <span className="text-[8px] font-bold text-gray-400 uppercase">{dateObj.getFullYear()}</span>
+                    <span className="text-2xl font-black text-gray-900 leading-none">{ethiopianDay(dateObj)}</span>
+                    <span className="text-[8px] font-bold text-gray-400 uppercase">{ethiopianYear(dateObj)}</span>
                   </div>
 
                   <div className="flex-1 min-w-0">

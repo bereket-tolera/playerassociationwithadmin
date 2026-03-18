@@ -1,6 +1,7 @@
 import { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import { EventService } from "../../api/eventService";
 import { X, Upload } from "lucide-react";
+import EthiopianDatePicker from "../../components/common/EthiopianDatePicker";
 
 interface EventFormProps {
   event?: any;
@@ -132,14 +133,11 @@ export default function EventForm({ event, onSuccess }: EventFormProps) {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1.5">Date *</label>
-                <input
-                  type="date"
-                  name="eventDate"
-                  value={form.eventDate}
-                  onChange={handleChange}
+                <EthiopianDatePicker
+                  label="Date"
                   required
-                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#009A44]/20 focus:border-[#009A44] outline-none text-sm transition-all"
+                  value={form.eventDate}
+                  onChange={(gcIso) => { setForm({ ...form, eventDate: gcIso }); setError(null); }}
                 />
               </div>
               <div>

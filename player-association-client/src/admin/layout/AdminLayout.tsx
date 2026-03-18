@@ -2,6 +2,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import AdminSidebar from "./AdminSidebar";
 import { useEffect, useState } from "react";
 import { Clock, Bell } from "lucide-react";
+import { formatEthiopianDate } from "../../utils/ethiopianDate";
 
 export default function AdminLayout() {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ export default function AdminLayout() {
     const storedUser = localStorage.getItem('username');
     if (storedUser) setUsername(storedUser);
     const date = new Date();
-    setFormattedDate(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }));
+    setFormattedDate(formatEthiopianDate(date, "am"));
   }, []);
 
   const handleLogout = () => {

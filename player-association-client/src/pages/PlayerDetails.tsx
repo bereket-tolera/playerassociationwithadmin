@@ -62,7 +62,7 @@ export default function PlayerDetails() {
             <img
               src={getImg(player.imagePaths || player.imagePath)}
               alt={player.fullName}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
           </div>

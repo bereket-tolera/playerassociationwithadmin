@@ -6,6 +6,7 @@ import Loader from "../components/common/Loader";
 import ImageSlider from "../components/ImageSlider";
 import { getImageUrl, getImageUrls } from "../utils/imageUtils";
 import { ArrowLeft, MapPin, Clock, Calendar } from "lucide-react";
+import { formatEthiopianDate } from "../utils/ethiopianDate";
 
 interface Event {
   id: number; title: string; description: string;
@@ -35,7 +36,8 @@ export default function EventDetails() {
 
   const dateObj = new Date(event.eventDate);
   const time = dateObj.toLocaleTimeString(i18n.language === "am" ? "am-ET" : "en-US", { hour: "2-digit", minute: "2-digit" });
-  const fullDate = dateObj.toLocaleDateString(i18n.language === "am" ? "am-ET" : "en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+  const lang = i18n.language === "am" ? "am" : "en";
+  const fullDate = formatEthiopianDate(dateObj, lang, true);
 
   return (
     <div className="min-h-screen bg-[#FAF7F0] dark:bg-[#0D0D0D] transition-colors duration-500">
