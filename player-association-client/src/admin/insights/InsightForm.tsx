@@ -1,7 +1,7 @@
 import { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import { InsightService } from "../../api/insightService";
+import { X, Upload } from "lucide-react";
 
-// --- Types ---
 interface InsightData {
   id?: number;
   title: string;
@@ -19,32 +19,18 @@ interface InsightFormProps {
   onCancel?: () => void;
 }
 
-const categories = [
-  "Development",
-  "HealthFitness",
-  "CareerEducation",
-  "TransferMarket",
-  "Interview",
-  "Biography",
-];
+const categories = ["Development", "HealthFitness", "CareerEducation", "TransferMarket", "Interview", "Biography"];
 
-// --- Icons ---
-const PenIcon = () => <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>;
-const UserIcon = () => <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>;
-const UploadIcon = () => <svg className="w-6 h-6 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>;
-const Spinner = () => <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>;
+const Spinner = () => (
+  <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+  </svg>
+);
 
 export default function InsightForm({ insight, onSuccess, onCancel }: InsightFormProps) {
-  const initialForm = {
-    title: "",
-    description: "",
-    content: "",
-    author: "",
-    category: categories[0],
-  };
-
-  /* eslint-disable react-hooks/exhaustive-deps */
-  const [form, setForm] = useState(initialForm);
+  const initial = { title: "", description: "", content: "", author: "", category: categories[0] };
+  const [form, setForm] = useState(initial);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -60,31 +46,16 @@ export default function InsightForm({ insight, onSuccess, onCancel }: InsightFor
         category: insight.category || categories[0],
       });
       setImageFiles([]);
-      // Use imagePaths array if available, otherwise fallback to imagePath string
       let imgPreview = "";
-      if (insight.imagePaths && insight.imagePaths.length > 0) {
-        imgPreview = insight.imagePaths.join(',');
-      } else if (typeof insight.imagePath === 'string') {
-        imgPreview = insight.imagePath;
-      }
+      if (insight.imagePaths?.length) imgPreview = insight.imagePaths.join(',');
+      else if (typeof insight.imagePath === 'string') imgPreview = insight.imagePath;
       setPreviewUrl(imgPreview || null);
     } else {
-      setForm(initialForm);
+      setForm(initial);
       setImageFiles([]);
       setPreviewUrl(null);
     }
   }, [insight]);
-
-  useEffect(() => {
-    return () => {
-      if (previewUrl && !previewUrl.startsWith('http')) {
-        const urls = previewUrl.split(',');
-        urls.forEach(url => {
-          if (url.startsWith('blob:')) URL.revokeObjectURL(url);
-        });
-      }
-    };
-  }, [previewUrl]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -92,49 +63,33 @@ export default function InsightForm({ insight, onSuccess, onCancel }: InsightFor
   };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
+    if (e.target.files?.length) {
       const files = Array.from(e.target.files);
       setImageFiles(files);
-
-      const objectUrls = files.map(file => URL.createObjectURL(file));
-      setPreviewUrl(objectUrls.join(','));
-
+      setPreviewUrl(files.map(f => URL.createObjectURL(f)).join(','));
       setError(null);
     }
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (!form.title.trim()) { setError("Article title is required."); return; }
     setLoading(true);
     setError(null);
-
-    if (!form.title.trim()) {
-      setError("Article Title is required.");
-      setLoading(false);
-      return;
-    }
-
     try {
-      const formData = new FormData();
-      formData.append("Title", form.title.trim());
-      formData.append("Description", form.description.trim());
-      formData.append("Content", form.content.trim());
-      formData.append("Author", form.author.trim());
-      formData.append("Category", form.category);
-
-      if (imageFiles.length > 0) {
-        imageFiles.forEach((file) => {
-          formData.append("ImageFiles", file);
-        });
-      }
-
-      if (insight && insight.id) {
-        await InsightService.update(insight.id, formData);
+      const fd = new FormData();
+      fd.append("Title", form.title.trim());
+      fd.append("Description", form.description.trim());
+      fd.append("Content", form.content.trim());
+      fd.append("Author", form.author.trim());
+      fd.append("Category", form.category);
+      imageFiles.forEach(f => fd.append("ImageFiles", f));
+      if (insight?.id) {
+        await InsightService.update(insight.id, fd);
       } else {
-        await InsightService.create(formData);
+        await InsightService.create(fd);
       }
-
-      setForm(initialForm);
+      setForm(initial);
       setImageFiles([]);
       setPreviewUrl(null);
       onSuccess();
@@ -145,113 +100,100 @@ export default function InsightForm({ insight, onSuccess, onCancel }: InsightFor
     }
   };
 
-  return (
-    <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden relative">
-      {/* Association Accent Top Border */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-[#009A44]"></div>
+  const handleCancel = () => {
+    setForm(initial);
+    setImageFiles([]);
+    setPreviewUrl(null);
+    onSuccess();
+    if (onCancel) onCancel();
+  };
 
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
       {/* Header */}
-      <div className="bg-gray-50 px-8 py-5 border-b border-gray-100 flex justify-between items-start">
-        <div>
-          <h3 className="text-xl font-bold text-gray-900 tracking-tight">
-            {insight ? "Edit Editorial" : "Compose Insight"}
-          </h3>
-          <p className="text-xs text-[#009A44] font-bold uppercase mt-1">
-            Official Federation Press Release (መግለጫ ቅጽ)
-          </p>
+      <div className="px-7 py-5 border-b border-gray-50 flex justify-between items-center bg-gray-50/50">
+        <div className="flex items-center gap-3">
+          <div className="w-1 h-5 rounded-full bg-[#009A44]"></div>
+          <div>
+            <h3 className="text-xs font-black text-gray-900 uppercase tracking-[0.2em]">
+              {insight ? "Edit Article" : "Compose Insight"}
+            </h3>
+            <p className="text-[9px] text-[#009A44] font-bold uppercase tracking-widest mt-0.5">
+              Official Federation Press Release (መግለጫ ቅጽ)
+            </p>
+          </div>
         </div>
-        {/* Flag Circles */}
-        <div className="flex gap-1 mt-1">
+        <div className="flex gap-1.5">
           <div className="w-2 h-2 rounded-full bg-[#009A44]"></div>
           <div className="w-2 h-2 rounded-full bg-[#FEDD00]"></div>
           <div className="w-2 h-2 rounded-full bg-[#E30613]"></div>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="p-8">
-
+      <form onSubmit={handleSubmit} className="p-7">
         {error && (
-          <div className="mb-6 bg-red-50 border-l-4 border-[#E30613] p-4 rounded-r text-sm text-red-700 font-medium">
+          <div className="mb-5 p-4 rounded-xl bg-red-50 border border-red-100 text-red-700 text-xs font-bold flex items-center gap-2">
+            <X size={14} className="text-red-500 flex-shrink-0" />
             {error}
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-7">
 
-          {/* Main Inputs */}
-          <div className="lg:col-span-8 space-y-6">
-
+          {/* Main fields */}
+          <div className="lg:col-span-8 space-y-5">
             <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">
+              <label className="block text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1.5">
                 Headline <span className="text-[#E30613]">*</span>
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <PenIcon />
-                </div>
-                <input
-                  type="text"
-                  name="title"
-                  value={form.title}
-                  onChange={handleChange}
-                  placeholder="Enter article title..."
-                  className="w-full pl-10 py-2.5 bg-gray-50 border border-gray-300 rounded focus:ring-1 focus:ring-[#009A44] focus:border-[#009A44] focus:bg-white transition-colors text-sm font-semibold text-gray-900 placeholder-gray-400"
-                />
-              </div>
+              <input
+                type="text"
+                name="title"
+                value={form.title}
+                onChange={handleChange}
+                placeholder="Enter article title..."
+                className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#009A44]/20 focus:border-[#009A44] outline-none text-sm font-semibold text-gray-900 transition-all"
+              />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
-                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">
-                  Author (ደራሲ)
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <UserIcon />
-                  </div>
-                  <input
-                    type="text"
-                    name="author"
-                    value={form.author}
-                    onChange={handleChange}
-                    className="w-full pl-10 py-2.5 bg-gray-50 border border-gray-300 rounded focus:ring-1 focus:ring-[#009A44] focus:border-[#009A44] focus:bg-white transition-colors text-sm"
-                  />
-                </div>
+                <label className="block text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1.5">Author (ደራሲ)</label>
+                <input
+                  type="text"
+                  name="author"
+                  value={form.author}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#009A44]/20 focus:border-[#009A44] outline-none text-sm transition-all"
+                />
               </div>
-
               <div>
-                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">
-                  Category (ምድብ)
-                </label>
+                <label className="block text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1.5">Category (ምድብ)</label>
                 <select
                   name="category"
                   value={form.category}
                   onChange={handleChange}
-                  className="w-full py-2.5 px-3 bg-gray-50 border border-gray-300 rounded focus:ring-1 focus:ring-[#009A44] focus:border-[#009A44] focus:bg-white transition-colors text-sm cursor-pointer"
+                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#009A44]/20 focus:border-[#009A44] outline-none text-sm cursor-pointer transition-all"
                 >
-                  {categories.map((c) => (
-                    <option key={c} value={c}>{c}</option>
-                  ))}
+                  {categories.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">
-                Summary / Abstract
-              </label>
+              <label className="block text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1.5">Summary / Abstract</label>
               <textarea
                 name="description"
                 rows={2}
                 value={form.description}
                 onChange={handleChange}
-                className="w-full p-3 bg-gray-50 border border-gray-300 rounded focus:ring-1 focus:ring-[#009A44] focus:border-[#009A44] focus:bg-white transition-colors text-sm resize-none"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#009A44]/20 focus:border-[#009A44] outline-none text-sm resize-none transition-all"
                 placeholder="Brief text for the card view..."
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">
+              <label className="block text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1.5">
                 Full Content Body <span className="text-[#E30613]">*</span>
               </label>
               <textarea
@@ -260,82 +202,53 @@ export default function InsightForm({ insight, onSuccess, onCancel }: InsightFor
                 value={form.content}
                 onChange={handleChange}
                 required
-                className="w-full p-4 bg-gray-50 border border-gray-300 rounded focus:ring-1 focus:ring-[#009A44] focus:border-[#009A44] focus:bg-white transition-colors text-sm font-mono leading-relaxed"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#009A44]/20 focus:border-[#009A44] outline-none text-sm font-mono leading-relaxed resize-none transition-all"
                 placeholder="Write article content here..."
               />
             </div>
-
           </div>
 
-          {/* Sidebar / Image */}
-          <div className="lg:col-span-4 flex flex-col">
-            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">
-              Featured Images
-            </label>
-
-            {/* Preview Grid */}
-            <div className="grid grid-cols-2 gap-2 mb-3">
+          {/* Sidebar */}
+          <div className="lg:col-span-4 flex flex-col gap-5">
+            <div>
+              <label className="block text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1.5">Featured Images</label>
               {previewUrl ? (
-                // Show primary/first image larger
-                <div className="col-span-2 relative group aspect-video rounded-lg overflow-hidden border border-gray-200">
-                  <img src={previewUrl.split(',')[0]} alt="Main Preview" className="w-full h-full object-cover" />
+                <div className="relative aspect-video rounded-xl overflow-hidden border border-gray-100 mb-3">
+                  <img src={previewUrl.split(',')[0]} alt="Preview" className="w-full h-full object-cover" />
                   {previewUrl.includes(',') && (
-                    <div className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
+                    <div className="absolute bottom-2 right-2 bg-black/60 text-white text-[9px] px-2 py-0.5 rounded-lg font-bold">
                       +{previewUrl.split(',').length - 1} more
                     </div>
                   )}
                 </div>
               ) : (
-                <div className="col-span-2 aspect-video bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center text-gray-400">
-                  <UploadIcon />
+                <div className="aspect-video bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl flex items-center justify-center text-gray-300 mb-3">
+                  <Upload size={24} />
                 </div>
               )}
+              <label className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-gray-200 rounded-xl hover:border-[#009A44] hover:bg-[#009A44]/5 transition-all cursor-pointer">
+                <Upload size={14} className="text-gray-400" />
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Upload Images</span>
+                <input type="file" multiple accept="image/*" onChange={handleFileChange} className="hidden" />
+              </label>
+              <p className="text-[9px] text-gray-400 mt-2 text-center">Max 5MB per file. First image is featured.</p>
             </div>
 
-            <div className="relative">
-              <input
-                type="file"
-                multiple
-                accept="image/*"
-                onChange={handleFileChange}
-                className="block w-full text-sm text-gray-500
-                    file:mr-4 file:py-2 file:px-4
-                    file:rounded-full file:border-0
-                    file:text-xs file:font-semibold
-                    file:bg-[#009A44] file:text-white
-                    hover:file:bg-[#007A30] cursor-pointer"
-              />
-            </div>
-            <p className="text-xs text-gray-500 mt-2 text-center">Max 5MB per file. First image is featured.</p>
-
-            {/* Action Buttons */}
-            <div className="mt-6 space-y-3">
+            <div className="mt-auto space-y-3">
               <button
                 type="submit"
                 disabled={loading}
-                className={`
-                   w-full flex items-center justify-center px-4 py-3 rounded text-sm font-bold text-white shadow-sm uppercase tracking-wide transition-all
-                   ${loading
-                    ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-[#009A44] hover:bg-[#008037] hover:shadow-lg active:transform active:scale-95'
-                  }
-                 `}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-[10px] font-black text-white uppercase tracking-widest bg-[#009A44] hover:bg-[#007A30] shadow-sm transition-all disabled:opacity-50"
               >
-                {loading ? <Spinner /> : null}
+                {loading && <Spinner />}
                 {loading ? "Publishing..." : (insight ? "Save Changes" : "Publish Article")}
               </button>
 
               {(insight || onCancel) && (
                 <button
                   type="button"
-                  onClick={() => {
-                    setForm(initialForm);
-                    setImageFiles([]);
-                    setPreviewUrl(null);
-                    onSuccess(); // Treats cancel as success to clear state
-                    if (onCancel) onCancel();
-                  }}
-                  className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded text-gray-600 text-sm font-bold uppercase tracking-wide hover:bg-gray-50 transition-colors"
+                  onClick={handleCancel}
+                  className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-gray-500 text-[10px] font-black uppercase tracking-widest hover:bg-gray-50 transition-all"
                 >
                   Cancel
                 </button>
